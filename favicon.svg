@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- 집투 파비콘(신규): 초록 라운드 타일 + 흰 집 외곽(좌하단 L자 발) + 상승 막대 3개 — ZiptoLogo와 동일 -->
-  <rect width="64" height="64" rx="13" fill="#17694a"/>
-  <path d="M 25.5 51 H 19 V 28.6 L 32 16.4 L 45 28.6 V 51" fill="none" stroke="#fff" stroke-width="5.6" stroke-linejoin="miter"/>
-  <rect x="25.4" y="41" width="4.6" height="12.8" fill="#d7ead9"/>
-  <rect x="31.6" y="36" width="4.6" height="17.8" fill="#8ec79b"/>
-  <rect x="37.6" y="31" width="4.6" height="22.8" fill="#4b9f68"/>
-</svg>
