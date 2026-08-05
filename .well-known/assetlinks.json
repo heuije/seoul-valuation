@@ -1,0 +1,10 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "kr.co.zipto.app",
+    "sha256_cert_fingerprints": [
+      "90:A2:78:A5:66:07:97:D3:E4:FF:25:4C:D1:74:EE:5E:B5:E6:8F:21:DF:7C:44:60:B0:ED:F4:C2:F6:B0:EB:43"
+    ]
+  }
+}]
