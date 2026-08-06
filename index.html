@@ -40,7 +40,9 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-2TR7N5HW5V');
+      // 자동 page_view는 끈다. SPA라 화면 이동이 URL 변경 없이 일어나 자동 집계는 최초 진입
+      // 1회뿐이고, 앱이 탭마다 직접 보내므로(App.tsx) 켜 두면 첫 화면만 두 번 집계된다.
+      gtag('config', 'G-2TR7N5HW5V', { send_page_view: false });
     </script>
     <!-- Microsoft Clarity — 히트맵·세션 리플레이(UX 개선) -->
     <script type="text/javascript">
@@ -50,8 +52,8 @@
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
       })(window, document, "clarity", "script", "xmqv3ahrno");
     </script>
-    <script type="module" crossorigin src="./assets/index-oee45fDY.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-DtXFk3r3.css">
+    <script type="module" crossorigin src="./assets/index-D2TJWeII.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-BtOxKKC2.css">
   </head>
   <body>
     <div id="root"></div>
