@@ -28,6 +28,15 @@
     <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png?v=3" />
     <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
     <link rel="manifest" href="./manifest.json" />
+    <script>
+      // 서비스워커 — 오프라인 안내 전용(자산 캐시 없음). 네트워크가 없을 때 흰 화면이 뜨면
+      // iOS 심사(가이드라인 2.1)에서 감점된다. 등록 실패는 조용히 넘긴다(기능에 영향 없음).
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('./sw.js').catch(function () {})
+        })
+      }
+    </script>
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="theme-color" content="#1a7a3f" />
     <!-- 로고 워드마크 전용 둥근 서체(Jua) — 한글 유니코드 서브셋 분할 로드라 실사용 다운로드는 수 KB -->
@@ -52,10 +61,10 @@
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
       })(window, document, "clarity", "script", "xmqv3ahrno");
     </script>
-    <script type="module" crossorigin src="./assets/index-LLwQsEoa.js"></script>
+    <script type="module" crossorigin src="./assets/index-BDrIcFO-.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-Bku6bi6F.css">
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"></div>
   </body>
 </html>

@@ -1,1 +1,31 @@
-{"name": "집투", "short_name": "집투", "start_url": "/", "display": "standalone", "background_color": "#0d1117", "theme_color": "#1a7a3f", "icons": [{"src": "./icon-192.png", "sizes": "192x192", "type": "image/png"}, {"src": "./icon-512.png", "sizes": "512x512", "type": "image/png"}]}
+{
+ "name": "집투",
+ "short_name": "집투",
+ "start_url": "/",
+ "display": "standalone",
+ "background_color": "#0d1117",
+ "theme_color": "#1a7a3f",
+ "icons": [
+  {
+   "src": "./icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "./icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "./icon-1024.png",
+   "sizes": "1024x1024",
+   "type": "image/png",
+   "purpose": "any"
+  }
+ ],
+ "description": "실거래 기반 아파트·오피스텔·빌라 가치평가 — 평당가·재건축·수익률·토지거래허가",
+ "lang": "ko",
+ "orientation": "portrait"
+}

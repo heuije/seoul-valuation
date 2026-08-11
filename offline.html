@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>집투 — 연결이 끊겼습니다</title>
+  <style>
+    :root { color-scheme: light dark; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100dvh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 18px; padding: 24px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+      background: #fff; color: #1c2b24; text-align: center; }
+    @media (prefers-color-scheme: dark) { body { background: #0d1117; color: #e6edf3; } }
+    img { width: 72px; height: 72px; border-radius: 18px; }
+    h1 { margin: 0; font-size: 17pt; font-weight: 800; letter-spacing: -.3px; }
+    p { margin: 0; font-size: 11pt; line-height: 1.6; opacity: .72; word-break: keep-all; max-width: 320px; }
+    button { margin-top: 6px; padding: 12px 26px; font-size: 11pt; font-weight: 700; cursor: pointer;
+      border: none; border-radius: 999px; background: #1a7a3f; color: #fff; }
+    button:active { transform: translateY(1px); }
+  </style>
+</head>
+<body>
+  <img src="./icon-192.png" alt="집투" />
+  <h1>연결이 끊겼습니다</h1>
+  <p>네트워크에 연결되어 있지 않습니다.<br />연결을 확인한 뒤 다시 시도해 주세요.</p>
+  <button type="button" onclick="location.replace('./')">다시 시도</button>
+</body>
+</html>
