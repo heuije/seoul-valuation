@@ -110,7 +110,7 @@
 ### ② 참조·기각한 출처와 이유
 
 - **채택**: BNEF(배터리 가격 표준 시계열), T&E/IEA(유럽 저가 모델 카운트), Cox/Thomson Reuters(미국 세액공제 종료 영향), IDTechEx·Interact Analysis 계열(전고체 컨센서스 — 단일사 홍보 자료 대신 복수 조사기관 종합), CnEVPost·Rest of World·Autonews(중국 해외 생산 진척 — 상호 교차), electrive/ICCT(EU CO2 수정안), VW·토요타·현대차 공식 발표 및 이를 인용한 복수 매체.
-- **기각/보류**: ① 딜러·판촉성 블로그(vwofstreetsboro, 딜러 세액공제 안내 등) — 마케팅 자료로 수치 인용 부적합, 맥락 확인용만. ② EnkiAI·evcurvefuturist 등 개인 블로그의 자체 추정치($90/kWh 등) — 원출처 불명 기각. ③ BYD 터키 공장 관련 상충 보도 — 단일 확정 서술 대신 상충 사실 자체를 명기. ④ 토요타 2030 목표는 2021년 공식 발표만 확인되어 "최신 갱신치 미확인"으로 강등. ⑤ 검색 요약문 수치 중 복수 소스에서 재현되지 않는 것은 본문 인용에서 제외.
+- **기각/보류**: ① 딜러·판촉성 블로그(vwofstreetsboro, 딜러 세액공제 안내 등) — 마케팅 자료로 수치 인용 부적합, 맥락 확인용만. ② EnkiAI·evcurvefuturist 등 개인 블로그의 자체 추정치($90/kWh 등) — 원출처 불명 기각. ③ BYD 터키 공장 관련 상충 보도 — 단일 확정 서술 대신 상충 사실 자체를 명기. ④ 토요타 2030 목표는 초고(初稿)에서 발표 연도를 오귀속(2017-12 발표를 2021년으로 기재)하고 갱신 발표를 미확인 처리했으나, QC 지적 후 원문 재검색으로 2017-12 원발표·2021-12-14 갱신 발표(BEV 350만)를 확인해 정정(하단 ④ QC 반영 기록 참조). ⑤ 검색 요약문 수치 중 복수 소스에서 재현되지 않는 것은 본문 인용에서 제외.
 - **시트 준수**: 판매량 수치는 전부 데이터시트를 우선 인용(출처 "(시트)" 표기)하고, 중국은 CAAM/SNE 병기 원칙을 유지. 웹 조사는 시트에 없는 기업 전략·기술·정책 정보에 한정.
 
 ### ③ 내린 판단
@@ -119,7 +119,15 @@
 2. **전고체의 우선순위 강등**: 발표 일정(2027~28)이 아니라 볼륨 관점(2030년 이전 저볼륨)으로 평가하여 톱5 내 5위 하부 요소로 배치 — 일정 발표를 그대로 판매 드라이버로 승격시키지 않음.
 3. **HEV 지속 판단의 조건부화**: "2030년까지 지속"을 무조건이 아니라 시장별(미국·일본·신흥 지속 vs 유럽 규제 상한 vs 중국 구조적 제한)로 분리.
 4. **관세 평가**: 수출 월 50만 대 돌파와 우회 전략 3종의 실재를 근거로 "차단 장치"가 아닌 "속도 조절 장치"로 규정 — 단, 미국(100%)만은 사실상 차단으로 구분.
-5. **불확실 항목의 명시적 등재**: 확인 실패 항목 6건을 별도 섹션으로 분리해 후속 조사(유료 DB) 필요성을 표기.
+5. **불확실 항목의 명시적 등재**: 확인 실패 항목을 별도 섹션으로 분리해 후속 조사(유료 DB) 필요성을 표기 — 초고 6건 중 토요타 목표 1건은 QC 후 재조사로 해소, 잔여 5건.
+
+### ④ QC 반영 기록 (2026-08-30, QC 성적표 04 — B등급 지적 3건 반영)
+
+1. **지적 1 (토요타 발표 연도 오귀속)**: WebSearch로 원문 재확인 — 전동화 550만·ZEV 100만 목표는 global.toyota 원문 제목 기준 2017년 12월 발표임을 확인, 본문 §2와 출처 [W7]의 "2021년 발표"를 "2017년 12월 발표"로 정정.
+2. **지적 2 (갱신 발표 미확인 처리 부정확)**: "Toyota December 2021 announcement 3.5 million BEV" 재검색으로 2021-12-14 발표(2030년 BEV 연 350만 대, 토요타·렉서스 BEV 30종, 8조 엔 투자 — Toyota USA Newsroom·Green Car Congress) 원문 확인. 본문 §2를 최신 목표(2021-12 갱신) 기준으로 교체 인용하고, "확인 불가 항목"의 해당 행을 해소 처리(2021-12 이후 추가 갱신 여부만 미확인으로 잔존 명기).
+3. **지적 3 (BMW 46시리즈 출처 부적합)**: 판매상 블로그(lifepo4batteryshop.com)를 출처 목록에서 제거하고 electrive(2022-09-09)·CATL 공식 보도자료(PR Newswire)로 교체 [W17a]. 공식 발표에서 확인되지 않는 세부 규격 표기 "4695/46120"은 "지름 46mm·높이 2종"(BMW·CATL 공식 표현)으로 교정. 아울러 CATL 셴싱 2세대 1.3MW가 단일 계열 보도 의존임을 [W17]에 명기(QC 검증 불가 항목과 정합).
+- QC팀 직접 교정 1건(급속충전 항목 "한L 기준" 오탈자 → "5분 충전으로 400km 주행(BYD 발표 기준)")은 반영 상태 확인 완료.
+- 지역 범위 가정 명기(QC 통합 의견 3)는 범위를 정의하는 01 데이터시트 정정 사항으로, 본 노트는 시트 준용(헤더 데이터 참조 명기)으로 충족.
 
 ## 웹 출처 목록 (전체 2026-08-30 조회)
 
@@ -139,7 +147,8 @@
 - [W14] EnergyTrend, "20 companies' solid-state battery mass production timetable" — https://www.energytrend.com/news/20240716-47888.html
 - [W15] Electrek, 토요타 전고체 — https://electrek.co/2025/10/30/toyotas-solid-state-ev-battery-dreams-might-actually-come-true/
 - [W16] Interact Analysis·IDTechEx·Recharged, 전고체 상용화 컨센서스 — https://interactanalysis.com/insight/when-will-solid-state-batteries-enter-commercial-production/ / https://www.idtechex.com/en/research-article/solid-state-battery-commercialization-mass-production-taking-off/32942
-- [W17] autoevolution·Electrek·electrive, 테슬라 4680 2026 계획·성능 이슈·Model Y 재탑재 — https://www.autoevolution.com/news/tesla-reportedly-plans-four-new-variants-of-their-dry-cathode-4680-batteries-for-2026-240848.html / https://electrek.co/2026/05/07/tesla-4680-battery-cell-performance-data-shows-cant-build-own-cells/ ; BMW 46시리즈(CATL·EVE) — https://www.lifepo4batteryshop.com/info/catl-supply-large-cylindrical-batteries-bmw.html
+- [W17] autoevolution·Electrek·electrive, 테슬라 4680 2026 계획·성능 이슈·Model Y 재탑재 — https://www.autoevolution.com/news/tesla-reportedly-plans-four-new-variants-of-their-dry-cathode-4680-batteries-for-2026-240848.html / https://electrek.co/2026/05/07/tesla-4680-battery-cell-performance-data-shows-cant-build-own-cells/ ; CATL 셴싱 2세대 1.3MW — 검색 결과 종합(단일 계열 보도 의존, QC 검증 불가 항목)
+- [W17a] BMW Neue Klasse 46mm 셀(CATL·EVE, 중국·유럽 각 최대 20GWh) — electrive, "BMW confirms use of round-battery cells for Neue Klasse" https://www.electrive.com/2022/09/09/bmw-confirms-use-of-round-battery-cells-for-new-class/ / CATL 공식 보도자료(PR Newswire), "CATL and BMW Group reach framework agreement on cylindrical battery supply" https://www.prnewswire.com/news-releases/catl-and-bmw-group-reach-framework-agreement-on-cylindrical-battery-supply-301621032.html
 - [W18] BYD 공식·InsideEVs·CnEVPost, 1MW 플래시차징 — https://www.byd.com/mea/news-list/byd-unveils-super-e-platform-with-megawatt-flash-charging / https://cnevpost.com/2025/06/01/byd-15000-1-mw-chargers-with-partners/
 - [W19] Thomson Reuters Tax, 세액공제 2025-09-30 종료 — https://tax.thomsonreuters.com/news/ev-sales-expected-to-dip-after-credits-expire-sept-30-industry-expert/ / Recurrent, 2026 현황 — https://www.recurrentauto.com/research/used-ev-tax-credits
 - [W20] autoevolution·VW Group 공식, VW H1 2026 인도 — https://www.autoevolution.com/news/volkswagen-group-h1-2026-deliveries-fall-63-percent-skoda-elroq-takes-bev-crown-272704.html / https://www.volkswagen-group.com/en/half-yearly-financial-report-and-results-2026-20506
