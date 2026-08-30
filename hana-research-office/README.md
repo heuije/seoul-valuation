@@ -7,7 +7,7 @@
 
 ```mermaid
 flowchart TD
-    CEO["🏛 대표이사 · 설립자<br/>(휘제 대표님)"]
+    CEO["🏛 대표이사 · 설립자<br/>(김희제 대표님)"]
     PRES["👔 사장<br/>클로드 (Claude)<br/><i>총괄 지휘 · 과업 배분 · 인사</i>"]
 
     CEO --> PRES
