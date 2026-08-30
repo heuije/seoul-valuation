@@ -36,7 +36,7 @@
 
 - **BYD**: 2026 H1 글로벌 인도 149.6만 대(-20.7% YoY, SNE, 시트)로 내수 부진이 뚜렷하나, 해외 판매 목표 150~160만 대로 성장 축을 수출·해외 생산으로 전환 [W12]. 유럽 시장점유율 2.4%(EU+EFTA+UK, 2026 H1)로 사상 처음 테슬라와 동률 [W3].
 - **테슬라**: 저가 신모델 대신 기존 모델의 염가 트림(Model Y Standard $39,990)으로 대응 [W9]. 미국 세액공제 종료 직격 구간. 완전 신규 저가 플랫폼의 2030년 이전 출시 여부는 [출처 미확인].
-- **토요타**: 멀티패스웨이 전략이 시장에서 사후 검증받는 국면. 2026년 HEV 500만 대 초과 판매 계획, 판매 내 HEV 비중 약 50%→60% 전망 [W7]. 2030년 전동화 550만 대(ZEV 100만 대 포함) 목표는 2021년 발표 기준으로 최신 갱신치는 [출처 미확인].
+- **토요타**: 멀티패스웨이 전략이 시장에서 사후 검증받는 국면. 2026년 HEV 500만 대 초과 판매 계획, 판매 내 HEV 비중 약 50%→60% 전망 [W7]. 2030년 목표는 **2017년 12월** 발표의 전동화 550만 대(ZEV 100만 대 포함)에서 **2021년 12월 14일** 발표로 상향 갱신 — 2030년 BEV 연 350만 대, 토요타·렉서스 BEV 30종, 2022~2030년 8조 엔 투자(BEV 4조·배터리 2조 포함, 나머지 4조는 HEV/PHEV/FCEV) [W7]. BEV 350만 대 목표와 HEV 500만 대+ 실적 계획이 병존하는 것 자체가 멀티패스웨이 구조의 정량적 표현.
 - **현대차·기아**: 2026 H1 그룹 EV 37만 대(+25%, SNE, 시트)로 서구 시장에서 상대 승자. 그러나 전략은 조정 중 — 전용 EV 플랫폼에서 다양한 파워트레인을 수용하는 유연 아키텍처로 전환, 미국은 ICE 개선+EREV+HEV 병행 [W5]. 2030년 북미 하이브리드 10종 이상·지역 판매의 약 절반을 하이브리드로, 2030년 영업이익률 목표 9% 이상으로 상향(2026-08 발표) [W6]. 하이브리드 판매 2026 Q2 +71%.
 - **VW**: 2026 H1 그룹 전체 인도 -6.3%(중국 부진), 글로벌 BEV -5.8%이나 **유럽 BEV는 37.7만 대(+8.4%), 서유럽 BEV 시장점유율 21%** [W20]. 2026~27년 ID.Polo/ID.Cross 등 €25k급 엔트리 BEV 4종 사이클 진입 [W10] — 유럽 패리티 드라이버이자 BYD 방어선.
 - **GM**: EV 트럭 증설을 2026년 중반 이후로 연기, 북미 PHEV 재도입, 현대차그룹과 5개 차종 공동개발 [W5]. 신형 Bolt(2026MY)로 저가 BEV 재진입 [W9].
@@ -46,7 +46,7 @@
 ### 3. 배터리 기술 — "2030년까지는 LFP·46시리즈·초급속충전의 시대"
 
 - **LFP vs 삼원계**: 가격 격차($81 vs $128/kWh)가 구조적이어서 대중 차급의 LFP 전환은 계속 확산 [W1]. 테슬라도 네바다 LFP 셀 라인을 2026년 가동 예정 [W17]. 삼원계는 프리미엄·장거리 차급으로 상방 축소. 서구 셀 메이커(한국 3사 포함)의 LFP 양산 경쟁력 확보 속도가 2030년 점유율 변수.
-- **4680/46시리즈**: 테슬라는 2026년 드라이 캐소드 4680 신규 4종(NC05~NC50) 계획·베를린 18GWh 증설 투자 진행 [W17]. 다만 2026년 들어 4680의 충전 성능 저하 이슈가 복수 보도되는 등 성능 검증은 진행형 [W17]. BMW Neue Klasse는 CATL·EVE로부터 4695/46120 46시리즈를 중국·유럽 각 20GWh 규모로 조달 [W17] — 46시리즈는 테슬라 전유물에서 업계 표준 포맷으로 확산 중.
+- **4680/46시리즈**: 테슬라는 2026년 드라이 캐소드 4680 신규 4종(NC05~NC50) 계획·베를린 18GWh 증설 투자 진행 [W17]. 다만 2026년 들어 4680의 충전 성능 저하 이슈가 복수 보도되는 등 성능 검증은 진행형 [W17]. BMW Neue Klasse 6세대 eDrive는 CATL·EVE로부터 지름 46mm(높이 2종) 원통형 셀을 조달 — 양사가 중국·유럽에 각각 연산 최대 20GWh 공장을 건설하는 수십억 유로 규모 계약이며, BMW는 에너지밀도 +20%·충전속도 최대 +30% 개선을 제시 [W17a] — 46시리즈는 테슬라 전유물에서 업계 표준 포맷으로 확산 중.
 - **전고체**: 삼성SDI 2027년 양산 목표(900Wh/L, 수원 S-Line 파일럿), 토요타 2027~28년 양산 목표 [W14][W15]. 그러나 업계 전망 종합 시 "2027~28년 저볼륨·프리미엄 탑재, 보급형 확산은 2030년 이후" [W16]. **2030년 이전 판매량에 유의미한 영향을 주는 변수가 아니라고 판단** — 오히려 전고체 기대가 현세대 구매 이연을 유발할 심리 리스크가 존재.
 - **급속충전**: BYD Super e-Platform 1,000kW(1MW) 플래시차징 — 5분 충전으로 400km 주행(BYD 발표 기준), 파트너와 1MW 충전기 1.5만 기 구축 계획 [W18]. CATL 셴싱 LFP 2세대는 최대 1.3MW·5분에 5→70% 충전 목표 [W17]. 충전 속도가 주유 경험에 수렴하면 HEV 대비 BEV의 마지막 사용성 열위가 소거되는 만큼, **중국 밖 충전 인프라(전력망 포함)의 MW급 대응 속도**가 2028~30년 서구 BEV 재가속의 열쇠.
 
@@ -88,7 +88,7 @@
 ## 확인 불가 항목 (본 노트 기준)
 
 - 글로벌 HEV 판매량 단일 집계(2025·2026 H1): `[출처 미확인]` — 데이터시트와 동일 한계. MarkLines·S&P 유료 DB 확인 권장.
-- 토요타 2030년 전동화·ZEV 목표의 최신 갱신치: 2021년 발표(550만/100만)만 확인, 이후 공식 갱신 여부 `[출처 미확인]`.
+- ~~토요타 2030년 목표 갱신 여부~~ → **해소** (QC 지적 반영): 2017-12 발표(전동화 550만/ZEV 100만)와 2021-12-14 갱신 발표(BEV 연 350만·30종)를 원문 재확인하여 본문 정정 [W7]. 2021-12 이후 추가 공식 갱신 여부는 미확인이나, 본 노트는 확인된 최신 발표(2021-12)를 기준으로 인용.
 - 기아 EV2 가격·출시 일정 세부: 검색 결과 미확보 `[출처 미확인]`.
 - 테슬라 완전 신규 저가 플랫폼의 2030년 이전 출시 계획: `[출처 미확인]` (현재 확인되는 것은 Model Y Standard 등 염가 트림).
 - BYD 터키 공장 상태: "무기한 중단" 보도 [W13]와 투자 지속 보도가 상충 — 확정 판단 보류.
@@ -129,7 +129,7 @@
 - [W4] Transport & Environment, "EV progress report 2026" — https://www.transportenvironment.org/articles/ev-progress-report-2026 / IEA Global EV Outlook 2025 affordability — https://www.iea.org/reports/global-ev-outlook-2025/trends-in-electric-car-affordability
 - [W5] CNBC, "EV realism is here. How GM, Hyundai, Ford react in 2026" — https://www.cnbc.com/2025/12/23/evs-gm-ford-hyundai-tesla.html
 - [W6] Korea Times·BNN Bloomberg·Motor1, 현대차 하이브리드 확대·마진 목표 — https://www.koreatimes.co.kr/business/companies/20260827/hybrid-becomes-hyundai-motors-new-us-strategy / https://www.bnnbloomberg.ca/business/company-news/2026/08/26/hyundai-lifts-margin-target-expands-us-hybrid-lineup/
-- [W7] Autoblog·Carscoops, 토요타 HEV 500만 대 — https://www.autoblog.com/news/toyotas-hybrid-boom-is-about-to-smash-the-5-million-mark / 토요타 2030 목표(2021 발표) — https://global.toyota/en/newsroom/corporate/20353243.html
+- [W7] Autoblog·Carscoops, 토요타 HEV 500만 대 — https://www.autoblog.com/news/toyotas-hybrid-boom-is-about-to-smash-the-5-million-mark / 토요타 2030 전동화 550만·ZEV 100만 목표(**2017-12 발표**) — https://global.toyota/en/newsroom/corporate/20353243.html / 토요타 2030 BEV 연 350만 대·30종 갱신(**2021-12-14 발표**) — Toyota USA Newsroom https://pressroom.toyota.com/akio-toyoda-shares-toyotas-strategy-for-achieving-carbon-neutrality-through-battery-electric-vehicles/ / Green Car Congress https://www.greencarcongress.com/2021/12/20211214-toyota.html
 - [W8] Automotive News, "EVs canceled in 2026" — https://www.autonews.com/car-concepts/an-ev-cancellations-delays-2026-0313/
 - [W9] Edmunds, 2026 Model Y Standard — https://www.edmunds.com/tesla/model-y/2026/standard/ / GM Authority, 신형 Bolt — https://gmauthority.com/blog/2025/01/chevy-bolt-ev-bolt-euv-lose-u-s-ev-tax-credit-eligibility/
 - [W10] Yahoo Autos·Notebookcheck, VW ID.Polo/ID.Cross — https://autos.yahoo.com/ev-and-future-tech/articles/vw-showcases-four-electric-cars-151423822.html
