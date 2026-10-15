@@ -1,0 +1,1869 @@
+<title>2차전지 밸류체인 맵</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: 도구 막대 → [마인드맵 캔버스 | 시장·기업 패널] → 표 보기. 단계 색은 밸류체인 8단계의 고정 순서 */
+:root{
+  --bg:#f3f5f8; --surface:#ffffff; --surface-2:#eef1f5;
+  --ink:#141920; --ink-2:#4a5260; --muted:#7a8391;
+  --line:#d8dde4; --link:#c3cad4; --accent:#2a55c9; --accent-soft:#e5ecfb; --bar:#2a78d6;
+  --ev:#2a78d6; --ess:#1baf7a; --it:#6250d6;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100;
+  --s5:#e87ba4; --s6:#008300; --s7:#6250d6; --s8:#e34948;
+  --sans:"IBM Plex Sans KR","Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"Consolas",monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0e1116; --surface:#171b21; --surface-2:#1f242c;
+  --ink:#e7ebf0; --ink-2:#b5bdc8; --muted:#8a94a1;
+  --line:#2a313a; --link:#3a434f; --accent:#7b9cf2; --accent-soft:#1f2a44; --bar:#3987e5;
+  --ev:#3987e5; --ess:#199e70; --it:#9085e9;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500;
+  --s5:#d55181; --s6:#008300; --s7:#9085e9; --s8:#e66767;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1116; --surface:#171b21; --surface-2:#1f242c;
+  --ink:#e7ebf0; --ink-2:#b5bdc8; --muted:#8a94a1;
+  --line:#2a313a; --link:#3a434f; --accent:#7b9cf2; --accent-soft:#1f2a44; --bar:#3987e5;
+  --ev:#3987e5; --ess:#199e70; --it:#9085e9;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500;
+  --s5:#d55181; --s6:#008300; --s7:#9085e9; --s8:#e66767;
+  color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1480px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:22px 40px;display:flex;flex-direction:column;gap:14px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+a{color:var(--accent)}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:10px 24px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+h1{margin:2px 0 0;font-size:24px;font-weight:700;letter-spacing:-.02em;text-wrap:balance}
+.stats{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12.5px;color:var(--ink-2)}
+.stats b{font-family:var(--mono);font-weight:500;color:var(--ink);font-variant-numeric:tabular-nums;margin-right:3px}
+
+.bar{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center}
+.lbl{font-size:11.5px;color:var(--muted);font-weight:500;letter-spacing:.02em;white-space:nowrap}
+.seg{display:inline-flex;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:2px;gap:2px}
+.seg button{appearance:none;border:0;background:transparent;color:var(--ink-2);font:500 12.5px/1 var(--sans);padding:8px 11px;border-radius:6px;cursor:pointer;white-space:nowrap;transition:background .18s,color .18s}
+.seg button:hover{color:var(--ink);background:var(--surface-2)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.btn{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);font:500 12.5px/1 var(--sans);padding:8px 11px;border-radius:8px;cursor:pointer;white-space:nowrap}
+.btn:hover{color:var(--ink);border-color:var(--muted)}
+.search{position:relative;flex:1 1 220px;max-width:340px;min-width:0}
+.search input{width:100%;font:13px var(--sans);padding:8px 11px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
+.search input:focus{outline:none;border-color:var(--accent)}
+.hits{position:absolute;left:0;right:0;top:calc(100% + 4px);background:var(--surface);border:1px solid var(--line);border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,.12);z-index:30;list-style:none;margin:0;padding:4px;max-height:320px;overflow:auto}
+.hits li button{width:100%;text-align:left;appearance:none;border:0;background:none;color:var(--ink);font:13px var(--sans);padding:7px 9px;border-radius:6px;cursor:pointer;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.hits li button:hover,.hits li button.on{background:var(--accent-soft)}
+.hits small{color:var(--muted);font-size:11.5px}
+
+.chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.chip{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);font:500 12px/1 var(--sans);padding:6px 10px;border-radius:999px;cursor:pointer;transition:background .18s,border-color .18s}
+.chip:hover{border-color:var(--muted);color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--ink)}
+.filters{display:flex;flex-wrap:wrap;gap:8px 22px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--ink-2)}
+.legend span{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.legend i{width:10px;height:10px;border-radius:50%;display:inline-block;box-shadow:0 0 0 2px var(--surface)}
+.axisnote{font-size:12.5px;color:var(--muted);margin:0}
+
+.work{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:14px;align-items:start}
+@media (max-width:980px){.work{grid-template-columns:1fr}}
+.mapbox{position:relative;height:clamp(520px,74vh,920px);background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+#map{width:100%;height:100%;display:block;cursor:grab;touch-action:none}
+#map:active{cursor:grabbing}
+#map text{font-family:var(--sans);fill:var(--ink);paint-order:stroke;stroke:var(--surface);stroke-width:3.5px;stroke-linejoin:round}
+#map .grp .lab{font-weight:600}
+#map .cnt{fill:var(--muted);font-family:var(--mono);font-weight:400;font-size:11px}
+#map .sub{fill:var(--muted);font-family:var(--mono);font-size:10.5px;font-weight:400}
+#map .shr{fill:var(--ink-2);font-family:var(--mono);font-size:10.5px;font-weight:500}
+#map .mk{fill:var(--muted);font-family:var(--mono);font-size:10.5px;font-weight:400}
+#map .lk{fill:none;stroke:var(--link);stroke-width:1.2;transition:stroke .2s,stroke-width .2s}
+#map .lk.hot{stroke:var(--accent);stroke-width:2.2}
+#map .node{cursor:pointer;transition:opacity .35s}
+#map .node.dim{opacity:.26}
+#map .node .dot{transform-box:fill-box;transform-origin:center;transition:transform .2s cubic-bezier(.3,1.6,.5,1)}
+#map .node:hover .dot{transform:scale(1.45)}
+#map .ring{fill:none;stroke:var(--accent);stroke-width:2}
+#map .ring.rel{stroke-dasharray:3 2.5}
+#map .tag{font-family:var(--mono);font-size:9.5px;fill:var(--accent);font-weight:500}
+.mapnote{position:absolute;left:12px;bottom:10px;font-size:11.5px;color:var(--muted);background:var(--surface);padding:2px 6px;border-radius:4px;pointer-events:none}
+.tip{position:absolute;z-index:20;pointer-events:none;background:var(--ink);color:var(--surface);font-size:12px;line-height:1.45;padding:8px 10px;border-radius:7px;max-width:290px;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.tip b{font-size:13px}
+.tip .m{opacity:.75;font-family:var(--mono);font-size:11px}
+.empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--muted);padding:24px}
+
+aside{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 16px 18px;max-height:clamp(520px,74vh,920px);overflow:auto;min-width:0}
+@media (max-width:980px){aside{max-height:none}}
+aside h2{margin:0;font-size:18px;letter-spacing:-.01em;line-height:1.3}
+aside h3.sec{margin:18px 0 8px;font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.02em}
+aside .en{color:var(--muted);font-size:12.5px;margin-top:2px}
+.badges{display:flex;flex-wrap:wrap;gap:5px;margin:10px 0 12px}
+.badge{font-size:11.5px;padding:3px 8px;border-radius:5px;background:var(--surface-2);color:var(--ink-2);display:inline-flex;align-items:center;gap:5px}
+.badge i{width:8px;height:8px;border-radius:50%;display:inline-block}
+dl{margin:0;display:grid;grid-template-columns:76px minmax(0,1fr);gap:7px 10px;font-size:13px}
+dt{color:var(--muted);font-size:12px;padding-top:1px}
+dd{margin:0;color:var(--ink);min-width:0;overflow-wrap:anywhere}
+.mono{font-family:var(--mono);font-size:12.5px}
+.rel{margin-top:16px;border-top:1px solid var(--line);padding-top:12px}
+.rel h3{margin:0 0 6px;font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.02em}
+.rel .list{display:flex;flex-wrap:wrap;gap:5px}
+.rel button{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:12.5px var(--sans);padding:5px 9px;border-radius:6px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.rel button:hover{border-color:var(--accent)}
+.rel button i{width:7px;height:7px;border-radius:50%}
+.none{font-size:12.5px;color:var(--muted)}
+.note{margin-top:12px;font-size:12.5px;color:var(--ink-2);background:var(--surface-2);border-radius:6px;padding:8px 10px}
+.sumrow{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid var(--line);font-size:13px}
+.sumrow:last-child{border-bottom:0}
+.sumrow b{font-family:var(--mono);font-weight:500;font-variant-numeric:tabular-nums}
+.hint{font-size:12.5px;color:var(--ink-2);margin:6px 0 0}
+.mkt{display:grid;gap:0}
+.mkt .row{display:grid;grid-template-columns:10px minmax(0,1fr) auto;gap:4px 8px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--line)}
+.mkt .row:last-child{border-bottom:0}
+.mkt .row i{width:8px;height:8px;border-radius:50%;align-self:center}
+.mkt .k{font-size:12.5px;color:var(--ink)}
+.mkt .v{font-family:var(--mono);font-size:13px;font-weight:500;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.mkt .s{grid-column:2 / 4;font-size:11.5px;color:var(--muted)}
+.bars{display:grid;gap:5px}
+.bars button{appearance:none;border:0;background:none;padding:2px 0;cursor:pointer;display:grid;grid-template-columns:118px minmax(0,1fr) 96px;gap:8px;align-items:center;font:12px var(--sans);color:var(--ink);text-align:left;border-radius:4px}
+.bars button>span:first-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bars button:hover .fill{filter:brightness(1.08)}
+.bars .track{height:10px;background:var(--surface-2);border-radius:3px;overflow:hidden}
+.bars .fill{height:100%;background:var(--bar);border-radius:0 3px 3px 0;transform-origin:left;animation:grow .7s cubic-bezier(.2,.8,.2,1) both}
+.bars .val{font-family:var(--mono);font-size:11.5px;text-align:right;font-variant-numeric:tabular-nums;color:var(--ink-2)}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.srcline{font-size:11px;color:var(--muted);margin-top:6px}
+
+.tablebox{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:1640px;font-size:12.5px}
+#tbl td:nth-child(2),#tbl td:nth-child(3),#tbl td:nth-child(6){white-space:nowrap}
+#tbl td:nth-child(1){min-width:150px} #tbl td:nth-child(9){min-width:110px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:11.5px;color:var(--muted);font-weight:600;background:var(--surface-2);position:sticky;top:0}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:var(--surface-2)}
+tbody tr.on{background:var(--accent-soft)}
+td .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:1px}
+/* 공급망 흐름도: 열(원료 → 소재 → 셀 → 수요처) 사이를 곡선으로 잇고, 수요처로 가는 선은 수요 유형 색 */
+.flowbox{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow-x:auto;overflow-y:hidden}
+#flow{display:block;width:100%;min-width:860px;height:auto}
+#flowView,#mapView,#tableView{min-width:0}
+#flow text{font-family:var(--sans)}
+#flow .fn{cursor:pointer;transition:opacity .25s}
+#flow .fn .box{fill:var(--surface-2);stroke:transparent;stroke-width:1.2;transition:fill .2s,stroke .2s}
+#flow .fn:hover .box,#flow .fn.sel .box{stroke:var(--accent);fill:var(--accent-soft)}
+#flow .fn .nm{font-size:11.5px;fill:var(--ink)}
+#flow .fn.sel .nm{font-weight:700}
+#flow .fn .v{font-family:var(--mono);font-size:10px;fill:var(--muted)}
+#flow .fn.iso .nm{fill:var(--muted)}
+#flow.focus .fn{opacity:.16}
+#flow.focus .fn.on{opacity:1}
+#flow .fl{fill:none;stroke-width:1.4;transition:opacity .25s,stroke .25s}
+#flow .fl.up{stroke:var(--muted);opacity:.24}
+#flow .fl.ev{stroke:var(--ev);opacity:.42}
+#flow .fl.ess{stroke:var(--ess);opacity:.5}
+#flow .fl.it{stroke:var(--it);opacity:.5}
+#flow .fl.t-jv{stroke-width:2.6}
+#flow .fl.t-c{stroke-dasharray:4 3}
+#flow.focus .fl{opacity:.05}
+#flow.focus .fl.on{opacity:.95}
+#flow.focus .fl.up.on{stroke:var(--ink-2)}
+#flow .hit{fill:none;stroke:transparent;stroke-width:9;pointer-events:stroke;cursor:help}
+#flow .pulse{fill:none;stroke-width:3;stroke-linecap:round;stroke-dasharray:.1 11;animation:flowdash .8s linear infinite;pointer-events:none}
+@keyframes flowdash{to{stroke-dashoffset:-11.1}}
+#flow .ch{font-size:13.5px;font-weight:700;fill:var(--ink)}
+#flow .chn{font-family:var(--mono);font-size:11px;fill:var(--muted);font-weight:400}
+#flow .arrow{fill:var(--muted);font-size:14px}
+#flow .gh{font-size:10.5px;fill:var(--muted);font-weight:600;letter-spacing:.02em}
+.flowlegend{display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px;font-size:12px;color:var(--ink-2);margin-top:8px}
+.flowlegend span{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.mx{margin-top:14px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 0 4px;min-width:0}
+.mx h3{margin:0 16px 4px;font-size:14px}
+.mx p{margin:0 16px 10px;font-size:12px;color:var(--muted)}
+.mxbox{overflow-x:auto}
+#mx{border-collapse:separate;border-spacing:0;min-width:0;width:auto;font-size:12px}
+#mx th,#mx td{padding:0;border-bottom:1px solid var(--line);text-align:center;vertical-align:middle;position:static;background:none}
+#mx thead th{padding:6px 2px 8px;min-width:58px;white-space:nowrap;font-weight:600;color:var(--ink-2);vertical-align:bottom}
+#mx thead th.cnt,#mx td.cnt{min-width:44px;font-family:var(--mono);color:var(--muted);font-weight:400}
+#mx button{appearance:none;border:0;background:none;color:inherit;font:inherit;cursor:pointer;padding:2px 4px;border-radius:4px}
+#mx button:hover{background:var(--accent-soft)}
+#mx .rh{position:sticky;left:0;z-index:1;background:var(--surface);text-align:left;padding:0 10px 0 12px;white-space:nowrap;min-width:150px;font-weight:400}
+#mx .rh small{color:var(--muted);font-size:10.5px;margin-left:4px}
+#mx tr.g td{background:var(--surface-2);text-align:left;font-size:11px;color:var(--muted);font-weight:600;padding:5px 12px;position:sticky;left:0}
+#mx td.x{height:26px}
+#mx td.x span{display:inline-block;font-size:13px;line-height:1;cursor:help}
+#mx td.x span.c{font-size:12px}
+#mx td.x.ev span{color:var(--ev)} #mx td.x.ess span{color:var(--ess)} #mx td.x.it span{color:var(--it)}
+#mx tbody tr:hover td,#mx tbody tr:hover th{background:var(--surface-2)}
+#mx tr.on td,#mx tr.on th,#mx td.on,#mx th.on{background:var(--accent-soft)}
+#mx tbody tr.g:hover td{background:var(--surface-2)}
+.work.flowmode aside{position:sticky;top:12px}
+@media (max-width:980px){.work.flowmode aside{position:static}}
+.rl{list-style:none;margin:0;padding:0;display:grid;gap:7px}
+.rl li{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;font-size:12px}
+.rl .rn{flex-basis:100%;color:var(--muted);font-size:11.5px;line-height:1.45;padding-left:2px}
+.rt{font-size:10.5px;padding:1px 6px;border-radius:4px;background:var(--surface-2);color:var(--ink-2);white-space:nowrap;border:1px solid transparent}
+.rt.jv{background:var(--accent-soft);color:var(--accent)}
+.rt.c{border:1px dashed var(--muted);background:none}
+.rel h4{margin:10px 0 6px;font-size:11.5px;color:var(--ink-2);font-weight:600}
+.toplist{display:grid;gap:4px;font-size:12.5px}
+.toplist button{appearance:none;border:0;background:none;padding:3px 0;cursor:pointer;display:flex;justify-content:space-between;gap:10px;color:var(--ink);font:12.5px var(--sans);text-align:left;border-bottom:1px solid var(--line)}
+.toplist button:hover{color:var(--accent)}
+.toplist b{font-family:var(--mono);font-weight:500;color:var(--ink-2)}
+.lens{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:8px}
+.lens .lbl{font-size:12px;color:var(--muted);margin-right:4px}
+#dlGroup button{font-size:12px}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--surface);font-size:12.5px;padding:8px 14px;border-radius:8px;z-index:50;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+@media print{
+  .bar,.filters,.lens,aside,#tip,#ftip,.toast{display:none!important}
+  body{background:#fff}
+  .work{display:block}
+  .flowbox,.mxbox,.tablebox{overflow:visible;border:0}
+  #flow{min-width:0}
+  #flow .pulse{display:none}
+  .mx{break-before:page}
+}
+footer{font-size:12px;color:var(--muted);line-height:1.7;display:grid;gap:8px}
+footer ul{margin:6px 0 0;padding-left:18px}
+footer summary{cursor:pointer;color:var(--accent);margin-top:4px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <div class="eyebrow">Global Battery Value Chain · 2026.10</div>
+      <h1>2차전지 밸류체인 맵</h1>
+    </div>
+    <div class="stats" id="stats"></div>
+  </header>
+
+  <div class="bar" id="axisBar">
+    <span class="lbl">분류 기준</span>
+    <div class="seg" id="axisSeg" role="group" aria-label="분류 기준"></div>
+  </div>
+
+  <div class="bar">
+    <span class="lbl">보기</span>
+    <div class="seg" id="viewSeg" role="group" aria-label="보기">
+      <button type="button" data-v="flow">흐름도</button>
+      <button type="button" data-v="map">마인드맵</button>
+      <button type="button" data-v="table">표</button>
+    </div>
+    <div class="seg" id="layoutSeg" role="group" aria-label="배치">
+      <button type="button" data-l="h">가로 트리</button>
+      <button type="button" data-l="r">방사형</button>
+    </div>
+    <button type="button" class="btn" id="expandAll">모두 펼치기</button>
+    <button type="button" class="btn" id="collapseAll">모두 접기</button>
+    <button type="button" class="btn" id="fitBtn">화면 맞춤</button>
+    <div class="seg" id="dlGroup" role="group" aria-label="내려받기" hidden>
+      <button type="button" id="dlPng" title="현재 흐름도(강조 상태 포함)를 이미지로 저장">흐름도 PNG</button>
+      <button type="button" id="dlCos" title="전체 기업 목록 (필터와 무관)">기업 CSV</button>
+      <button type="button" id="dlRel" title="전체 공급 관계 (필터와 무관)">관계 CSV</button>
+    </div>
+    <div class="search">
+      <input id="q" type="search" placeholder="기업명·영문명·티커 검색 (예: 373220, CATL)" autocomplete="off" aria-label="기업 검색">
+      <ul class="hits" id="hits" hidden></ul>
+    </div>
+  </div>
+
+  <div class="filters">
+    <div class="chips" id="regionChips"><span class="lbl">지역</span></div>
+    <div class="chips" id="demandChips"><span class="lbl">전방 수요</span></div>
+  </div>
+
+  <div class="legend" id="legend"></div>
+  <p class="axisnote" id="axisNote"></p>
+
+  <div class="work" id="work">
+    <div id="flowView" hidden>
+      <div class="lens" id="lensBar" role="group" aria-label="빠른 보기"></div>
+      <div class="flowbox" id="flowbox">
+        <svg id="flow" role="img" aria-label="원료에서 수요처까지 공급망 흐름도"></svg>
+        <div class="tip" id="ftip" hidden></div>
+      </div>
+      <div class="flowlegend" id="flowLegend"></div>
+      <section class="mx" aria-labelledby="mxTitle">
+        <h3 id="mxTitle">셀 제조사 → 수요처 매트릭스</h3>
+        <p>행은 수요처(완성차·ESS·IT), 열은 셀 제조사입니다. ◆ 합작·계열 · ● 공급 · ○ 수주·공급 예정. 칸에 마우스를 올리면 계약 내용이 나오고, 이름을 누르면 상세 정보를 엽니다.</p>
+        <div class="mxbox"><table id="mx"></table></div>
+      </section>
+    </div>
+    <div id="mapView" hidden>
+      <div class="mapbox" id="mapbox">
+        <svg id="map" role="img" aria-label="2차전지 밸류체인 마인드맵"></svg>
+        <div class="tip" id="tip" hidden></div>
+        <div class="empty" id="empty" hidden></div>
+        <div class="mapnote">드래그로 이동 · 휠/핀치로 확대 · 그룹을 누르면 펼치기/접기 · 원 크기 = 배터리 점유율</div>
+      </div>
+    </div>
+    <div id="tableView" hidden>
+      <div class="tablebox"><table id="tbl"><thead><tr>
+        <th>기업</th><th>국가</th><th>티커</th><th>밸류체인</th><th>주요 제품</th><th>점유율</th><th>배터리 화학</th><th>폼팩터</th><th>전방 수요</th><th>주요 고객사</th><th>주요 공급사</th>
+      </tr></thead><tbody></tbody></table></div>
+    </div>
+    <aside id="panel" aria-live="polite"></aside>
+  </div>
+
+  <footer>
+    <div>공개 자료(기업 공시·IR·언론 보도)를 바탕으로 정리한 내부 참고용 지도입니다. 고객사·공급사 관계는 대표적인 보도 기준이며 전체 거래처가 아닙니다. 티커는 「코드.거래소」 형식(KS 코스피 · KQ 코스닥 · SS 상해 · SZ 심천 · BJ 북경 · HK 홍콩 · T 도쿄 · AX 호주 · L 런던 · DE 독일 · 접미사 없음 = 미국)이고, 국내 종목은 DataGuide 코드(A+6자리)를 함께 표시합니다. 투자 판단의 근거가 아닙니다.</div>
+    <div><b>시장 규모·점유율 출처</b> — 조사기관별로 집계 기준(장착 사용량·출하량·수요)이 달라 수치를 서로 더하거나 비교하면 안 됩니다. 일부는 언론·2차 자료 인용이니 리포트에 쓸 때는 원문으로 확인하세요.
+      <details><summary>시장 규모·점유율 출처 보기</summary><ul id="srcList"></ul></details>
+    </div>
+    <div><b>업데이트 내역</b>
+      <ul>
+        <li>2026.10.15 — 장비·재활용을 흐름도에 포함, 소재·장비사 고객 관계와 국내 상장사 보강, 빠른 보기·내려받기(PNG·CSV) 추가, EV 판매·ESS 설치 규모 추가</li>
+        <li>2026.10.14 — 공급망 흐름도와 셀×수요처 매트릭스, 완성차·ESS·IT 수요처 27곳 추가</li>
+        <li>2026.10.14 — 티커(KS·KQ, DataGuide 코드), 단계별 시장 규모·EV·ESS 점유율, 마인드맵 전환 애니메이션</li>
+        <li>2026.10 — 최초 공개 (115개 기업, 7개 분류 기준 마인드맵·표)</li>
+      </ul>
+    </div>
+    <div><b>공급 관계 출처</b> — 셀 제조사와 완성차·ESS 고객의 관계는 공시·보도자료·언론 보도 기준이며, 「수주·공급 예정」은 계약만 체결되고 아직 본격 공급 전인 건입니다. 금액·물량은 보도치가 섞여 있습니다.
+      <details><summary id="relSrcSum">공급 관계 출처 보기</summary><ul id="relSrcList"></ul></details>
+    </div>
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script>
+(function(){
+"use strict";
+/* ───────── 분류 체계 ───────── */
+const STAGES=[
+ {k:'raw',  name:'원료·광물',     subs:['리튬','니켈·코발트','흑연']},
+ {k:'cath', name:'양극',          subs:['전구체','양극재(삼원계)','양극재(LFP)','양극재(LCO 등)']},
+ {k:'anode',name:'음극',          subs:['흑연계 음극재','실리콘계 음극재']},
+ {k:'elsep',name:'전해액·분리막', subs:['전해액','전해질·첨가제','분리막']},
+ {k:'parts',name:'부품·기타 소재',subs:['동박','알루미늄박','도전재·바인더','파우치·캔·캡','ESS 부품']},
+ {k:'cell', name:'셀',            subs:['중대형 셀(EV·ESS)','소형 셀(IT·공구)']},
+ {k:'eqr',  name:'장비·재활용',   subs:['공정 장비','리사이클링']},
+ {k:'oem',  name:'수요처',        subs:['완성차(EV)','ESS 통합·발주','IT·전동공구']}
+];
+const STAGE_IDX=Object.fromEntries(STAGES.map((s,i)=>[s.k,i]));
+const SCOL=k=>`var(--s${STAGE_IDX[k]+1})`;
+const CHEM={NCx:'삼원계 (NCM·NCA)',LFP:'LFP·LMFP',NA:'나트륨이온',SSB:'전고체 (개발)',CMN:'화학계 공통'};
+const DEM={EV:'EV 전기차',ESS:'ESS 에너지저장',IT:'IT·소형기기',PT:'전동공구·모빌리티'};
+const FORMS=['각형','파우치','원통'];
+const EXG_ORDER=['한국거래소','중국 본토','홍콩','일본(도쿄)','미국','유럽','호주','기타 해외','비상장'];
+const REGION={'한국':'한국','중국':'중국','일본':'일본','미국':'미주','칠레':'미주','브라질':'미주','독일':'유럽','벨기에':'유럽','프랑스':'유럽','스웨덴':'유럽','네덜란드':'유럽','스위스':'유럽','영국':'유럽','호주':'호주·기타','러시아':'호주·기타'};
+const REGIONS=['한국','중국','일본','미주','유럽','호주·기타'];
+
+/* ───────── 기업 데이터 (공개 자료 기준) ─────────
+   st: [단계, 세부] 소속(복수 가능) · ch: 배터리 화학 · f: 폼팩터 · d: 전방 수요 · cu: 주요 고객사(보도 기준)
+   티커는 아래 TICK 표가 기준(x·t 필드는 쓰지 않음) */
+const COS=[
+ // 원료·광물
+ {id:'alb',ko:'앨버말',en:'Albemarle',c:'미국',x:'NYSE',t:'ALB',st:[['raw','리튬']],p:'탄산·수산화리튬 (칠레 염호, 호주 광산 지분)',ch:['NCx','LFP'],d:['EV','ESS']},
+ {id:'sqm',ko:'SQM',en:'Sociedad Química y Minera',c:'칠레',x:'NYSE',t:'SQM (ADR)',st:[['raw','리튬']],p:'칠레 아타카마 염호 기반 탄산·수산화리튬',ch:['NCx','LFP'],d:['EV','ESS']},
+ {id:'ganfeng',ko:'간펑리튬',en:'Ganfeng Lithium',c:'중국',x:'SZSE',t:'002460 · HK 1772',st:[['raw','리튬']],p:'리튬 화합물·금속리튬, 전고체 등 배터리 사업 병행',ch:['NCx','LFP','SSB'],d:['EV','ESS']},
+ {id:'tianqi',ko:'톈치리튬',en:'Tianqi Lithium',c:'중국',x:'SZSE',t:'002466 · HK 9696',st:[['raw','리튬']],p:'리튬 정광·화합물 (호주 그린부시스 광산 지분)',ch:['NCx','LFP'],d:['EV','ESS']},
+ {id:'pls',ko:'필바라 미네랄스',en:'Pilbara Minerals (PLS)',c:'호주',x:'ASX',t:'PLS',st:[['raw','리튬']],p:'스포듀민 리튬 정광 (필강고라 광산)',ch:['NCx','LFP'],d:['EV','ESS'],n:'포스코홀딩스와 광양 수산화리튬 합작'},
+ {id:'minres',ko:'미네랄 리소시스',en:'Mineral Resources',c:'호주',x:'ASX',t:'MIN',st:[['raw','리튬']],p:'스포듀민 리튬 정광, 철광석',ch:['NCx','LFP'],d:['EV','ESS']},
+ {id:'rio',ko:'리오틴토',en:'Rio Tinto',c:'영국',x:'EU',t:'LSE RIO · ASX RIO',st:[['raw','리튬']],p:'리튬 (2025년 아케이디움 리튬 인수), 구리·철광석',ch:['NCx','LFP'],d:['EV','ESS']},
+ {id:'posco_h',ko:'포스코홀딩스',en:'POSCO Holdings',c:'한국',x:'KRX',t:'005490',st:[['raw','리튬']],p:'수산화리튬 (아르헨티나 염호, 광양 공장), 철강',ch:['NCx','LFP'],d:['EV','ESS'],n:'포스코퓨처엠의 지주사'},
+ {id:'huayou',ko:'화유코발트',en:'Zhejiang Huayou Cobalt',c:'중국',x:'SSE',t:'603799',st:[['raw','니켈·코발트'],['cath','전구체']],p:'코발트·니켈 (인도네시아 HPAL), 전구체·양극재 계열사',ch:['NCx'],d:['EV','ESS']},
+ {id:'cmoc',ko:'CMOC(뤄양몰리브덴)',en:'CMOC Group',c:'중국',x:'SSE',t:'603993 · HK 3993',st:[['raw','니켈·코발트']],p:'콩고민주공화국 코발트·구리 광산',ch:['NCx'],d:['EV','IT']},
+ {id:'glencore',ko:'글렌코어',en:'Glencore',c:'스위스',x:'EU',t:'LSE GLEN',st:[['raw','니켈·코발트']],p:'코발트·니켈 채굴 및 원자재 트레이딩',ch:['NCx'],d:['EV','IT']},
+ {id:'vale',ko:'발레',en:'Vale',c:'브라질',x:'B3',t:'VALE3 · NYSE VALE',st:[['raw','니켈·코발트']],p:'니켈·코발트 (Vale Base Metals), 철광석',ch:['NCx'],d:['EV']},
+ {id:'nornickel',ko:'노르니켈',en:'Nornickel',c:'러시아',x:'MOEX',t:'GMKN',st:[['raw','니켈·코발트']],p:'니켈·코발트·팔라듐',ch:['NCx'],d:['EV']},
+ {id:'tsingshan',ko:'칭산그룹',en:'Tsingshan Holding',c:'중국',x:'비상장',t:'—',st:[['raw','니켈·코발트']],p:'인도네시아 니켈 (NPI·니켈매트), 스테인리스',ch:['NCx'],d:['EV'],n:'루이푸에너지(REPT) 계열'},
+ {id:'nic',ko:'니켈 인더스트리즈',en:'Nickel Industries',c:'호주',x:'ASX',t:'NIC',st:[['raw','니켈·코발트']],p:'인도네시아 니켈 (RKEF·HPAL)',ch:['NCx'],d:['EV']},
+ {id:'korea_zinc',ko:'고려아연',en:'Korea Zinc',c:'한국',x:'KRX',t:'010130',st:[['raw','니켈·코발트'],['cath','전구체']],p:'황산니켈 제련, 전구체 (LG화학 합작 한국전구체주식회사)',ch:['NCx'],d:['EV'],cu:['lgchem']},
+ {id:'syrah',ko:'시라 리소시스',en:'Syrah Resources',c:'호주',x:'ASX',t:'SYR',st:[['raw','흑연'],['anode','흑연계 음극재']],p:'모잠비크 천연흑연, 미국 비달리아 음극재 공장',ch:['CMN'],d:['EV'],cu:['tesla']},
+ // 양극
+ {id:'cngr',ko:'중웨이',en:'CNGR Advanced Material',c:'중국',x:'SZSE',t:'300919',st:[['cath','전구체']],p:'삼원계 전구체 (세계 최대 규모), 인도네시아 니켈',ch:['NCx'],d:['EV']},
+ {id:'gem',ko:'거린메이',en:'GEM Co.',c:'중국',x:'SZSE',t:'002340',st:[['cath','전구체'],['eqr','리사이클링']],p:'삼원계 전구체, 폐배터리·폐자원 재활용',ch:['NCx'],d:['EV']},
+ {id:'ecopro_mat',ko:'에코프로머티리얼즈',en:'EcoPro Materials',c:'한국',x:'KRX',t:'450080',st:[['cath','전구체']],p:'하이니켈 전구체',ch:['NCx'],d:['EV'],cu:['ecopro_bm']},
+ {id:'ecopro_bm',ko:'에코프로비엠',en:'EcoPro BM',c:'한국',x:'KRX',t:'247540',st:[['cath','양극재(삼원계)']],p:'하이니켈 NCA·NCM 양극재 (헝가리 데브레첸 공장)',ch:['NCx'],d:['EV','ESS'],cu:['sdi','skon']},
+ {id:'posco_fm',ko:'포스코퓨처엠',en:'POSCO Future M',c:'한국',x:'KRX',t:'003670',st:[['cath','양극재(삼원계)'],['anode','흑연계 음극재']],p:'NCM·NCMA 양극재, 천연·인조흑연 음극재, 내화물',ch:['NCx'],d:['EV','ESS'],cu:['lges','sdi'],n:'GM과 북미 양극재 합작 (얼티엄캠)'},
+ {id:'lnf',ko:'엘앤에프',en:'L&F',c:'한국',x:'KRX',t:'066970',st:[['cath','양극재(삼원계)'],['cath','양극재(LFP)']],p:'하이니켈 NCMA 양극재, LFP 양극재',ch:['NCx','LFP'],d:['EV','ESS'],cu:['lges','skon','tesla'],n:'테슬라 공급계약(2023)은 이후 계약 규모 축소 공시'},
+ {id:'lgchem',ko:'LG화학',en:'LG Chem',c:'한국',x:'KRX',t:'051910',st:[['cath','양극재(삼원계)'],['parts','도전재·바인더']],p:'NCMA·단입자 양극재, CNT 도전재, 석유화학',ch:['NCx'],d:['EV','ESS'],cu:['lges','gm','toyota'],n:'LG에너지솔루션의 모회사. GM·토요타 양극재 공급계약 (보도 기준)'},
+ {id:'cosmo',ko:'코스모신소재',en:'Cosmo AM&T',c:'한국',x:'KRX',t:'005070',st:[['cath','양극재(삼원계)']],p:'NCM 양극재, 이형·점착 필름',ch:['NCx'],d:['EV','IT']},
+ {id:'umicore',ko:'유미코아',en:'Umicore',c:'벨기에',x:'EU',t:'Euronext UMI',st:[['cath','양극재(삼원계)'],['eqr','리사이클링']],p:'NCM 양극재, 배터리 재활용, 촉매',ch:['NCx'],d:['EV']},
+ {id:'basf',ko:'BASF',en:'BASF',c:'독일',x:'EU',t:'XETRA BAS',st:[['cath','양극재(삼원계)']],p:'양극재 (BASF 도다 배터리 머티리얼즈), 핀란드 전구체',ch:['NCx'],d:['EV']},
+ {id:'smm',ko:'스미토모금속광산',en:'Sumitomo Metal Mining',c:'일본',x:'TSE',t:'5713',st:[['cath','양극재(삼원계)'],['raw','니켈·코발트']],p:'NCA 양극재, 니켈 제련',ch:['NCx'],d:['EV'],cu:['panasonic']},
+ {id:'ronbay',ko:'룽바이',en:'Ningbo Ronbay',c:'중국',x:'SSE',t:'688005',st:[['cath','양극재(삼원계)']],p:'하이니켈 NCM 양극재, 나트륨이온 양극재 (한국 충주 공장)',ch:['NCx','NA'],d:['EV']},
+ {id:'easpring',ko:'당승과기',en:'Beijing Easpring',c:'중국',x:'SZSE',t:'300073',st:[['cath','양극재(삼원계)']],p:'NCM·LCO 양극재',ch:['NCx'],d:['EV','IT']},
+ {id:'yuneng',ko:'후난위넝',en:'Hunan Yuneng',c:'중국',x:'SZSE',t:'301358',st:[['cath','양극재(LFP)']],p:'LFP 양극재 (출하량 최상위권)',ch:['LFP'],d:['EV','ESS'],cu:['catl']},
+ {id:'dynanonic',ko:'더팡나노',en:'Shenzhen Dynanonic',c:'중국',x:'SZSE',t:'300769',st:[['cath','양극재(LFP)']],p:'LFP·LMFP 양극재',ch:['LFP'],d:['EV','ESS'],cu:['catl']},
+ {id:'xtc',ko:'샤먼텅스텐신에너지',en:'XTC New Energy',c:'중국',x:'SSE',t:'688778',st:[['cath','양극재(LCO 등)']],p:'LCO(코발트산리튬)·NCM 양극재',ch:['NCx'],d:['IT','EV']},
+ // 음극
+ {id:'btr',ko:'베터르',en:'BTR New Material',c:'중국',x:'BSE',t:'835185',st:[['anode','흑연계 음극재'],['anode','실리콘계 음극재']],p:'천연·인조흑연, 실리콘계 음극재 (출하 세계 1위권)',d:['EV','ESS','IT']},
+ {id:'shanshan',ko:'샨샨',en:'Ningbo Shanshan',c:'중국',x:'SSE',t:'600884',st:[['anode','흑연계 음극재']],p:'인조흑연 음극재, 편광판',d:['EV','ESS']},
+ {id:'putailai',ko:'푸타이라이',en:'Shanghai Putailai',c:'중국',x:'SSE',t:'603659',st:[['anode','흑연계 음극재'],['elsep','분리막']],p:'인조흑연 음극재, 분리막 코팅, PVDF',d:['EV','ESS']},
+ {id:'shangtai',ko:'상타이',en:'Shangtai Technology',c:'중국',x:'SZSE',t:'001301',st:[['anode','흑연계 음극재']],p:'인조흑연 음극재',d:['EV','ESS']},
+ {id:'daejoo',ko:'대주전자재료',en:'Daejoo Electronic Materials',c:'한국',x:'KRX',t:'078600',st:[['anode','실리콘계 음극재']],p:'실리콘(SiOx) 음극재, 전자 소재',d:['EV']},
+ {id:'novonix',ko:'노보닉스',en:'Novonix',c:'호주',x:'ASX',t:'NVX · NASDAQ NVX',st:[['anode','흑연계 음극재']],p:'인조흑연 음극재 (미국 테네시 공장)',d:['EV','ESS'],cu:['panasonic']},
+ {id:'group14',ko:'그룹14',en:'Group14 Technologies',c:'미국',x:'비상장',t:'—',st:[['anode','실리콘계 음극재']],p:'실리콘-탄소 복합 음극재',d:['EV','IT'],n:'SK그룹과 국내 합작'},
+ {id:'sila',ko:'실라',en:'Sila Nanotechnologies',c:'미국',x:'비상장',t:'—',st:[['anode','실리콘계 음극재']],p:'실리콘 음극재 (미국 모지스레이크 공장)',d:['EV','IT']},
+ // 전해액·분리막
+ {id:'tinci',ko:'톈츠소재',en:'Guangzhou Tinci',c:'중국',x:'SZSE',t:'002709',st:[['elsep','전해액'],['elsep','전해질·첨가제']],p:'전해액 (출하 세계 1위권), LiPF6',d:['EV','ESS'],cu:['catl']},
+ {id:'capchem',ko:'신쟈오',en:'Shenzhen Capchem',c:'중국',x:'SZSE',t:'300037',st:[['elsep','전해액']],p:'전해액, 유기불소 화학',d:['EV','ESS','IT']},
+ {id:'dfd',ko:'둬푸둬',en:'Do-Fluoride New Materials',c:'중국',x:'SZSE',t:'002407',st:[['elsep','전해질·첨가제']],p:'LiPF6·LiFSI 전해질',d:['EV','ESS']},
+ {id:'enchem',ko:'엔켐',en:'Enchem',c:'한국',x:'KRX',t:'348370',st:[['elsep','전해액']],p:'전해액 (한국·중국·미국·유럽 거점)',d:['EV','ESS'],cu:['skon']},
+ {id:'soulbrain',ko:'솔브레인',en:'Soulbrain',c:'한국',x:'KRX',t:'357780',st:[['elsep','전해액']],p:'전해액, 반도체 공정 소재',d:['EV','IT'],cu:['sdi']},
+ {id:'dongwha',ko:'동화기업',en:'Dongwha Enterprise',c:'한국',x:'KRX',t:'025900',st:[['elsep','전해액']],p:'전해액 (동화일렉트로라이트), 목재 소재',d:['EV','ESS']},
+ {id:'chunbo',ko:'천보',en:'Chunbo',c:'한국',x:'KRX',t:'278280',st:[['elsep','전해질·첨가제']],p:'전해질·첨가제 (LiFSI·LiPO2F2 등)',d:['EV','ESS']},
+ {id:'foosung',ko:'후성',en:'Foosung',c:'한국',x:'KRX',t:'093370',st:[['elsep','전해질·첨가제']],p:'LiPF6 전해질, 불소 화학',d:['EV','ESS']},
+ {id:'mcc',ko:'미쓰비시케미칼',en:'Mitsubishi Chemical Group',c:'일본',x:'TSE',t:'4188',st:[['elsep','전해액']],p:'전해액, 음극재 등 화학 소재',d:['EV','IT']},
+ {id:'skiet',ko:'SK아이이테크놀로지',en:'SK IE Technology',c:'한국',x:'KRX',t:'361610',st:[['elsep','분리막']],p:'습식 분리막 (한국·중국·폴란드)',d:['EV'],cu:['skon']},
+ {id:'wcp',ko:'더블유씨피',en:'WCP',c:'한국',x:'KRX',t:'393890',st:[['elsep','분리막']],p:'습식 분리막',d:['EV','ESS'],cu:['sdi'],n:'일본 W-Scope 계열'},
+ {id:'semcorp',ko:'은첩(엔지에)',en:'Yunnan Energy New Material (SEMCORP)',c:'중국',x:'SZSE',t:'002812',st:[['elsep','분리막']],p:'습식 분리막 (세계 1위)',d:['EV','ESS'],cu:['catl']},
+ {id:'senior',ko:'싱위안',en:'Shenzhen Senior Technology',c:'중국',x:'SZSE',t:'300568',st:[['elsep','분리막']],p:'건식·습식 분리막',d:['EV','ESS']},
+ {id:'asahi',ko:'아사히카세이',en:'Asahi Kasei',c:'일본',x:'TSE',t:'3407',st:[['elsep','분리막']],p:'습식 분리막(하이포어), 건식 분리막(셀가드)',d:['EV','ESS','IT']},
+ {id:'toray',ko:'도레이',en:'Toray Industries',c:'일본',x:'TSE',t:'3402',st:[['elsep','분리막']],p:'분리막 (LG화학과 헝가리 합작), 탄소섬유',d:['EV']},
+ // 부품·기타 소재
+ {id:'skc',ko:'SKC',en:'SKC',c:'한국',x:'KRX',t:'011790',st:[['parts','동박']],p:'전지용 동박 (자회사 SK넥실리스), 반도체 글라스기판',d:['EV']},
+ {id:'lotteemat',ko:'롯데에너지머티리얼즈',en:'Lotte Energy Materials',c:'한국',x:'KRX',t:'020150',st:[['parts','동박']],p:'전지박(동박)',d:['EV','ESS']},
+ {id:'solus',ko:'솔루스첨단소재',en:'Solus Advanced Materials',c:'한국',x:'KRX',t:'336370',st:[['parts','동박']],p:'전지박 (헝가리·캐나다 공장), OLED 소재',d:['EV']},
+ {id:'nuode',ko:'누오더',en:'Nuode New Materials',c:'중국',x:'SSE',t:'600110',st:[['parts','동박']],p:'리튬전지용 동박',d:['EV','ESS']},
+ {id:'jiayuan',ko:'자위안과기',en:'Jiayuan Technology',c:'중국',x:'SSE',t:'688388',st:[['parts','동박']],p:'리튬전지용 동박',d:['EV','ESS']},
+ {id:'sama',ko:'삼아알미늄',en:'Sama Aluminium',c:'한국',x:'KRX',t:'006110',st:[['parts','알루미늄박']],p:'양극 집전체용 알루미늄박',d:['EV','ESS']},
+ {id:'nanoshin',ko:'나노신소재',en:'Advanced Nano Products',c:'한국',x:'KRX',t:'121600',st:[['parts','도전재·바인더']],p:'CNT 도전재, 디스플레이·태양광 소재',d:['EV']},
+ {id:'cnano',ko:'톈나이과기',en:'Jiangsu Cnano Technology',c:'중국',x:'SSE',t:'688116',st:[['parts','도전재·바인더']],p:'CNT 도전재 (세계 1위권)',d:['EV','ESS']},
+ {id:'cabot',ko:'캐보트',en:'Cabot Corporation',c:'미국',x:'NYSE',t:'CBT',st:[['parts','도전재·바인더']],p:'카본블랙·CNT 도전재',d:['EV','ESS']},
+ {id:'kureha',ko:'구레하',en:'Kureha',c:'일본',x:'TSE',t:'4023',st:[['parts','도전재·바인더']],p:'PVDF 바인더',d:['EV','IT']},
+ {id:'hansol',ko:'한솔케미칼',en:'Hansol Chemical',c:'한국',x:'KRX',t:'014680',st:[['parts','도전재·바인더']],p:'2차전지 바인더, 반도체 공정 소재',d:['EV']},
+ {id:'dnp',ko:'다이닛폰인쇄',en:'Dai Nippon Printing',c:'일본',x:'TSE',t:'7912',st:[['parts','파우치·캔·캡']],p:'파우치 필름 (세계 1위권)',f:['파우치'],d:['EV','IT']},
+ {id:'yulchon',ko:'율촌화학',en:'Youlchon Chemical',c:'한국',x:'KRX',t:'008730',st:[['parts','파우치·캔·캡']],p:'파우치 필름, 포장재',f:['파우치'],d:['EV','IT']},
+ {id:'sangsin',ko:'상신이디피',en:'Sangsin EDP',c:'한국',x:'KRX',t:'091580',st:[['parts','파우치·캔·캡']],p:'원통형·각형 배터리 캔',f:['원통','각형'],d:['EV','IT','PT'],cu:['sdi']},
+ {id:'dongwonsys',ko:'동원시스템즈',en:'Dongwon Systems',c:'한국',x:'KRX',t:'014820',st:[['parts','파우치·캔·캡']],p:'원통형 배터리 캔, 포장재',f:['원통'],d:['EV','PT']},
+ {id:'shinheung',ko:'신흥에스이씨',en:'Shinheung SEC',c:'한국',x:'KRX',t:'243840',st:[['parts','파우치·캔·캡']],p:'캡 어셈블리(CID)·각형 부품',f:['원통','각형'],d:['EV','IT'],cu:['sdi']},
+ // 셀
+ {id:'catl',ko:'CATL',en:'Contemporary Amperex Technology',c:'중국',x:'SZSE',t:'300750 · HK 3750',st:[['cell','중대형 셀(EV·ESS)']],p:'EV·ESS 셀 (출하 세계 1위), 독일·헝가리 공장',ch:['NCx','LFP','NA'],f:['각형'],d:['EV','ESS'],n:'스텔란티스와 스페인 LFP 합작, 포드에 LFP 기술 라이선스'},
+ {id:'byd',ko:'BYD',en:'BYD Company',c:'중국',x:'HKEX',t:'1211 · SZ 002594',st:[['cell','중대형 셀(EV·ESS)']],p:'LFP 블레이드 배터리 (배터리 자회사 핀드림스), 자사 전기차·ESS 탑재',ch:['LFP','NA'],f:['각형'],d:['EV','ESS'],n:'셀 대부분을 자사 전기차·ESS에 탑재'},
+ {id:'lges',ko:'LG에너지솔루션',en:'LG Energy Solution',c:'한국',x:'KRX',t:'373220',st:[['cell','중대형 셀(EV·ESS)'],['cell','소형 셀(IT·공구)']],p:'파우치·원통형(46시리즈 포함) 셀, ESS용 LFP (한국·중국·폴란드·미국·인니)',ch:['NCx','LFP'],f:['파우치','원통'],d:['EV','ESS','IT','PT'],n:'GM·현대차그룹·혼다·스텔란티스와 북미 합작 공장'},
+ {id:'sdi',ko:'삼성SDI',en:'Samsung SDI',c:'한국',x:'KRX',t:'006400',st:[['cell','중대형 셀(EV·ESS)'],['cell','소형 셀(IT·공구)']],p:'각형·원통형 셀, ESS (한국·중국·헝가리·말레이시아·미국)',ch:['NCx','LFP','SSB'],f:['각형','원통'],d:['EV','ESS','IT','PT'],n:'스텔란티스 합작 스타플러스에너지, 전고체 개발'},
+ {id:'skon',ko:'SK온',en:'SK On',c:'한국',x:'비상장',t:'모회사 SK이노베이션 096770',st:[['cell','중대형 셀(EV·ESS)']],p:'하이니켈 파우치 셀 (한국·중국·헝가리·미국)',ch:['NCx','LFP'],f:['파우치'],d:['EV','ESS'],n:'포드와의 합작(블루오벌SK)은 2025.12 해소 합의 — SK온이 테네시 공장 단독 운영, 포드가 켄터키 공장 인수. 테네시 공장은 포드 공급과 ESS 생산 병행'},
+ {id:'panasonic',ko:'파나소닉에너지',en:'Panasonic Energy',c:'일본',x:'TSE',t:'6752 (파나소닉홀딩스)',st:[['cell','중대형 셀(EV·ESS)'],['cell','소형 셀(IT·공구)']],p:'원통형 2170·4680 셀 (미국 네바다·캔자스 공장)',ch:['NCx'],f:['원통'],d:['EV','IT','PT']},
+ {id:'calb',ko:'CALB(중촹신항)',en:'CALB Group',c:'중국',x:'HKEX',t:'3931',st:[['cell','중대형 셀(EV·ESS)']],p:'삼원계·LFP 각형 셀',ch:['NCx','LFP'],f:['각형'],d:['EV','ESS']},
+ {id:'gotion',ko:'궈쉬안하이테크',en:'Gotion High-Tech',c:'중국',x:'SZSE',t:'002074',st:[['cell','중대형 셀(EV·ESS)']],p:'LFP 셀 (EV·ESS)',ch:['LFP'],f:['각형'],d:['EV','ESS'],n:'폭스바겐그룹이 최대주주'},
+ {id:'eve',ko:'이브에너지',en:'EVE Energy',c:'중국',x:'SZSE',t:'300014',st:[['cell','중대형 셀(EV·ESS)'],['cell','소형 셀(IT·공구)']],p:'ESS용 LFP 각형, 46시리즈 원통형, 소형 전지',ch:['LFP','NCx'],f:['각형','원통'],d:['ESS','EV','IT','PT']},
+ {id:'svolt',ko:'펑차오에너지(SVOLT)',en:'SVOLT Energy',c:'중국',x:'비상장',t:'—',st:[['cell','중대형 셀(EV·ESS)']],p:'EV·ESS 셀',ch:['NCx','LFP'],f:['각형'],d:['EV','ESS'],n:'창청자동차(Great Wall) 계열'},
+ {id:'sunwoda',ko:'신왕다',en:'Sunwoda Electronic',c:'중국',x:'SZSE',t:'300207',st:[['cell','소형 셀(IT·공구)'],['cell','중대형 셀(EV·ESS)']],p:'스마트폰·노트북 배터리 팩, EV 셀',ch:['NCx','LFP'],d:['IT','EV']},
+ {id:'rept',ko:'루이푸에너지(REPT)',en:'REPT Battero',c:'중국',x:'HKEX',t:'0666',st:[['cell','중대형 셀(EV·ESS)']],p:'ESS·EV용 LFP 각형 셀',ch:['LFP'],f:['각형'],d:['ESS','EV'],n:'칭산그룹 계열'},
+ {id:'hithium',ko:'하이티움',en:'Hithium',c:'중국',x:'비상장',t:'—',st:[['cell','중대형 셀(EV·ESS)']],p:'ESS 전용 LFP 각형 셀',ch:['LFP','NA'],f:['각형'],d:['ESS']},
+ {id:'farasis',ko:'부능테크(Farasis)',en:'Farasis Energy',c:'중국',x:'SSE',t:'688567',st:[['cell','중대형 셀(EV·ESS)']],p:'삼원계 파우치 셀',ch:['NCx'],f:['파우치'],d:['EV']},
+ {id:'atl',ko:'ATL',en:'Amperex Technology (TDK)',c:'중국',x:'TSE',t:'모회사 TDK 6762',st:[['cell','소형 셀(IT·공구)']],p:'스마트폰·노트북용 파우치 셀 (소형 세계 1위권)',ch:['NCx'],f:['파우치'],d:['IT'],n:'일본 TDK 자회사, 본사 홍콩·생산 중국'},
+ {id:'murata',ko:'무라타제작소',en:'Murata Manufacturing',c:'일본',x:'TSE',t:'6981',st:[['cell','소형 셀(IT·공구)']],p:'원통형 소형 전지 (전동공구 등), 전자부품',ch:['NCx'],f:['원통'],d:['PT','IT']},
+ {id:'aesc',ko:'AESC',en:'AESC Group',c:'일본',x:'비상장',t:'—',st:[['cell','중대형 셀(EV·ESS)']],p:'EV·ESS 셀 (일본·중국·영국·미국 등)',ch:['NCx','LFP'],f:['각형','파우치'],d:['EV','ESS'],n:'중국 엔비전 그룹 소유, 닛산 배터리 사업에서 분사. 2026.4 미국 테네시 공장 지분 과반을 Fixx Energy에 매각 보도'},
+ {id:'acc',ko:'ACC',en:'Automotive Cells Company',c:'프랑스',x:'비상장',t:'—',st:[['cell','중대형 셀(EV·ESS)']],p:'EV용 셀 (프랑스 공장)',ch:['NCx'],d:['EV'],n:'스텔란티스·메르세데스-벤츠·토탈에너지스 합작'},
+ {id:'powerco',ko:'파워코',en:'PowerCo',c:'독일',x:'비상장',t:'—',st:[['cell','중대형 셀(EV·ESS)']],p:'통합 각형 셀 (독일 잘츠기터 공장)',ch:['NCx','LFP'],f:['각형'],d:['EV'],n:'폭스바겐그룹 배터리 자회사'},
+ {id:'northvolt',ko:'노스볼트',en:'Northvolt',c:'스웨덴',x:'비상장',t:'—',st:[['cell','중대형 셀(EV·ESS)']],p:'EV·ESS 셀',ch:['NCx'],d:['EV','ESS'],n:'2024.11 미국 챕터11, 2025.3 스웨덴 파산 신청 이후 자산 매각 (보도 기준) — 현황 확인 필요'},
+ // 장비·재활용
+ {id:'pnt',ko:'피엔티',en:'PNT',c:'한국',x:'KRX',t:'137400',st:[['eqr','공정 장비']],p:'전극 공정 장비 (코터·슬리터), 동박 장비',d:['EV','ESS']},
+ {id:'cis',ko:'씨아이에스',en:'CIS',c:'한국',x:'KRX',t:'222080',st:[['eqr','공정 장비']],p:'전극 공정 장비 (캘린더·코터)',d:['EV','ESS']},
+ {id:'hanatech',ko:'하나기술',en:'Hana Technology',c:'한국',x:'KRX',t:'299030',st:[['eqr','공정 장비']],p:'조립·화성 공정 장비',d:['EV','ESS']},
+ {id:'wonikpne',ko:'원익피앤이',en:'Wonik PNE',c:'한국',x:'KRX',t:'217820',st:[['eqr','공정 장비']],p:'화성(충방전) 공정 장비',d:['EV','ESS']},
+ {id:'mplus',ko:'엠플러스',en:'Mplus',c:'한국',x:'KRX',t:'259630',st:[['eqr','공정 장비']],p:'조립 공정 장비 (파우치)',f:['파우치'],d:['EV']},
+ {id:'apro',ko:'에이프로',en:'A-Pro',c:'한국',x:'KRX',t:'262260',st:[['eqr','공정 장비']],p:'화성 공정 장비',d:['EV']},
+ {id:'lead',ko:'선도지능',en:'Wuxi Lead Intelligent',c:'중국',x:'SZSE',t:'300450',st:[['eqr','공정 장비']],p:'2차전지 전 공정 턴키 장비',d:['EV','ESS']},
+ {id:'sungeel',ko:'성일하이텍',en:'SungEel HiTech',c:'한국',x:'KRX',t:'365340',st:[['eqr','리사이클링']],p:'폐배터리 재활용 (블랙매스, 황산니켈·코발트)',ch:['NCx'],d:['EV']},
+ {id:'brunp',ko:'방푸순환',en:'Brunp Recycling',c:'중국',x:'비상장',t:'—',st:[['eqr','리사이클링']],p:'폐배터리 재활용, 전구체',ch:['NCx','LFP'],d:['EV'],cu:['catl'],n:'CATL 자회사'},
+ {id:'redwood',ko:'레드우드 머티리얼즈',en:'Redwood Materials',c:'미국',x:'비상장',t:'—',st:[['eqr','리사이클링']],p:'폐배터리 재활용, 양극 소재',ch:['NCx'],d:['EV','ESS']},
+ // 수요처
+ {id:'tesla',ko:'테슬라',en:'Tesla',c:'미국',x:'NASDAQ',t:'TSLA',st:[['oem','완성차(EV)'],['cell','중대형 셀(EV·ESS)']],p:'전기차, 4680 셀 내재화 (ESS 사업은 「테슬라 에너지」로 분리 표시)',ch:['NCx','LFP'],f:['원통'],d:['EV']},
+ {id:'gm',ko:'GM',en:'General Motors',c:'미국',x:'NYSE',t:'GM',st:[['oem','완성차(EV)']],p:'얼티엄 기반 전기차, LG엔솔 합작(얼티엄셀즈)',d:['EV']},
+ {id:'ford',ko:'포드',en:'Ford Motor',c:'미국',x:'NYSE',t:'F',st:[['oem','완성차(EV)']],p:'전기차, CATL LFP 기술 라이선스 (미시간 공장)',d:['EV']},
+ {id:'hyundai',ko:'현대차·기아',en:'Hyundai Motor Group',c:'한국',x:'KRX',t:'005380 · 000270',st:[['oem','완성차(EV)']],p:'E-GMP 기반 전기차, LG엔솔·SK온과 미국 합작',d:['EV']},
+ {id:'vw',ko:'폭스바겐그룹',en:'Volkswagen Group',c:'독일',x:'EU',t:'XETRA VOW3',st:[['oem','완성차(EV)']],p:'MEB·PPE 기반 전기차, 배터리 자회사 파워코',d:['EV']},
+ {id:'bmw',ko:'BMW',en:'BMW Group',c:'독일',x:'EU',t:'XETRA BMW',st:[['oem','완성차(EV)']],p:'노이어 클라세 (46시리즈 원통형 셀 채택)',d:['EV']},
+ {id:'mbz',ko:'메르세데스-벤츠',en:'Mercedes-Benz Group',c:'독일',x:'EU',t:'XETRA MBG',st:[['oem','완성차(EV)']],p:'EQ 계열 전기차, ACC 지분 보유',d:['EV']},
+ {id:'stellantis',ko:'스텔란티스',en:'Stellantis',c:'네덜란드',x:'EU',t:'STLA (밀라노·파리·NYSE)',st:[['oem','완성차(EV)']],p:'전기차, 삼성SDI·LG엔솔·CATL과 합작',d:['EV']},
+ {id:'toyota',ko:'토요타',en:'Toyota Motor',c:'일본',x:'TSE',t:'7203',st:[['oem','완성차(EV)']],p:'하이브리드·전기차, 전고체 개발',d:['EV']},
+ {id:'honda',ko:'혼다',en:'Honda Motor',c:'일본',x:'TSE',t:'7267',st:[['oem','완성차(EV)']],p:'전기차, LG엔솔과 미국 오하이오 합작',d:['EV']},
+ {id:'vertech',ko:'LG ES 버테크',en:'LG Energy Solution Vertech',c:'미국',x:'비상장',t:'LG에너지솔루션 자회사',st:[['oem','ESS 통합·발주']],p:'ESS 시스템 통합(SI)',d:['ESS']},
+ {id:'fluence',ko:'플루언스',en:'Fluence Energy',c:'미국',x:'NASDAQ',t:'FLNC',st:[['oem','ESS 통합·발주']],p:'ESS 시스템 통합',d:['ESS']},
+ {id:'sungrow',ko:'썬그로우',en:'Sungrow Power Supply',c:'중국',x:'SZSE',t:'300274',st:[['oem','ESS 통합·발주']],p:'태양광 인버터, ESS 시스템 (매출 비중 1위 사업)',d:['ESS'],n:'셀은 외부에서 조달하며 공급사는 공개되지 않음'},
+ // 수요처 — 완성차 (중국)
+ {id:'byd_auto',ko:'BYD(완성차)',en:'BYD Auto',c:'중국',st:[['oem','완성차(EV)']],p:'BEV·PHEV 판매 세계 1위권, 블레이드 배터리 내재화',d:['EV'],n:'배터리는 그룹 자회사 핀드림스(BYD 셀)에서 조달'},
+ {id:'geely',ko:'지리자동차',en:'Geely Automobile',c:'중국',st:[['oem','완성차(EV)']],p:'지리·지커·링크앤코 전기차',d:['EV']},
+ {id:'li',ko:'리오토',en:'Li Auto',c:'중국',st:[['oem','완성차(EV)']],p:'EREV·BEV SUV',d:['EV']},
+ {id:'nio',ko:'니오',en:'NIO',c:'중국',st:[['oem','완성차(EV)']],p:'프리미엄 BEV, 배터리 교체 스테이션',d:['EV']},
+ {id:'xpeng',ko:'샤오펑',en:'XPeng',c:'중국',st:[['oem','완성차(EV)']],p:'BEV, 800V 고전압 플랫폼',d:['EV']},
+ {id:'xiaomi',ko:'샤오미',en:'Xiaomi',c:'중국',st:[['oem','완성차(EV)']],p:'SU7·YU7 전기차',d:['EV']},
+ {id:'saic',ko:'상하이자동차',en:'SAIC Motor',c:'중국',st:[['oem','완성차(EV)']],p:'MG·로위, 상하이GM우링(SGMW)',d:['EV']},
+ {id:'gac',ko:'광저우자동차',en:'GAC Group',c:'중국',st:[['oem','완성차(EV)']],p:'아이온(AION) 전기차',d:['EV']},
+ {id:'changan',ko:'창안자동차',en:'Changan Automobile',c:'중국',st:[['oem','완성차(EV)']],p:'디팝·아바타 전기차',d:['EV']},
+ {id:'leap',ko:'립모터',en:'Leapmotor',c:'중국',st:[['oem','완성차(EV)']],p:'보급형 BEV·EREV, 스텔란티스와 해외 합작',d:['EV']},
+ {id:'gwm',ko:'창청자동차',en:'Great Wall Motor',c:'중국',st:[['oem','완성차(EV)']],p:'SUV·픽업, SVOLT와 같은 그룹',d:['EV']},
+ {id:'chery',ko:'체리자동차',en:'Chery Automobile',c:'중국',st:[['oem','완성차(EV)']],p:'중국 최대 자동차 수출사, 2025.9 홍콩 상장',d:['EV']},
+ // 수요처 — 완성차 (유럽·일본·미국)
+ {id:'renault',ko:'르노그룹',en:'Renault Group',c:'프랑스',st:[['oem','완성차(EV)']],p:'암페어(Ampere) 전기차, R5·메간 E-Tech',d:['EV']},
+ {id:'nissan',ko:'닛산',en:'Nissan Motor',c:'일본',st:[['oem','완성차(EV)']],p:'리프·아리야, 미국 미시시피 캔턴 공장 차세대 EV',d:['EV']},
+ {id:'mazda',ko:'마쓰다',en:'Mazda Motor',c:'일본',st:[['oem','완성차(EV)']],p:'2027년 이후 BEV 출시 계획',d:['EV']},
+ {id:'subaru',ko:'스바루',en:'Subaru',c:'일본',st:[['oem','완성차(EV)']],p:'BEV 전환, 파나소닉과 군마 배터리 공장 추진',d:['EV']},
+ {id:'rivian',ko:'리비안',en:'Rivian Automotive',c:'미국',st:[['oem','완성차(EV)']],p:'R1·R2 전기 SUV·픽업, 상용 밴',d:['EV']},
+ {id:'lucid',ko:'루시드',en:'Lucid Group',c:'미국',st:[['oem','완성차(EV)']],p:'에어·그래비티 프리미엄 BEV',d:['EV']},
+ // 수요처 — ESS 통합사·발주처
+ {id:'tesla_e',ko:'테슬라 에너지',en:'Tesla Energy (Megapack)',c:'미국',st:[['oem','ESS 통합·발주']],p:'메가팩·파워월, 미국 ESS 시스템 1위',ch:['LFP'],d:['ESS'],n:'테슬라의 에너지 저장 사업 부문 (상하이·미국 메가팩토리)'},
+ {id:'hyperstrong',ko:'하이퍼스트롱',en:'HyperStrong',c:'중국',st:[['oem','ESS 통합·발주']],p:'중국 대형 ESS 시스템 통합',d:['ESS']},
+ {id:'crrc',ko:'CRRC 주저우연구소',en:'CRRC Zhuzhou Institute',c:'중국',st:[['oem','ESS 통합·발주']],p:'ESS 시스템 통합, 철도 전장',d:['ESS']},
+ {id:'nextera',ko:'넥스트에라에너지',en:'NextEra Energy',c:'미국',st:[['oem','ESS 통합·발주']],p:'미국 최대 재생에너지 발전·ESS 개발사',d:['ESS']},
+ {id:'flatiron',ko:'플랫아이언',en:'Flatiron Energy Development',c:'미국',st:[['oem','ESS 통합·발주']],p:'ESS 프로젝트 개발사 (매사추세츠 등)',d:['ESS']},
+ {id:'neovolta',ko:'네오볼타',en:'NeoVolta',c:'미국',st:[['oem','ESS 통합·발주']],p:'가정·상업용 ESS',d:['ESS']},
+ {id:'hanwha_q',ko:'한화큐셀',en:'Hanwha Qcells',c:'한국',st:[['oem','ESS 통합·발주']],p:'태양광 모듈, 미국 전력망 ESS 프로젝트(EPC)',d:['ESS']},
+ // 수요처 — IT 기기
+ {id:'apple',ko:'애플',en:'Apple',c:'미국',st:[['oem','IT·전동공구']],p:'아이폰·맥북',d:['IT']},
+ {id:'samsung_elec',ko:'삼성전자',en:'Samsung Electronics',c:'한국',st:[['oem','IT·전동공구']],p:'갤럭시 스마트폰·태블릿',d:['IT']},
+ // 국내 2차전지 상장사 보강 (2026.10.15)
+ {id:'ecopro',ko:'에코프로',en:'EcoPro',c:'한국',st:[['cath','양극재(삼원계)']],p:'에코프로비엠·에코프로머티리얼즈 지주사, 인도네시아 니켈 투자',ch:['NCx'],d:['EV','ESS'],n:'지주회사 — 양극재 사업은 자회사 에코프로비엠'},
+ {id:'cosmochem',ko:'코스모화학',en:'Cosmo Chemical',c:'한국',st:[['raw','니켈·코발트'],['eqr','리사이클링']],p:'황산코발트, 폐배터리 블랙파우더 재활용',ch:['NCx'],d:['EV']},
+ {id:'isuchem',ko:'이수스페셜티케미컬',en:'ISU Specialty Chemical',c:'한국',st:[['elsep','전해질·첨가제']],p:'황화리튬(Li2S)·황화물계 고체전해질 원료',ch:['SSB'],d:['EV'],n:'온산 공장 증설, 2027년 본격 공급 전망 (보도) — 고객사 비공개'},
+ {id:'jeio',ko:'제이오',en:'JEIO',c:'한국',st:[['parts','도전재·바인더']],p:'다중벽·소수벽(TWCNT) CNT 도전재',d:['EV','ESS']},
+ {id:'duksan',ko:'덕산테코피아',en:'Duksan Techopia',c:'한국',st:[['elsep','전해액']],p:'전해액·첨가제 (자회사 덕산일렉테라, 미국 테네시 공장)',d:['EV'],n:'2차전지 매출 비중 아직 작음 (2025년 약 6%, 보도) — 북미 고객사 비공개'},
+ {id:'ecoanddream',ko:'에코앤드림',en:'Eco&Dream',c:'한국',st:[['cath','전구체']],p:'하이니켈 NCM 전구체 (청주·새만금)',ch:['NCx'],d:['EV']},
+ {id:'saebit',ko:'새빗켐',en:'Saebitchem',c:'한국',st:[['eqr','리사이클링']],p:'폐양극재 재활용 → 전구체 복합액·탄산리튬',ch:['NCx'],d:['EV']},
+ {id:'tsi',ko:'티에스아이',en:'TSI',c:'한국',st:[['eqr','공정 장비']],p:'전극 믹싱 시스템',d:['EV','ESS']},
+ {id:'yoonsung',ko:'윤성에프앤씨',en:'Yoonsung F&C',c:'한국',st:[['eqr','공정 장비']],p:'믹싱 시스템 (메인 믹서)',d:['EV']},
+ {id:'philenergy',ko:'필에너지',en:'PHIL Energy',c:'한국',st:[['eqr','공정 장비']],p:'스태킹·노칭 장비',d:['EV','ESS']},
+ {id:'dent',ko:'디이엔티',en:'DE&T',c:'한국',st:[['eqr','공정 장비']],p:'레이저 노칭 장비',d:['EV']},
+ {id:'onejoon',ko:'원준',en:'Onejoon',c:'한국',st:[['eqr','공정 장비']],p:'양극재·음극재 소성로 (RHK 등)',d:['EV']},
+ {id:'innometry',ko:'이노메트리',en:'Innometry',c:'한국',st:[['eqr','공정 장비']],p:'X-ray·CT 비파괴 검사 장비',d:['EV','ESS']},
+ {id:'nsys',ko:'엔시스',en:'NSYS',c:'한국',st:[['eqr','공정 장비']],p:'머신비전 검사 장비 (전극~모듈·팩)',d:['EV','ESS']},
+ {id:'kwenergy',ko:'강원에너지',en:'Kangwon Energy',c:'한국',st:[['eqr','공정 장비']],p:'양극재 분체·건조 설비',d:['EV']},
+ {id:'hanjung',ko:'한중엔시에스',en:'Hanjung NCS',c:'한국',st:[['parts','ESS 부품']],p:'ESS 수냉식 냉각플레이트·칠러',d:['ESS']},
+ {id:'seojin',ko:'서진시스템',en:'Seojin System',c:'한국',st:[['parts','ESS 부품']],p:'ESS 함체·인클로저, 반도체 장비 부품',d:['ESS']}
+];
+
+/* ───────── 티커 (코드.거래소) ───────── */
+const TICK={
+ alb:['ALB'],sqm:['SQM-B.SN','SQM'],ganfeng:['002460.SZ','1772.HK'],tianqi:['002466.SZ','9696.HK'],pls:['PLS.AX'],minres:['MIN.AX'],
+ rio:['RIO.L','RIO.AX','RIO'],posco_h:['005490.KS'],huayou:['603799.SS'],cmoc:['603993.SS','3993.HK'],glencore:['GLEN.L'],
+ vale:['VALE3.SA','VALE'],nornickel:['GMKN.ME'],nic:['NIC.AX'],korea_zinc:['010130.KS'],syrah:['SYR.AX'],
+ cngr:['300919.SZ'],gem:['002340.SZ'],ecopro_mat:['450080.KS'],ecopro_bm:['247540.KQ'],posco_fm:['003670.KS'],lnf:['066970.KS'],
+ lgchem:['051910.KS'],cosmo:['005070.KS'],umicore:['UMI.BR'],basf:['BAS.DE'],smm:['5713.T'],ronbay:['688005.SS'],
+ easpring:['300073.SZ'],yuneng:['301358.SZ'],dynanonic:['300769.SZ'],xtc:['688778.SS'],
+ btr:['835185.BJ'],shanshan:['600884.SS'],putailai:['603659.SS'],shangtai:['001301.SZ'],daejoo:['078600.KQ'],novonix:['NVX.AX','NVX'],
+ tinci:['002709.SZ'],capchem:['300037.SZ'],dfd:['002407.SZ'],enchem:['348370.KQ'],soulbrain:['357780.KQ'],dongwha:['025900.KQ'],
+ chunbo:['278280.KQ'],foosung:['093370.KS'],mcc:['4188.T'],skiet:['361610.KS'],wcp:['393890.KQ'],semcorp:['002812.SZ'],
+ senior:['300568.SZ'],asahi:['3407.T'],toray:['3402.T'],
+ skc:['011790.KS'],lotteemat:['020150.KS'],solus:['336370.KS'],nuode:['600110.SS'],jiayuan:['688388.SS'],sama:['006110.KS'],
+ nanoshin:['121600.KQ'],cnano:['688116.SS'],cabot:['CBT'],kureha:['4023.T'],hansol:['014680.KS'],dnp:['7912.T'],
+ yulchon:['008730.KS'],sangsin:['091580.KQ'],dongwonsys:['014820.KS'],shinheung:['243840.KQ'],
+ catl:['300750.SZ','3750.HK'],byd:['1211.HK','002594.SZ'],lges:['373220.KS'],sdi:['006400.KS'],panasonic:['6752.T'],
+ calb:['3931.HK'],gotion:['002074.SZ'],eve:['300014.SZ'],sunwoda:['300207.SZ'],rept:['0666.HK'],farasis:['688567.SS'],murata:['6981.T'],
+ pnt:['137400.KQ'],cis:['222080.KQ'],hanatech:['299030.KQ'],wonikpne:['217820.KQ'],mplus:['259630.KQ'],apro:['262260.KQ'],
+ lead:['300450.SZ'],sungeel:['365340.KQ'],
+ tesla:['TSLA'],gm:['GM'],ford:['F'],hyundai:['005380.KS','000270.KS'],vw:['VOW3.DE'],bmw:['BMW.DE'],mbz:['MBG.DE'],
+ stellantis:['STLAM.MI','STLAP.PA','STLA'],toyota:['7203.T'],honda:['7267.T'],fluence:['FLNC'],sungrow:['300274.SZ'],
+ geely:['0175.HK'],li:['LI','2015.HK'],nio:['NIO','9866.HK'],xpeng:['XPEV','9868.HK'],xiaomi:['1810.HK'],saic:['600104.SS'],
+ gac:['601238.SS','2238.HK'],changan:['000625.SZ'],leap:['9863.HK'],gwm:['601633.SS','2333.HK'],chery:['9973.HK'],
+ renault:['RNO.PA'],nissan:['7201.T'],mazda:['7261.T'],subaru:['7270.T'],rivian:['RIVN'],lucid:['LCID'],
+ hyperstrong:['688411.SS'],nextera:['NEE'],neovolta:['NEOV'],apple:['AAPL'],samsung_elec:['005930.KS'],
+ ecopro:['086520.KQ'],cosmochem:['005420.KS'],isuchem:['457190.KS'],jeio:['418550.KQ'],duksan:['317330.KQ'],ecoanddream:['101360.KQ'],
+ saebit:['107600.KQ'],tsi:['277880.KQ'],yoonsung:['372170.KQ'],philenergy:['378340.KQ'],dent:['079810.KQ'],onejoon:['382840.KQ'],
+ innometry:['302430.KQ'],nsys:['333620.KQ'],kwenergy:['114190.KQ'],hanjung:['107640.KQ'],seojin:['178320.KQ']
+};
+/* 비상장 자회사·합작사: 모회사 티커 */
+const PARENT={
+ skon:{ko:'SK이노베이션',tk:['096770.KS']}, vertech:{ko:'LG에너지솔루션',tk:['373220.KS']}, atl:{ko:'TDK',tk:['6762.T']},
+ brunp:{ko:'CATL',tk:['300750.SZ']}, powerco:{ko:'폭스바겐그룹',tk:['VOW3.DE']},
+ acc:{ko:'스텔란티스·메르세데스-벤츠·토탈에너지스',tk:['STLAM.MI','MBG.DE','TTE.PA']},
+ crrc:{ko:'중국중차(CRRC)',tk:['601766.SS','1766.HK']}, hanwha_q:{ko:'한화솔루션',tk:['009830.KS']},
+ // div: 별도 법인이 아닌 사업 부문 — 모회사 티커가 곧 그 기업의 티커
+ byd_auto:{ko:'BYD',tk:['1211.HK','002594.SZ'],div:true}, tesla_e:{ko:'테슬라',tk:['TSLA'],div:true}
+};
+const NASDAQ=new Set(['TSLA','FLNC','NVX','RIVN','LCID','LI','NEOV','AAPL']);
+function exOf(code){
+  const m=/\.([A-Z]+)$/.exec(code); const s=m?m[1]:'';
+  const map={KS:'KOSPI',KQ:'KOSDAQ',SS:'상해',SZ:'심천',BJ:'북경',HK:'홍콩',T:'도쿄',AX:'ASX',L:'런던',DE:'독일 XETRA',BR:'브뤼셀',PA:'파리',MI:'밀라노',SA:'브라질 B3',ME:'모스크바',SN:'산티아고'};
+  if(!s) return NASDAQ.has(code)?'NASDAQ':'NYSE';
+  return map[s]||s;
+}
+function exGroup(ex){
+  if(ex==='KOSPI'||ex==='KOSDAQ') return '한국거래소';
+  if(['상해','심천','북경'].includes(ex)) return '중국 본토';
+  if(ex==='홍콩') return '홍콩'; if(ex==='도쿄') return '일본(도쿄)';
+  if(ex==='NYSE'||ex==='NASDAQ') return '미국'; if(ex==='ASX') return '호주';
+  if(['런던','독일 XETRA','브뤼셀','파리','밀라노'].includes(ex)) return '유럽';
+  return '기타 해외';
+}
+const dgCode=code=>/\.(KS|KQ)$/.test(code)?'A'+code.slice(0,6):'';
+
+/* ───────── 시장 규모 · 점유율 ───────── */
+const SRC={
+ sne25:{t:'SNE리서치 — 2025년 1~12월 글로벌 전기차용 배터리 사용량',u:'https://sneresearch.com/kr/insight/release_view/584/page/0'},
+ sne26:{t:'SNE리서치 2026년 1~8월 전기차 배터리 사용량 (아시아경제 보도)',u:'https://view.asiae.co.kr/article/2026100209362564646'},
+ sne26b:{t:'SNE리서치 2026년 1~8월 (글로벌이코노믹 보도)',u:'https://www.g-enews.com/article/Industry/2026/10/202610021043179800139bf6e4b2_1'},
+ sne26nc:{t:'SNE리서치 — 2026년 1~8월 비중국 전기차용 배터리 사용량',u:'https://www.sneresearch.com/kr/insight/release_view/750/page/264?s_cat=%7C&s_keyword='},
+ evtank:{t:'EVTank — 2025년 글로벌 리튬이온전지 출하량 2,280.5GWh (China EV Home 보도)',u:'https://chinaevhome.com/2026/01/15/global-lithium-ion-battery-shipments-hit-2280-5-gwh-in-2025-china-accounts-for-82-8/'},
+ bench:{t:'Benchmark Mineral Intelligence — 2025년 리튬이온전지 수요 1.59TWh',u:'https://source.benchmarkminerals.com/article/global-lithium-ion-battery-demand-rose-29-in-2025'},
+ essH1:{t:'2026년 상반기 글로벌 ESS 배터리 출하 461.3GWh·업체별 점유율 (SNE리서치 인용 보도)',u:'https://www.globalautoinsight.com/news/catl-ess-battery-shipments-first-half-2026-global-market-growth'},
+ info:{t:'InfoLink — 2025년 ESS 셀 출하 612GWh (Energy Storage News)',u:'https://www.ess-news.com/2026/02/09/infolink-2025-energy-storage-cell-shipments-jump-95-to-612-gwh-as-market-flips-from-glut-to-tightness/'},
+ mat:{t:'EVTank — 2025년 중국 양극재 498.7만t·음극재 292.2만t 출하 (관연천하 인용)',u:'https://www.chinabaogao.com/jingzheng/202605/797351.html'},
+ mat2:{t:'EVTank — 2025년 중국 전해액 223.5만t·분리막 328.5억㎡ 출하 (전첨 인용)',u:'https://www.qianzhan.com/analyst/detail/220/260429-dbfffcc1.html'},
+ evs25:{t:'Benchmark(Rho Motion) — 2025년 글로벌 EV 판매 2,070만대 (+20%)',u:'https://source.benchmarkminerals.com/article/global-ev-sales-reach-20-7-million-units-in-2025-growing-by-20'},
+ evs26:{t:'Benchmark(Rho Motion) — 2026년 1~8월 글로벌 EV 판매 1,340만대 (+4%)',u:'https://source.benchmarkminerals.com/article/global-ev-sales-reach-1-8-million-units-in-august-2026'},
+ bnefess:{t:'BNEF — 2025년 글로벌 ESS 신규 설치 112GW·307GWh (pv magazine 보도)',u:'https://www.pv-magazine.com/2026/05/11/bloombergnef-confirms-energy-storage-has-reached-the-100-gw-era/'},
+ sneess:{t:'SNE리서치 — 2025년 ESS용 리튬이온전지 출하 550GWh',u:'https://www.sneresearch.com/en/insight/release_view/583/page/0'},
+ recyc:{t:'신화통신 — 2025년 중국 폐동력전지 재활용 40만t 이상 (+32.9%)',u:'https://www.news.cn/energy/20260224/715de5b634094895b235a0592203391a/c.html'},
+ foil:{t:'EVTank — 2025년 리튬전지용 동박 출하 130.2만t (Metalnomist 보도)',u:'https://www.metalnomist.com/2026/07/lithium-ion-battery-copper-foil.html'},
+ li:{t:'2025년 리튬 수요 약 150만t LCE (Panorama Minero, 기관별 110만~180만t)',u:'https://www.panorama-minero.com/en/news/lithium-nearly-1-billion-tonnes-of-lce-resources-have-already-been-identified-worldwide'}
+};
+const MARKET={
+ raw:  {v:'≈150만t LCE',d:'2025 리튬 수요 (기관별 110만~180만t)',src:'li'},
+ cath: {v:'498.7만t',d:'2025 중국 양극재 출하 (+51.5%, LFP 79%) — 글로벌의 대부분',src:'mat'},
+ anode:{v:'292.2만t',d:'2025 중국 음극재 출하 (+38.2%)',src:'mat'},
+ elsep:{v:'223.5만t · 328.5억㎡',d:'2025 중국 전해액 · 분리막 출하 (+46.4% · +44.4%)',src:'mat2'},
+ parts:{v:'130.2만t',d:'2025 리튬전지용 동박 출하 (+41.7%)',src:'foil'},
+ cell: {v:'2,280.5GWh',d:'2025 리튬이온전지 출하 (EV 1,495 · ESS 652GWh)',src:'evtank'},
+ eqr:  {v:'40만t+',d:'2025 중국 폐동력전지 재활용 (+32.9%)',src:'recyc'},
+ oem:  {v:'EV 1,187GWh',d:'2025 전기차 배터리 사용량 (+31.7%)',src:'sne25'}
+};
+/* 최종 수요: EV 판매(대수)와 ESS 설치(GWh) */
+const DEMAND_MKT=[
+ {k:'EV 판매 2025',v:'2,070만대',d:'+20% · 중국 1,290만 · 유럽 430만 · 북미 180만(-4%)',src:'evs25'},
+ {k:'EV 판매 2026.1~8',v:'1,340만대',d:'+4% · 8월 유럽 +36%, 중국 -11%, 북미 -33%',src:'evs26'},
+ {k:'ESS 설치 2025',v:'307GWh',d:'112GW · 중국 173GWh · 미국 55GWh (BNEF), 2026E 459GWh',src:'bnefess'},
+ {k:'ESS 전지 출하 2025',v:'550GWh',d:'+79% · CATL 30%, 삼성SDI·LG엔솔 합산 4% (SNE)',src:'sneess'}
+];
+/* EV 배터리 사용량 2026.1~8 (SNE, 전체 844.2GWh) — 점유율은 보도치, 일부는 GWh로 환산 */
+const EV_TOTAL=844.2;
+const SHARE_EV={catl:{g:333.0,p:39.4,rk:1},byd:{g:127.9,p:15.1,rk:2},lges:{g:68.3,p:8.1,rk:3},calb:{g:44.4,rk:4},gotion:{g:41.5,rk:5},panasonic:{g:29.7,rk:6},skon:{g:24.9,p:2.9,rk:8}};
+Object.values(SHARE_EV).forEach(s=>{ if(s.p==null) s.p=Math.round(s.g/EV_TOTAL*1000)/10; });
+/* 2025 연간 EV 배터리 사용량 (SNE, 1,187GWh) */
+const EV25={catl:464.7,byd:194.8,lges:108.8,skon:44.5,sdi:28.9};
+/* ESS 배터리 출하 2026 상반기 (461.3GWh) */
+const SHARE_ESS={catl:{g:125,p:27.1,rk:1},eve:{g:48,p:10.4,rk:2},hithium:{g:46.2,p:10.0,rk:3}};
+const NONCN={sdi:13.6,lges:58.1,skon:24.8};
+
+/* ───────── 공급 관계 (공시·보도자료·언론 보도 기준, 대표 거래만) ─────────
+   [공급사, 고객사, 유형, 내용] · 유형 jv 합작·계열 / s 공급 / c 수주·공급 예정(계약 후 본격 공급 전) */
+const REL=[
+ // 셀 → 완성차·ESS·IT
+ ['catl','tesla','s','중국·독일 공장용 LFP 등'],
+ ['catl','tesla_e','s','상하이 메가팩토리 주력 셀 공급사 (보도)'],
+ ['catl','bmw','s','유럽·중국 공급, 노이어 클라세 원통형'],
+ ['catl','mbz','s','유럽·중국 공급'],
+ ['catl','vw','s','중국·유럽 공급'],
+ ['catl','stellantis','jv','스페인 사라고사 LFP 합작 공장'],
+ ['catl','ford','s','머스탱 마하-E LFP 팩 (2023~), 미시간 공장에 LFP 기술 라이선스'],
+ ['catl','honda','s','2020 전략 제휴·공급 계약'],
+ ['catl','hyundai','s','레이 EV 등 LFP'],
+ ['catl','li','s','주력 공급사'],
+ ['catl','nio','s','주력 공급사'],
+ ['catl','xpeng','s',''],
+ ['catl','geely','s','지커 등'],
+ ['catl','saic','jv','상하이차와 셀 합작'],
+ ['catl','xiaomi','s','SU7 등'],
+ ['catl','hyperstrong','c','ESS 셀 200GWh, 3년 (2025년 말)'],
+ ['catl','fluence','s','주요 셀 공급사로 알려짐 (회사는 공급사 비공개)'],
+ ['byd','byd_auto','jv','셀 설치량의 약 49%를 자사 차량에 탑재 (2026.2)'],
+ ['byd','xiaomi','s','외부 고객 1위, 비중 17.9% (2026.2)'],
+ ['byd','xpeng','s','외부 고객, 비중 6.6% (2026.2)'],
+ ['byd','toyota','s','bZ3 등 (BYD·토요타 합작 모델)'],
+ ['byd','tesla_e','s','상하이 메가팩토리 셀 20% 이상 (2024 보도)'],
+ ['lges','gm','jv','얼티엄셀즈 합작 (오하이오·테네시), 테네시 일부 라인은 ESS로 전환'],
+ ['lges','hyundai','jv','미국 조지아·인도네시아 합작'],
+ ['lges','honda','jv','미국 오하이오 합작 (L-H 배터리)'],
+ ['lges','stellantis','jv','캐나다 윈저 합작 (넥스트스타에너지)'],
+ ['lges','toyota','s','미국 미시간 공장 공급 (2023 계약)'],
+ ['lges','ford','s','유럽 머스탱 마하-E·상용 밴 등 (폴란드)'],
+ ['lges','vw','s','유럽 MEB 파우치 (폴란드)'],
+ ['lges','tesla','s','원통형 (중국 난징)'],
+ ['lges','renault','c','LFP 파우치 CTP 약 39GWh, 2025년 말~2030 (2024.7)'],
+ ['lges','mbz','c','2028년부터 10년간 50.5GWh (2024.10) + 2025.9 추가 계약, 누적 약 150GWh 보도'],
+ ['lges','bmw','c','대규모 수주 보도 (2026.4, 약 10조원)'],
+ ['lges','rivian','c','4695 원통형 67GWh, 5년 — R2 탑재 예정 (2024.11)'],
+ ['lges','chery','c','46시리즈 원통형 8GWh (2025.6)'],
+ ['lges','tesla_e','c','ESS용 LFP 43억달러(약 5.9조원), 2027.8~2030.7 (2025.7 공시, 미 정부 자료로 테슬라 확인)'],
+ ['lges','vertech','jv','ESS 시스템 통합(SI) 자회사'],
+ ['lges','hanwha_q','c','ESS용 LFP 5GWh, 2028~2030 (2026.2, 미시간 홀랜드 생산)'],
+ ['sdi','bmw','s','각형 셀 장기 공급'],
+ ['sdi','stellantis','jv','미국 인디애나 합작 (스타플러스에너지), 일부 라인 ESS 전환'],
+ ['sdi','gm','jv','미국 인디애나 합작 공장 (건설)'],
+ ['sdi','hyundai','c','유럽향 P6 각형, 2026~2032 (2023.10)'],
+ ['sdi','rivian','s','R1 시리즈 셀 (2021 발표)'],
+ ['sdi','tesla_e','c','ESS 배터리 공급 계약 (2026.1 공시, 상대방 비공개 — 테슬라·약 3조원 보도)'],
+ ['sdi','nextera','c','ESS(SBB) 4,374억원 (2025.3 공시)'],
+ ['sdi','samsung_elec','s','스마트폰 등 소형 전지'],
+ ['skon','hyundai','jv','미국 조지아 합작, 아이오닉 등'],
+ ['skon','ford','s','F-150 라이트닝 등 — 합작(블루오벌SK)은 2025.12 해소 합의, 공급은 지속'],
+ ['skon','vw','s','미국 조지아 공장 → ID.4'],
+ ['skon','mbz','s','EQ 계열 공급 (보도)'],
+ ['skon','nissan','c','하이니켈 파우치 약 100GWh, 2028~2033 (2025.3)'],
+ ['skon','flatiron','c','ESS LFP 1GWh 확정·최대 7.2GWh, 2026~ (2025.9)'],
+ ['skon','neovolta','c','ESS LFP 셀 9GWh, 2027~2031 (2026.8 보도)'],
+ ['panasonic','tesla','s','원통형 2170·4680 (네바다·캔자스)'],
+ ['panasonic','lucid','s','원통형 셀 공급 계약 (2021)'],
+ ['panasonic','mazda','c','원통형 셀, 2027년 이후 BEV (2024 계약)'],
+ ['panasonic','subaru','c','원통형 셀, 군마 신공장 공동 추진 (2024)'],
+ ['calb','gac','s','최대 고객 (아이온)'],
+ ['calb','xpeng','s','800V 고속충전 셀'],
+ ['calb','leap','s','립모터와 공장 공동 건설'],
+ ['calb','changan','s',''],
+ ['gotion','vw','jv','폭스바겐그룹이 최대주주, 중국 공급'],
+ ['eve','bmw','c','노이어 클라세 46시리즈 원통형 (헝가리 공장)'],
+ ['eve','hyperstrong','c','ESS 셀 50GWh (2025)'],
+ ['svolt','gwm','jv','창청자동차와 같은 그룹'],
+ ['hithium','crrc','c','ESS 120GWh, 5년 협력 (2025.12)'],
+ ['farasis','mbz','s','다임러(현 벤츠) 지분 투자·공급 계약 (2020)'],
+ ['farasis','geely','jv','지리와 배터리 합작 (보도)'],
+ ['atl','apple','s','아이폰 주력 셀 공급사'],
+ ['sunwoda','apple','s','배터리 팩 공급'],
+ ['aesc','nissan','jv','닛산 배터리 사업에서 분사, 리프·아리야'],
+ ['aesc','renault','s','프랑스 두에 공장'],
+ ['aesc','bmw','c','미국 사우스캐롤라이나 원통형 셀 공장 (계획)'],
+ ['aesc','mbz','c','미국 켄터키 공장 (계획)'],
+ ['aesc','fluence','c','미국산 셀 공급 계약 (2023) — 2026.4 테네시 공장 지분은 Fixx Energy로 넘어간 뒤 공급 계약 승계 보도'],
+ ['acc','stellantis','jv','주주 (합작사)'],
+ ['acc','mbz','jv','주주 (합작사)'],
+ ['powerco','vw','jv','폭스바겐그룹 배터리 자회사'],
+ // 원료·소재 → 셀 (대표 거래)
+ ['sqm','lges','c','탄산·수산화리튬 10만t 이상, 2023~2029'],
+ ['sqm','ford','c','리튬 공급 계약 (2023)'],
+ ['alb','ford','s','수산화리튬 10만t 이상, 2026~2030 (2023) — 공급 개시 구간'],
+ ['ganfeng','lgchem','s','탄산·수산화리튬 2019~2025 누적 9.26만t — 2025년 말 만료 가능성'],
+ ['ganfeng','hyundai','c','수산화리튬, ~2027.12 (2024.1)'],
+ ['pls','ganfeng','s','스포듀민 오프테이크 ~2026, 2024년 31만t (2024 개정)'],
+ ['gem','ecopro_bm','jv','니켈·전구체 협력 (인도네시아·새만금)'],
+ ['huayou','lgchem','jv','LFP 양극재 합작 등 (보도)'],
+ ['huayou','posco_fm','jv','전구체·양극재 합작 (보도)'],
+ ['posco_fm','gm','jv','얼티엄캠 (캐나다 양극재 합작)'],
+ ['ronbay','lges','c','LMFP 등 공동개발·공급 협력 (2024)'],
+ ['ronbay','skon','c','삼원계·LFP 양극재 MOU (2024)'],
+ ['umicore','powerco','jv','IONWAY 양극재 합작'],
+ ['daejoo','lges','s','실리콘 음극재 장기 거래 (포르쉐 타이칸 배터리 등)'],
+ ['tinci','byd','s',''],
+ ['tinci','lges','s',''],
+ ['enchem','lges','s','얼티엄셀즈 오하이오 등'],
+ ['enchem','tesla','s','북미 신규 고객 (2024)'],
+ ['enchem','panasonic','s','북미 신규 고객 (2024)'],
+ ['semcorp','lges','s',''],
+ ['semcorp','panasonic','s',''],
+ ['semcorp','byd','s',''],
+ ['semcorp','sdi','s','중국 내 공급 (보도)'],
+ ['semcorp','acc','s',''],
+ ['skc','skon','s','SK넥실리스 — SK온 매출 비중 35.5% (2023)'],
+ ['solus','lges','s','헝가리 공장 전지박'],
+ ['solus','acc','c','5년간 최대 8,000억원 (보도)'],
+ ['solus','catl','s','신규 공급 (2025 보도)'],
+ // 국내 상장사 보강분
+ ['ecopro','ecopro_bm','jv','지주사 — 에코프로비엠 최대주주'],
+ ['ecopro','ecopro_mat','jv','지주사 — 에코프로머티리얼즈 최대주주'],
+ ['cosmochem','cosmo','jv','코스모신소재 모회사'],
+ ['cosmochem','cngr','s','재활용 메탈 판매 협업 (2024.7, 보도)'],
+ ['jeio','catl','s','TWCNT 도전재 정기 공급 확대 (2026.3, 보도)'],
+ ['jeio','skon','s','CNT 도전재 (보도)'],
+ ['ecoanddream','umicore','c','하이니켈 NCM 전구체 162억원 (2025.10 공시)'],
+ ['saebit','lgchem','c','한국전구체(LG화학·고려아연 합작) 10년 장기계약, 2026~ (2023.8)'],
+ ['tsi','lges','s','믹싱 시스템 (보도)'],
+ ['tsi','sdi','s','믹싱 시스템 (보도)'],
+ ['yoonsung','skon','s','메인 믹서 주력 고객 (2022 리포트)'],
+ ['yoonsung','lges','s','믹싱 시스템 (2022 리포트)'],
+ ['philenergy','sdi','s','스태킹 장비 주력 고객'],
+ ['dent','lges','s','레이저 노칭 — 얼티엄셀즈 등 (2023 IR)'],
+ ['onejoon','posco_fm','s','양극재 소성로 RHK (2023 리포트)'],
+ ['onejoon','ecopro_bm','s','소성로 (2023 리포트)'],
+ ['onejoon','daejoo','s','음극재 소성로 (2023 리포트)'],
+ ['innometry','sdi','s','X-ray 검사 장비 (2023 IR)'],
+ ['innometry','skon','s','X-ray 검사 장비 (2023 IR)'],
+ ['innometry','lges','s','X-ray 검사 장비 (2023 IR)'],
+ ['innometry','northvolt','s','X-ray 검사 장비 (2023 IR)'],
+ ['nsys','lges','s','비전 검사 장비 (보도)'],
+ ['nsys','sdi','s','비전 검사 장비 (보도)'],
+ ['kwenergy','ecopro_bm','s','에코프로이엠(에코프로비엠·삼성SDI 합작) 분체설비 147억원 (2022)'],
+ ['hanjung','sdi','s','SBB용 수냉식 냉각 독점 공급 (보도)'],
+ ['seojin','fluence','s','ESS 함체 공급 (보도)'],
+ // 국내 소재사 관계 보강·정정 (2026.10.15)
+ ['korea_zinc','lgchem','jv','한국전구체(KPC, 켐코 51 : LG화학 49) 2025.1 양산'],
+ ['posco_h','posco_fm','jv','그룹 내 리튬 조달'],
+ ['posco_fm','sdi','s','NCA 양극재 공급 + LFP 약 6조원 본계약 (2026.10.6)'],
+ ['posco_fm','skon','s','음극재 공급 중 + LFP 양극재 약 1.1조원, 2027~2029 (2026.9.22)'],
+ ['posco_fm','lges','s','양극재·인조흑연 음극재 9,393억원 2023~2028 (얼티엄셀즈향), 2025.7 NCMA 초도 출하'],
+ ['ecopro_bm','sdi','s','43.87조원, 2024~2028 — 헝가리 공장 2026.6 첫 출하'],
+ ['ecopro_bm','skon','s','10.1조원, 2024~2026 (계약 당사자 SK이노베이션) — 2026년 말 만료, 새만금 전구체 합작(지이엠코리아)'],
+ ['lnf','sdi','c','LFP 1조6,067억원, ~2029.12 북미향 (2026.3 공시)'],
+ ['lnf','skon','s','하이니켈 공급 + ESS용 LFP 약 1,600억원 2026.9~2028.12'],
+ ['lgchem','gm','s','양극재 24.75조원, 2026~2035 (2024.2) — 얼티엄 물량 감소 영향'],
+ ['lgchem','panasonic','c','2170 원통형 양극재 2026년 3분기 공급 개시 — 고객 비공개, 업계는 파나소닉 추정'],
+ ['cosmo','lgchem','s','NCMA 양극활물질 3,621억→2,504억원 감액 (2025.4 공시)'],
+ ['cosmo','sdi','s','NCM 양극재 (2026.4 증권사 리포트)'],
+ ['cosmo','lges','s','NCM 양극재 (2026.4 증권사 리포트)'],
+ ['daejoo','panasonic','s','실리콘 음극재 → 테슬라 모델Y용 2170 (2025.6 보도)'],
+ ['daejoo','skon','s','실리콘 음극재 (2025.6 보도)'],
+ ['enchem','catl','c','전해액 5년 35만t·약 1.5조원, 2026~2030 (2025.12 보도)'],
+ ['chunbo','sdi','s','LiPO2F2 첨가제 (2021 IR 기준)'],
+ ['chunbo','skon','s','LiPO2F2 첨가제 (2021 IR 기준)'],
+ ['chunbo','catl','s','LiPO2F2 첨가제 (2021 IR 기준)'],
+ ['chunbo','lges','s','LiPO2F2 첨가제 (2021 IR 기준)'],
+ ['chunbo','dongwha','c','북미 공급망 협력 협약 (2026.2, 공급계약 아님)'],
+ ['dongwha','lges','s','국내 3사 주요 고객 (2023년경 보도)'],
+ ['dongwha','sdi','s','국내 3사 주요 고객 (2023년경 보도)'],
+ ['dongwha','skon','s','국내 3사 주요 고객 (2023년경 보도)'],
+ ['skiet','gotion','c','북미·유럽 분리막 공급 협력 MOU (2025.2)'],
+ ['wcp','sdi','s','주요 고객, 스타플러스 ESS 라인 단독 공급 (보도) — 스텔란티스 합작 철수 검토 보도(2026.2)'],
+ ['wcp','skon','c','조지아 LFP ESS 분리막 단독 공급, 2026.10 양산 (보도)'],
+ ['skc','lges','c','동박 5~10만t·1~3조원 합의 보도, 구매 의무 없음 (2025.7)'],
+ ['skc','aesc','s','동박 약 2조원, 2025년부터 10년 (2023 계약, 보도)'],
+ ['lotteemat','sdi','s','최대 고객 — 삼성SDI·LG엔솔 합산 약 80% (2025 초 보도)'],
+ ['lotteemat','lges','s','얼티엄셀즈 1공장향 (2023 리포트)'],
+ ['sama','lges','s','양극박 — LG엔솔이 지분 10.2% 투자(SI)'],
+ ['sama','sdi','s','알루미늄박 (보도)'],
+ ['sama','skon','s','알루미늄박 (보도)'],
+ ['sama','yulchon','s','파우치용 알루미늄박 (보도)'],
+ ['nanoshin','lges','s','CNT 도전재 — 테슬라향 2170 개량 셀 (2026.5 리포트)'],
+ ['yulchon','lges','s','파우치 필름 핵심 고객, 스팟 계약 (2026.5) — 2022년 얼티엄 1.49조원 계약은 2024.7 해지'],
+ ['dongwonsys','lges','c','46파이 원통형 캔 공급 전망 (2024.3 보도)'],
+ // 해외 원료·소재 관계 보강·정정 (2026.10.15)
+ ['syrah','tesla','c','미국 비달리아 천연흑연 음극재 — 2025.7 디폴트 통지 후 2026.6 해지 철회, 최종 품질인증 전'],
+ ['syrah','posco_fm','s','발라마 흑연 6년 (2024.3)'],
+ ['syrah','lges','c','비달리아 음극재 연 2kt MoU, 비구속 (2022)'],
+ ['novonix','panasonic','c','합성흑연 1만t 2025~2028 — 첫 납품 2026년 초 계획, 장비 지연'],
+ ['novonix','powerco','c','합성흑연 3.2만t 이상, 2027년부터 5년 (2024.11)'],
+ ['smm','panasonic','s','파나소닉의 테슬라향 NCA 양극재'],
+ ['smm','toyota','c','전고체용 양극재 양산 협력, 2028 목표 (2025.10)'],
+ ['alb','bmw','s','장기 리튬 공급 (2024.2 계약, 2025 발효)'],
+ ['sqm','hyundai','s','장기 수산화리튬 (2024.6)'],
+ ['sqm','skon','s','기존 고객 (보도)'],
+ ['ganfeng','umicore','s','리튬 공급 계약'],
+ ['tianqi','lgchem','s','수산화리튬 2023~2026'],
+ ['pls','posco_h','jv','광양 수산화리튬 합작(지분 18%), 정광 연 31.5만t'],
+ ['minres','alb','jv','워지나 광산 50:50 (MARBL)'],
+ ['minres','ganfeng','jv','마운트매리언 광산 50:50'],
+ ['rio','gm','s','옛 리벤트 수산화리튬 6년 2025~ (GM 선급금 1.98억달러)'],
+ ['rio','tesla','s','아케이디움 인수로 고객 승계 (보도)'],
+ ['rio','bmw','s','아케이디움 인수로 고객 승계 (보도)'],
+ ['rio','ford','s','아케이디움 주요 고객 (애널리스트 언급)'],
+ ['huayou','lges','s','전구체 7.6만t·양극재 8.8만t, 2026~2030 (2025.9)'],
+ ['huayou','eve','c','헝가리 하이니켈 양극재 12.78만t, 2026~2035 (2025.11)'],
+ ['cmoc','catl','jv','CATL이 KFM 광산 지분 25% (2021) + 2025~27 판매계약 갱신 (보도)'],
+ ['glencore','tesla','s','코발트 연 최대 6kt (2020.6, 보도)'],
+ ['glencore','umicore','s','장기 코발트 수산화물 (2019.5)'],
+ ['glencore','catl','s','코발트 2만t (보도, 기간 미확인)'],
+ ['vale','gm','c','황산니켈 연 2.5만t, 2026 하반기 개시 예정 (2022.11)'],
+ ['vale','tesla','s','니켈 공급 계약 (로이터)'],
+ ['vale','ford','s','니켈 공급 계약 (로이터)'],
+ ['nornickel','basf','s','핀란드 하르야발타 Ni·Co 원료 장기 공급 (2018.10)'],
+ ['tsingshan','gem','s','인도네시아 IMIP 고품위 니켈매트 (보도)'],
+ ['cngr','umicore','s','전구체 공급 (2025.3)'],
+ ['cngr','lgchem','s','고객 목록 (보도)'],
+ ['cngr','sdi','s','고객 목록 (보도)'],
+ ['gem','xtc','c','2026~2028 연 15만t 원료·전구체, 비구속 프레임워크 (2025.10)'],
+ ['gem','skon','jv','한국 전구체 합작 (지이엠코리아)'],
+ ['umicore','acc','s','폴란드 니사 하이니켈 양극재 (2022.4)'],
+ ['umicore','aesc','c','북미향 양극재 10년 2026~2035 — 천안 공장에서 공급'],
+ ['umicore','lgchem','s','NMC 12.5만t 다년 공급 (2020~, 현황 미확인)'],
+ ['basf','catl','s','양극재 글로벌 프레임워크 (2025.7)'],
+ ['basf','skon','c','양극재 공동생산 검토 협력 (2023.11)'],
+ ['basf','svolt','s','양극재 공급·재활용 협력'],
+ ['basf','shanshan','jv','BASF 삼산 51:49 양극재 합작 (2021)'],
+ ['ronbay','catl','s','LFP·삼원계 6년 305만t 이상 (2026.1) + 나트륨이온 양극재 주공급사 (2025.11)'],
+ ['easpring','skon','s','하이·중니켈 약 1.7만t, 2025~2027 (2025.2)'],
+ ['easpring','lges','s','약 11만t, 2025~2027, 약 140억위안 (2025.3)'],
+ ['yuneng','byd','s','CATL·BYD가 매출의 80% 이상 (2022)'],
+ ['xtc','byd','s','고객사 (보도)'],
+ ['xtc','catl','s','고객사 (보도)'],
+ ['xtc','panasonic','s','고객사 (보도)'],
+ ['btr','ford','c','모로코 음극재 공장, 선급금 1.2억달러 예정 (2024.8, 보도)'],
+ ['btr','panasonic','s','고객 목록 (보도)'],
+ ['btr','sdi','s','고객 목록 (보도)'],
+ ['shanshan','catl','jv','CATL 계열 투자(2022), 주요 고객'],
+ ['shanshan','byd','jv','BYD 투자(2022), 주요 고객'],
+ ['shangtai','catl','s','2022 상장 시점 공급망 진입 (보도)'],
+ ['shangtai','atl','s','고객사 (보도)'],
+ ['shangtai','gotion','s','고객사 (보도)'],
+ ['shangtai','svolt','s','고객사 (보도)'],
+ ['shangtai','sunwoda','s','고객사 (보도)'],
+ ['group14','atl','jv','시리즈D 투자 참여 (2025.8)'],
+ ['sila','panasonic','c','타이탄 실리콘, 모지스레이크 공장 2025~ (2023.12)'],
+ ['sila','mbz','c','차기 G-클래스 적용'],
+ ['capchem','catl','s','전해액 30만t, 2026~2028 (2026.6)'],
+ ['capchem','lges','s','폴란드 공장 고객 (보도)'],
+ ['capchem','sdi','s','폴란드 공장 고객 (보도)'],
+ ['capchem','powerco','s','폴란드 공장 고객 (보도)'],
+ ['dfd','soulbrain','jv','한국 LiPF6 합작, 생산분 대부분 솔브레인 공급'],
+ ['mcc','lnf','c','차세대 음극재 공동개발 MoU (2023.6)'],
+ ['senior','lges','s','2024~2030 분리막 우선구매 MoU (2023.11)'],
+ ['senior','sdi','c','습식 코팅 분리막 약 22.2억㎡, ~2030 MoU (2024.4)'],
+ ['asahi','honda','c','캐나다 하이포어 공장 2027 가동, 혼다와 합작 검토 (2024.4)'],
+ ['nuode','calb','s','동박 37.3만t, 2026~2028 공급 보증 (2025.12)'],
+ ['nuode','catl','s','주요 고객 (보도)'],
+ ['nuode','byd','s','주요 고객 (보도)'],
+ ['nuode','lges','s','주요 고객 (보도)'],
+ ['jiayuan','catl','s','동박 62.6만t 이상 2026~2028 우선 공급사 (2025.11), 10만t 합작 (2021)'],
+ ['cabot','powerco','s','도전재 다년 공급 (2026.1)'],
+ ['brunp','mbz','s','중국 폐배터리 폐쇄루프 협력 (2023.2)'],
+ ['brunp','bmw','s','장기 재활용 협력사 (보도)'],
+ ['redwood','toyota','c','양극재·동박 장기 공급 (보도)'],
+ ['redwood','panasonic','s','배터리 재활용 (2021)'],
+ ['redwood','gm','s','얼티엄셀즈 공정 스크랩 재활용']
+];
+const REL_TYPE={jv:'합작·계열',s:'공급',c:'수주·공급 예정'};
+const REL_SRC=[
+ {t:'LG엔솔 ESS용 LFP 계약 고객사 테슬라 확인 (SBS Biz)',u:'https://biz.sbs.co.kr/amp/article/20000298108'},
+ {t:'LG엔솔–한화큐셀 ESS 5GWh (2026.2, 이투데이)',u:'https://www.etoday.co.kr/news/view/2552796'},
+ {t:'LG엔솔–리비안 4695 원통형 67GWh (2024.11, LG)',u:'https://www.lg.co.kr/media/release/28318'},
+ {t:'LG엔솔–메르세데스-벤츠 추가 공급 계약 (2025.9, 헤럴드경제)',u:'https://www.heraldk.com/article/2025090217045408874'},
+ {t:'LG엔솔–BMW 수주 보도 (2026.4, 헤럴드경제)',u:'https://www.heraldk.com/article/2026042920004056736'},
+ {t:'LG엔솔–르노(암페어) LFP 파우치 공급 (2024.7, LG)',u:'https://www.lg.co.kr/media/release/27857'},
+ {t:'LG엔솔–체리자동차 46시리즈 8GWh (2025.6)',u:'https://m.bobaedream.co.kr/board/bbs_view/nnews/229646/2/10'},
+ {t:'삼성SDI–넥스트에라 ESS 4,374억원 (2025.3)',u:'https://sateconomy.co.kr/news/view/1065570283826272'},
+ {t:'삼성SDI–테슬라 ESS 공급 협상 보도 (2025.11, 2026.1 확정 공시)',u:'https://www.heraldk.com/article/2025110316573536389'},
+ {t:'삼성SDI–현대차 유럽향 P6 공급 (2023.10, 삼성SDI)',u:'https://samsungsdi.co.kr/sdi-now/sdi-news/3441.html?idx=3441'},
+ {t:'SK온–닛산 약 100GWh (2025.3, Business Wire)',u:'https://www.businesswire.com/news/home/20250319151845/en/SK-On-and-Nissan-Announce-Battery-Supply-Agreement-to-Support-Future-EV-Production-in-America'},
+ {t:'SK온–플랫아이언 ESS (2025.9, 더팩트)',u:'https://news.tf.co.kr/read/economy/2240313.htm'},
+ {t:'SK온–네오볼타 ESS 9GWh (한경비즈니스)',u:'https://magazine.hankyung.com/business/article/202608312759b'},
+ {t:'포드–SK온 블루오벌SK 합작 해소 (2025.12, Electrek)',u:'https://electrek.co/2025/12/11/ford-sk-on-kill-massive-us-battery-joint-venture-split-factories-between-them/'},
+ {t:'파나소닉에너지–마쓰다·스바루 원통형 셀 (EV Specifications)',u:'https://www.evspecifications.com/en/news/5303913'},
+ {t:'BYD 핀드림스 외부 고객 비중 (2026.2)',u:'https://english.news18a.com/news/english_241612.html'},
+ {t:'테슬라 상하이 메가팩토리 셀: CATL 주력·핀드림스 (CnEVPost)',u:'https://cnevpost.com/2024/06/05/byd-findreams-to-supply-battery-cells-to-tesla-megafactory/'},
+ {t:'CATL–포드 머스탱 마하-E LFP 팩 (CnEVPost)',u:'https://cnevpost.com/2022/07/21/catl-to-provide-lfp-battery-packs-for-ford-evs-sold-in-north-america-starting-next-year'},
+ {t:'2025 ESS 셀·시스템 출하와 주요 계약 (Energy-Storage.news)',u:'https://www.energy-storage.news/2025-bess-cell-and-system-shipments-byd-takes-bess-crown-no-korean-firms-in-top-10-cell-suppliers/'},
+ {t:'2025 ESS 셀 공급사·시스템 통합사 순위 (Benchmark)',u:'https://source.benchmarkminerals.com/article/the-top-energy-storage-cell-suppliers-and-system-integrators-in-2025'},
+ {t:'플루언스–AESC 셀 공급 (Energy-Storage.news)',u:'https://www.energy-storage.news/fluence-raises-guidance-again-reveals-aesc-and-northvolt-battery-deals/'},
+ {t:'AESC 미국 공장 지분 Fixx Energy 매각 (SMM, 2026.4)',u:'https://news.metal.com/newscontent/103883230-AESC-sells-control-of-US-battery-plant'},
+ {t:'CALB 2025 반기 실적·고객사',u:'https://business.mammothtimes.com/mammothtimes/article/acnnewswire-2025-8-28-calb-3931hk-announces-2025-interim-results'},
+ {t:'엔켐 북미 신규 고객 (2024.8, 뉴시스)',u:'https://mobile.newsis.com/view/NISX20240816_0002851771'},
+ {t:'동박 3사 고객 동향 (딜사이트)',u:'https://dealsite.co.kr/articles/148552'},
+ {t:'분리막 상위 10개사 실적·고객 (SMM)',u:'https://news.metal.com/newscontent/103315512'},
+ {t:'SQM–LG엔솔 리튬 장기 공급 (SQM)',u:'https://sqm.com/?p=9961'},
+ {t:'포드 리튬 공급 계약 — 앨버말·SQM 등 (NS Energy)',u:'https://www.nsenergybusiness.com/news/ford-signs-multiple-lithium-supply-agreements-to-scale-ev-production'},
+ {t:'간펑–필바라 오프테이크·현대차 수산화리튬 (Project Blue)',u:'https://projectblue.com/blue/news-analysis/735/ganfeng-and-pilbara-amend-offtake-agreement-as-hyundai-looks-to-secure-future-lithium-supply-volumes-'},
+ {t:'간펑–LG화학 리튬 공급 연장 (Fastmarkets)',u:'https://www.fastmarkets.com/insights/ganfeng-lithium-signs-new-contracts-with-lg-chem-tesla/'},
+ {t:'룽바이–LG엔솔 협력 (Yicai)',u:'https://yicaiglobal.com/news/ronbay-lg-energy-to-co-develop-lithium-battery-materials-for-japan-south-korea-europe-us'},
+ {t:'룽바이–SK온 MOU (Mysteel)',u:'https://www.mysteel.net/news/5051326-flash-ronbay-technology-and-sk-on-sign-a-mou'},
+ {t:'대주전자재료 실리콘 음극재–LG엔솔 (파이낸스스코프)',u:'https://www.finance-scope.com/article/view/scp202410310006'},
+ {t:'에코앤드림–유미코아 NCM 전구체 공급계약 (2025.10, 디지털투데이)',u:'https://www.digitaltoday.co.kr/aigongsi/4442/ecoandream-umicore-sa-high-nickel-ncm-supply-contract'},
+ {t:'새빗켐–한국전구체 장기계약 (한경비즈니스 2023.8)',u:'https://magazine.hankyung.com/business/article/202308100804b'},
+ {t:'코스모화학–CNGR 협업 (스마트투데이)',u:'https://www.smarttoday.co.kr/ko-kr/articles/55211'},
+ {t:'제이오 CNT 도전재 공급 (벤처스퀘어)',u:'https://www.venturesquare.net/tag/cnt/'},
+ {t:'티에스아이 믹싱 시스템 계약 (2025.10, 디지털투데이)',u:'https://www.digitaltoday.co.kr/aigongsi/amp/4384/tsai-battery-mixing-system-contract'},
+ {t:'윤성에프앤씨 리포트 (유안타 2022.12)',u:'https://file.alphasquare.co.kr/media/pdfs/company-report/유안타20221216윤성에프앤씨.pdf'},
+ {t:'필에너지 상장·고객 (뉴스토마토)',u:'https://newstomato.com/ReadNews.aspx?no=1188233'},
+ {t:'디이엔티 IR (2023.2)',u:'https://file.alphasquare.co.kr/media/pdfs/company-report/IR20230201디이엔티.pdf'},
+ {t:'원준 리포트 (대신 2023.2)',u:'https://file.alphasquare.co.kr/media/pdfs/company-report/대신20230201원준.pdf'},
+ {t:'이노메트리 IR (2023.1)',u:'https://file.alphasquare.co.kr/media/pdfs/company-report/IR20230120이노메트리.pdf'},
+ {t:'엔시스 수주 (스마트투데이)',u:'https://www.smarttoday.co.kr/ko-kr/articles/58262'},
+ {t:'강원에너지 리포트 (하이 2023.1)',u:'https://file.alphasquare.co.kr/media/pdfs/company-report/하이20230125강원에너지.pdf'},
+ {t:'한중엔시에스 삼성SDI ESS 냉각 (2024.6)',u:'https://v.daum.net/v/20240625095440814'},
+ {t:'서진시스템 ESS 함체 (위키독스)',u:'https://wikidocs.net/blog/@zsnote/5672/'},
+ {t:'이수스페셜티케미컬 황화리튬 증설 (아시아경제 2025.2)',u:'https://view.asiae.co.kr/article/2025022616094461211'},
+ {t:'덕산테코피아 리포트 (2026.5)',u:'https://stock.pstatic.net/stock-research/company/64/20260521_company_610185000.pdf'},
+ {t:'에코프로 지주 개요 (위키독스)',u:'https://wikidocs.net/blog/@zsnote/5294/'},
+ {t:'에코프로비엠 코스피 이전상장 예비심사 철회 (한국경제 2025.2)',u:'https://www.hankyung.com/article/2025022868486'},
+ {t:'포스코퓨처엠–삼성SDI LFP 약 6조원 본계약 (머니투데이방송 2026.10)',u:'https://news.mtn.co.kr/news-detail/2026100621151180825'},
+ {t:'포스코퓨처엠–SK온 LFP 양극재 1.1조원 (포스코 뉴스룸 2026.9)',u:'https://newsroom.posco.com/kr/포스코퓨처엠-sk온과-lfp-양극재-1-1조원-공급계약-체결-수/'},
+ {t:'포스코퓨처엠 얼티엄셀즈향 인조흑연 9,393억원 (한경비즈니스 2022.12)',u:'https://magazine.hankyung.com/business/article/202212054933b'},
+ {t:'포스코퓨처엠 천연흑연 6,710억원 공시 (2025.10, 디지털투데이)',u:'https://www.digitaltoday.co.kr/aigongsi/3728/posco-futurem-global-automaker-battery-material-supply'},
+ {t:'포스코퓨처엠 인조흑연 1조149억원 (스마트투데이 2026.3)',u:'https://www.smarttoday.co.kr/ko-kr/articles/105020'},
+ {t:'엘앤에프–삼성SDI LFP 1조6,067억원 (디지털데일리 2026.3)',u:'https://www.ddaily.co.kr/page/view/2026032411000642673'},
+ {t:'엘앤에프–SK온 ESS용 LFP 약 1,600억원 (머니투데이방송 2026.9)',u:'https://news.mtn.co.kr/news-detail/2026091719174393399'},
+ {t:'LG화학 원통형 양극재 공급 개시 (데일리안)',u:'https://www.dailian.co.kr/news/view/1673170/'},
+ {t:'LG화학–GM 양극재 24.75조원 (2024.2)',u:'https://v.daum.net/v/20240208071200557'},
+ {t:'코스모신소재–LG화학 NCMA 계약 감액 (2025.5)',u:'https://v.daum.net/v/20250515100044058'},
+ {t:'고려아연·LG화학 한국전구체 양산 (2025.1)',u:'https://v.daum.net/v/20250121143312452'},
+ {t:'에코프로비엠–삼성SDI 43.87조원·헝가리 공장 (2025.12)',u:'https://v.daum.net/v/20251202154314454'},
+ {t:'새만금 전구체 합작 지이엠코리아 (바이라인네트워크 2023.3)',u:'https://byline.network/2023/03/23-265/'},
+ {t:'대주전자재료 실리콘 음극재 파나소닉 확보 (2025.6)',u:'https://v.daum.net/v/20250629163245061'},
+ {t:'엔켐–CATL 전해액 35만t (2025.12)',u:'https://v.daum.net/v/20251224092752537'},
+ {t:'동화일렉트로라이트 테네시 공장 공급계약 (디지털데일리 2025.4)',u:'https://www.ddaily.co.kr/page/view/2025040309475467975'},
+ {t:'동화기업 국내 3사 고객 (딜사이트)',u:'https://dealsite.co.kr/articles/105200'},
+ {t:'천보 2020년 실적발표 IR (첨가제 고객)',u:'https://file.alphasquare.co.kr/media/pdfs/company-ir/20210120천보-천보-2020년-4분기-및-연간-실적발표온라인.pdf'},
+ {t:'천보–동화 북미 공급망 협약 (뉴스1 2026.2)',u:'https://www.news1.kr/industry/sb-founded/6068407'},
+ {t:'후성 LiPF6 미국향 (스마트투데이 2025.10)',u:'https://www.smarttoday.co.kr/ko-kr/articles/94468'},
+ {t:'SKIET 북미 고객 분리막 원단 (스마트투데이)',u:'https://www.smarttoday.co.kr/ko-kr/articles/77741'},
+ {t:'SKIET–궈쉬안 분리막 MOU (한경비즈니스 2025.2)',u:'https://magazine.hankyung.com/business/article/202502272669b'},
+ {t:'더블유씨피 SK온 조지아 ESS 분리막 (2026.4 리포트)',u:'https://alphadistill.com/report/2074'},
+ {t:'스텔란티스 스타플러스 철수 검토 보도 (헤럴드경제 2026.2)',u:'https://www.heraldk.com/article/2026021016214118941'},
+ {t:'SKC(SK넥실리스)–LG엔솔 동박 합의 보도 (한국경제 2025.7)',u:'https://www.hankyung.com/article/2025072404731'},
+ {t:'SK넥실리스–AESC 동박 계약 (딜사이트)',u:'https://dealsite.co.kr/articles/109683'},
+ {t:'SK넥실리스–노스볼트 동박 계약 (이투데이 2023.2)',u:'https://www.etoday.co.kr/news/view/2223225'},
+ {t:'롯데에너지머티리얼즈 고객 비중 (파이낸스스코프)',u:'https://www.finance-scope.com/article/view/scp202410140011'},
+ {t:'솔루스첨단소재 북미 원통형 신규 계약 (딜사이트 2025.9)',u:'https://dealsite.co.kr/articles/149028'},
+ {t:'삼아알미늄–LG엔솔 SI 투자 (뉴스토마토)',u:'https://newstomato.com/ReadNews.aspx?no=1199255'},
+ {t:'삼아알미늄 배터리 3사 공급 (더코모디티스뉴스)',u:'https://thecommoditiesnews.com/news/articleView.html?idxno=6668'},
+ {t:'나노신소재 리포트 (2026.5)',u:'https://stock.pstatic.net/stock-research/company/61/20260511_company_196623000.pdf'},
+ {t:'율촌화학 파우치 필름 LG엔솔 (파이낸스스코프 2026.5)',u:'https://www.finance-scope.com/article/view/scp202605080015'},
+ {t:'율촌화학 얼티엄 파우치 계약 해지 (2024.8)',u:'https://v.daum.net/v/20240801070040387'},
+ {t:'동원시스템즈 46파이 원통형 캔 (2024.3)',u:'https://v.daum.net/v/20240306181148298'},
+ {t:'코스모신소재 리포트 (2026.4)',u:'https://alphadistill.com/report/419'},
+ {t:'앨버말–BMW 장기 리튬 공급 (앨버말)',u:'https://albemarle.com/news/albemarle-and-the-bmw-group-announce-longterm-partnership'},
+ {t:'앨버말–포드 전략 계약 (앨버말)',u:'https://www.albemarle.com/news/albemarle-establishes-strategic-agreement-with-ford-motor-company'},
+ {t:'SQM–현대차·기아 수산화리튬 (Mining.com)',u:'https://www.mining.com/web/sqm-reaches-supply-deal-with-hyundai-kia/'},
+ {t:'SQM 고객 SK온 언급 (electrive)',u:'https://electrive.com/2024/06/18/hyundai-and-kia-procure-lithium-from-sqm'},
+ {t:'간펑–유미코아 리튬 공급 (Indian Chemical News)',u:'https://www.indianchemicalnews.com/general/lite/umicore-signs-lithium-supply-contracts-with-ganfeng-and-vulcan-10867'},
+ {t:'톈치–LG화학 수산화리튬 (CnEVPost)',u:'https://cnevpost.com/2022/06/27/tianqi-lithium-signs-deal-to-supply-lithium-hydroxide-to-lg-chem/'},
+ {t:'필바라–포스코 광양 수산화리튬 합작 (Mining Technology)',u:'https://www.mining-technology.com/news/pilbara-posco-lithium-hydroxide'},
+ {t:'필바라 오프테이크 개정 (Mysteel)',u:'https://www.mysteel.net/news/5050332-flash-pilbara-announces-to-successfully-revise-offtake-agreements'},
+ {t:'필바라–쓰촨야화 계약 (Small Caps)',u:'https://smallcaps.com.au/pilbara-minerals-signs-lithium-offtake-agreement-china-sichuan-yahua'},
+ {t:'미네랄리소시스–앨버말 MARBL 합작 (S&P Global)',u:'https://www.spglobal.com/market-intelligence/en/news-insights/articles/2022/2/albemarle-mineral-resources-to-explore-expansion-of-lithium-jv-68799962'},
+ {t:'미네랄리소시스–간펑 마운트매리언 (Chemical Week)',u:'https://chemweek.mydigitalpublication.com/articles/mineral-resources-albemarle-ganfeng-to-lift-spodumene-output'},
+ {t:'리오틴토의 아케이디움 인수 (Mining.com)',u:'https://www.mining.com/rio-tinto-to-join-top-three-lithium-miners-with-arcadium-acquisition/'},
+ {t:'아케이디움 주요 고객 (S&P Global)',u:'https://www.spglobal.com/energy/en/news-research/latest-news/metals/100924-rio-tinto-to-control-third-largest-lithium-reserves-with-67b-arcadium-takeover'},
+ {t:'리벤트–GM 수산화리튬 계약 (SEC)',u:'https://www.sec.gov/Archives/edgar/data/1742924/000174292422000019/liventex9916302022.htm'},
+ {t:'시라–포스코퓨처엠 흑연 (ASX 공시 2024.3)',u:'https://announcements.asx.com.au/asxpdf/20240301/pdf/0611fqnfxpgt3f.pdf'},
+ {t:'시라–LG엔솔 음극재 MoU (Kallanish)',u:'https://api.kallanish.com/en/news/power-materials/market-reports/article-details/syrah-resources-lines-us-supply-anode-deal-with-lges-1022'},
+ {t:'시라–테슬라 공급 분쟁 해소 (electrive 2026.6)',u:'https://www.electrive.com/2026/06/01/graphite-deal-with-tesla-syrah-reports-resolution-in-delivery-dispute/'},
+ {t:'화유코발트–LG엔솔 전구체·양극재 (2025.9)',u:'https://filingreader.com/news-wire/shanghai/2025-09-29/huayou-cobalt-secures-lges-battery-material-deals-adjusts-share-structure'},
+ {t:'화유코발트–EVE 헝가리 양극재 (Yicai)',u:'https://www.yicaiglobal.com/news/chinas-huayou-cobalt-gains-after-hungarian-plant-lands-another-big-battery-materials-order'},
+ {t:'CATL의 KFM 지분 인수 (NS Energy)',u:'https://www.nsenergybusiness.com/?p=290535'},
+ {t:'CMOC 2025~27 판매계약 (Fastmarkets)',u:'https://fastmarkets.com/insights/cmoc-cobalt-producer-exceeds-2024-guidance'},
+ {t:'글렌코어–테슬라 코발트 (Mining.com)',u:'https://www.mining.com/web/tesla-strikes-deal-to-buy-cobalt-from-glencore-for-ev-plants/'},
+ {t:'유미코아–글렌코어 코발트 (유미코아)',u:'https://www.umicore.com/en/newsroom/news/umicore-and-glencore-develop-partnership-for-sustainable-cobalt-supply-in-battery-materials/'},
+ {t:'글렌코어–CATL 코발트 (S&P Global)',u:'https://autotechinsight.ihsmarkit.com/news/5240930/glencore-signs-deal-to-supply-20000-tons-of-cobalt-to-chinese-firm-catl-report'},
+ {t:'발레–GM 황산니켈 (Mining.com)',u:'https://www.mining.com/web/vale-to-supply-gm-with-nickel-for-evs-starting-in-2026/'},
+ {t:'노르니켈–BASF 하르야발타 (BASF)',u:'https://www.basf.com/global/en/media/news-releases/2018/10/p-18-336.html'},
+ {t:'칭산 고품위 니켈매트 (Kallanish)',u:'https://api.kallanish.com/en/news/power-materials/market-reports/article-details/nickel-tsingshan-indonesia-to-expand-high-grade-nickel-matte-production'},
+ {t:'유미코아–CNGR·에코앤드림 전구체 (Indian Chemical News)',u:'https://www.indianchemicalnews.com/battery/lite/umicore-signs-precursor-cathode-active-materials-ev-battery-supply-agreements-with-cngr-and-ecodream-25633'},
+ {t:'CNGR 고객 목록 (Yicai)',u:'https://yicaiglobal.com/news/china-cngr-teams-up-with-south-korea-sk-group-on-lithium-materials'},
+ {t:'거린메이–샤먼텅스텐 프레임워크 (2025.10)',u:'https://filingreader.com/news-wire/shenzhen/2025-10-24/gem-and-xiamen-tungsten-new-energy-partner-on-battery-material-supply'},
+ {t:'거린메이 한국 전구체 합작 (Fastmarkets)',u:'https://fastmarkets.com/insights/chinas-gem-plans-precursor-jv-in-south-korea'},
+ {t:'유미코아–ACC 양극재 (유미코아)',u:'https://www.umicore.com/en/media/newsroom/umicore-and-acc-enter-strategic-partnership-for-ev-battery-materials-in-europe/'},
+ {t:'유미코아 캐나다 공장 중단·AESC 공급 (유미코아)',u:'https://www.umicore.com/en/media/newsroom/umicore-shares-details-on-cost-saving-measures-and-pauses-construction-of-its-battery-materials-plant-in-canada/?locale=fr'},
+ {t:'유미코아–LG화학 NMC (유미코아)',u:'https://umicore.com/en/newsroom/umicore-announces-partnership-with-lg-chem-for-the-supply-of-nmc-cathode-materials'},
+ {t:'BASF–CATL 양극재 프레임워크 (BASF 2025.7)',u:'https://battery-materials.basf.com/global/en/news/2025/2025-07-28_BASF-Battery-Materials-and-CATL-sign-a-framework-agreement-for-cathode-active-materials'},
+ {t:'BASF–SK온 협력 (electrive)',u:'https://www.electrive.com/2023/11/15/basf-sk-on-announce-battery-cooperation'},
+ {t:'BASF–SVOLT 협력 (BEST)',u:'https://www.bestmag.co.uk/basf-and-svolt-partner-advance-materials-development-and-battery-recycling/'},
+ {t:'BASF 삼산 합작 (Battery Industry)',u:'https://batteryindustry.net/?p=21937'},
+ {t:'BASF–PPES 양극재 (electrive)',u:'https://www.electrive.com/2022/12/19/basf-to-supply-cathode-materials-for-prime-planet-energy'},
+ {t:'스미토모금속광산–도요타 전고체 양극재 (ESS News)',u:'https://www.ess-news.com/2025/10/09/sumitomo-metal-mining-and-toyota-collaborate-to-mass-produce-cathode-materials-for-solid-state-batteries/'},
+ {t:'스미토모금속광산 증설·파나소닉 NCA (Mining.com)',u:'https://www.mining.com/web/sumitomo-metal-to-invest-424m-to-boost-battery-materials-output/'},
+ {t:'룽바이–CATL LFP·삼원계 대형 수주 (electrive 2026.1)',u:'https://www.electrive.com/2026/01/15/catl-places-large-order-for-lfp-cathodes-with-ronbay'},
+ {t:'룽바이–CATL 나트륨이온 양극재 (2025.11)',u:'https://filingreader.com/news-wire/shanghai/2025-11-16/ronbay-new-energy-secures-major-catl-sodium-ion-battery-material'},
+ {t:'당승과기–SK온 (Yicai)',u:'https://www.yicaiglobal.com/news/chinas-easpring-sinks-despite-landing-long-term-lithium-battery-materials-order-from-sk-on/'},
+ {t:'당승과기–LG엔솔 (Yicai)',u:'https://yicaiglobal.com/news/chinas-easpring-jumps-after-securing-usd19-billion-battery-material-order-from-south-koreas-lg-energy'},
+ {t:'후난위넝 고객 비중 (EnergyTrend)',u:'https://www.energytrend.com/news/20230424-31816.html'},
+ {t:'샤먼텅스텐신에너지 고객 (Yicai)',u:'https://yicaiglobal.com/news/byd-supplier-xtc-inks-three-year-deal-with-zhejiang-power-for-battery-materials'},
+ {t:'베터르 모로코 공장·포드 (Yicai)',u:'https://yicaiglobal.com/news/chinas-btr-to-build-new-anode-plant-in-morocco-expects-usd120-million-pre-order-from-ford'},
+ {t:'베터르 고객 목록 (Battery-Tech Network)',u:'https://battery-tech.net/company/btr-new-material-group-co-ltd/'},
+ {t:'CATL·BYD의 샨샨 자회사 투자 (Gasgoo)',u:'https://autonews.gasgoo.com/articles/ev/byd-catl-invest-in-lithium-battery-material-supplier-shanshans-subsidiary-70020153'},
+ {t:'샨샨–정력신에너지 협력 (Mysteel)',u:'https://www.mysteel.net/news/5095762-flash-cornex-new-energy-and-shanshan-technology-sign-a-strategic-cooperation-agreement-'},
+ {t:'상타이 상장·고객 (EqualOcean)',u:'https://equalocean.com/news/2022122919330-shangtai-listed-shenzhen-stock-exchange-entered-catls-supply-chain'},
+ {t:'노보닉스 20-F (SEC, 파나소닉·파워코)',u:'https://www.sec.gov/Archives/edgar/data/1859795/000095017025029488/nvx-20241231.htm'},
+ {t:'노보닉스–스텔란티스 계약 해지 (SEC)',u:'https://www.sec.gov/Archives/edgar/data/1859795/000119312525262911/nvx-ex99_1.htm'},
+ {t:'그룹14 시리즈D·SK 합작 인수 (TechCrunch 2025.8)',u:'https://techcrunch.com/2025/08/20/group14-lands-463m-from-sk-porsche-and-others-to-make-silicon-anodes-for-evs'},
+ {t:'실라–파나소닉 (electrive)',u:'https://www.electrive.com/2023/12/12/panasonic-orders-anode-material-from-sila-nanotechnologies'},
+ {t:'실라–메르세데스 G-클래스 (TechCrunch)',u:'https://techcrunch.com/2023/12/11/sila-panasonic-deal/amp'},
+ {t:'신쟈오–CATL 전해액 30만t (2026.6)',u:'https://filingreader.com/news-wire/shenzhen/2026-06-07/capchem-secures-major-three-year-electrolyte-supply-deal-with-catl'},
+ {t:'신쟈오 폴란드 공장 고객 (Yicai)',u:'https://www.yicaiglobal.com/news/chinas-capchem-to-build-lithium-battery-materials-plant-in-saudi-arabia-for-usd260-million-boost-polish-factory-capacity'},
+ {t:'둬푸둬 한국 LiPF6 합작 (Asian Metal)',u:'https://www.asianmetal.com/news/2041505/DFD-to-set-up-LiPF6-joint-venture-in-South-Korea'},
+ {t:'미쓰비시케미칼–엘앤에프 음극재 MoU (KED)',u:'https://amp.kedglobal.com/newsAmp/ked202306230005'},
+ {t:'싱위안–LG엔솔 분리막 (Kallanish)',u:'https://api.kallanish.com/en/news/power-materials/market-reports/article-details/senior-lges-sign-7-year-separator-supply-deal-1123'},
+ {t:'싱위안–삼성SDI 분리막 MoU (Mysteel)',u:'https://www.mysteel.net/news/5052894-flash-senior-and-samsung-sdi-signed-a-strategic-memorandum'},
+ {t:'아사히카세이 캐나다 분리막 공장 (electrive)',u:'https://electrive.com/2024/04/25/asahi-kasei-to-build-battery-separator-plant-in-canada'},
+ {t:'도레이 헝가리 합작 지분 매각 (S&P Global)',u:'https://autotechinsight.spglobal.com/news/5284459/toray-sells-complete-stake-in-lg-toray-hungary-to-lg-chem'},
+ {t:'누오더–CALB 동박 (Mysteel)',u:'https://www.mysteel.net/news/5105948-flash-nuode-new-materials-signs-a-supply-assurance-framework-agreement-with-calb-'},
+ {t:'누오더 고객 (Yicai)',u:'https://yicaiglobal.com/news/chinas-nuode-becomes-copper-foil-supplier-of-unit-of-indias-biggest-storage-battery-maker'},
+ {t:'자위안–CATL 동박 (EnergyTrend 2025.11)',u:'https://www.energytrend.com/news/20251106-50354.html'},
+ {t:'캐보트–파워코 도전재 (electrive 2026.1)',u:'https://www.electrive.com/2026/01/08/powerco-sources-battery-materials-from-cabot'},
+ {t:'방푸순환–메르세데스 재활용 (electrive)',u:'https://www.electrive.com/2023/03/14/mercedes-catl-subsidiary-brunp-announce-battery-recycling-cooperation'},
+ {t:'방푸순환 재활용 협력사 (Gasgoo)',u:'https://autonews.gasgoo.com/articles/news/brunp-recycling-mercedes-benz-sign-mou-for-closed-loop-battery-recycling-70022357'},
+ {t:'레드우드–도요타 소재 공급 (보도)',u:'https://www.stockopedia.com/share-prices/panasonic-holdings-PNK:PCRFY/news/redwood-inks-long-term-ev-battery-materials-supply-deal-with-toyota-019e6d63-e0ac-742a-971a-c0aea2913f35/'},
+ {t:'레드우드–파나소닉 재활용 (Recycling Today)',u:'https://recyclingtoday.com/news/redwood-materials-announces-deals-with-panasonic-lyft-for-battery-recycling'},
+ {t:'레드우드 얼티엄셀즈 스크랩 (Argus)',u:'https://www.argusmedia.com/en/news-and-insights/latest-market-news/2571898-redwood-to-recyle-ultium-scrap'},
+ {t:'선도지능–American Battery Factory (China Daily)',u:'https://regional.chinadaily.com.cn/bizwnden/2024-04/03/c_976793.htm'}
+];
+
+/* 정규화 */
+const BY={};
+COS.forEach(c=>{BY[c.id]=c; c.cu=(c.cu||[]); c.f=c.f||[]; c.d=c.d||[];
+  if(!c.ch){ c.ch = c.st[0][0]==='oem' ? [] : ['CMN']; }
+  c.stage=c.st[0][0]; c.region=REGION[c.c]||'호주·기타';
+  c.tk=TICK[c.id]||[]; c.parent=PARENT[c.id]||null;
+  const lt=c.tk.length?c.tk[0]:(c.parent&&c.parent.div?c.parent.tk[0]:'');
+  c.ex=lt?exOf(lt):'비상장'; c.exg=lt?exGroup(c.ex):'비상장';
+  c.dg=c.tk.map(dgCode).filter(Boolean);
+  c.shareEV=SHARE_EV[c.id]||null; c.shareESS=SHARE_ESS[c.id]||null;
+  c.share=(c.shareEV&&c.shareEV.p)||(c.shareESS&&c.shareESS.p)||0;
+});
+/* 상대방 비공개 계약 — 관계선 대신 기업 비고에 표시 */
+const NOTE_EXTRA={
+ posco_fm:'음극재: 비공개 글로벌 완성차향 천연흑연 6,710억원 2027.10~2031.9 (2025.10 공시), 인조흑연 1조149억원 2027~2032 베트남 공장 (2026.3)',
+ lgchem:'비공개 미국 고객 EV 양극재 3조7,620억원, ~2029.7 (2025.11 공시)',
+ dongwha:'테네시 공장 전해액 — 비공개 미국 배터리사·완성차 2곳, 2026~2028 합산 약 3,500억원 (2025.4)',
+ foosung:'LiPF6 — 비공개 미국 글로벌 업체향, 국내 캐파의 20~30% (2025.10 증권사, ESS향 추정)',
+ skiet:'비공개 북미 고객 분리막 원단 2025.4~, 2026년까지 EV 최대 30만대분',
+ solus:'비공개 북미 원통형 톱티어 배터리사 신규 계약 (2025.9 보도), 일본계 배터리사 양산 공급 개시 (보도)',
+ skc:'노스볼트 동박 1.4조원 계약(2023.2)은 노스볼트 파산으로 사실상 종료',
+ ecopro_bm:'코스피 이전상장 예비심사 철회 (2025.2) — 현재 코스닥',
+ pls:'중국 쓰촨야화 2024.3 3년 계약(연 10만~16만t), 성신리튬 오프테이크 개정 (2024)',
+ nic:'한국 스피어(Sphere) ENC 지분 10%·니켈 오프테이크 (2026.1, 종결 미확인)',
+ shanshan:'정력신에너지(Cornex) 100억위안 이상 음극재 협력 (2025.8)',
+ basf:'도요타·파나소닉 합작 PPES 양극재 공급 (2022.12), 포르쉐 셀포스 독점 양극재 공급사 (보도)',
+ group14:'포르쉐 투자 (2022), SK와의 상주 합작을 2025.8 100% 인수, 2024.6 비공개 고객 5곳 오프테이크',
+ senior:'노르웨이 프레이어(Freyr) 물량 예약 계약 (2022.6)',
+ mcc:'인도 네오젠에 전해액 기술 라이선스 (2023.4)',
+ nuode:'인도 엑사이드에너지 동박 공급 (2024~)',
+ lead:'미국 American Battery Factory 20GWh 셀 라인 계약 (2024.3)',
+ toray:'LG화학과의 헝가리 분리막 합작은 2025.12 전량 매각으로 종료',
+ novonix:'스텔란티스 합성흑연 계약(2024.11)은 2025.11 해지',
+ cngr:'테슬라 전구체 계약(2023~2025) 만료',
+ glencore:'삼성SDI 코발트 계약(2020~2024) 만료 추정',
+ dfd:'BYD LiPF6 계약(2022~2025)·엔켐 LiPF6 계약(2022~2024) 종료'
+};
+COS.forEach(c=>{ if(NOTE_EXTRA[c.id]) c.n=c.n?c.n+' · '+NOTE_EXTRA[c.id]:NOTE_EXTRA[c.id]; });
+const RELMAP={};
+REL.forEach(([a,b,t,n])=>{ if(!BY[a]||!BY[b]) return; if(!BY[a].cu.includes(b)) BY[a].cu.push(b); RELMAP[a+'>'+b]={t,n}; });
+COS.forEach(c=>{c.cu=c.cu.filter(id=>BY[id]);});
+const SUP={}; COS.forEach(c=>c.cu.forEach(id=>{(SUP[id]=SUP[id]||[]).push(c.id);}));
+const relOf=(a,b)=>RELMAP[a+'>'+b]||{t:'s',n:''};
+const tickLabel=c=>c.tk.length?c.tk[0]:(c.parent&&c.parent.div?c.parent.tk[0]:'비상장');
+/* 수요처 유형: ev 완성차 / ess ESS 통합·발주 / it IT 기기 */
+const demType=c=>{ const e=c.st.find(x=>x[0]==='oem'); const s=e?e[1]:''; return s.startsWith('ESS')?'ess':s.startsWith('IT')?'it':'ev'; };
+const DEM_NAME={ev:'완성차',ess:'ESS 통합·발주',it:'IT 기기'};
+const dotColor=c=>c.stage==='oem'?`var(--${demType(c)})`:SCOL(c.stage);
+
+/* ───────── 분류 기준 ───────── */
+const AXES=[
+ {k:'stage',name:'밸류체인',note:'원료·광물부터 수요처까지 8단계 › 세부 공정 › 기업. 단계 옆 숫자는 2025년 시장 규모, 기업 옆 %는 배터리 점유율입니다.'},
+ {k:'country',name:'국가',note:'본사 소재국 › 밸류체인 단계 › 기업.'},
+ {k:'demand',name:'수요처',note:'전방 수요(EV·ESS·IT·전동공구) › 밸류체인 단계 › 기업. 여러 수요에 걸친 기업은 각각 표시됩니다.'},
+ {k:'chem',name:'배터리 화학',note:'삼원계·LFP·나트륨이온·전고체 › 단계 › 기업. 동박·분리막처럼 화학계와 무관한 소재·장비는 「화학계 공통」에 모았고, 수요처는 제외했습니다.'},
+ {k:'form',name:'폼팩터',note:'각형·파우치·원통 › 단계 › 기업. 셀과 폼팩터 전용 부품(파우치 필름·캔·캡)만 해당합니다.'},
+ {k:'exg',name:'상장 거래소',note:'주 상장 거래소 › 단계 › 기업. 중국 본토는 상해·심천·북경 합산, 비상장 자회사는 상세 패널에 모회사 티커를 적었습니다.'},
+ {k:'block',name:'중국/비중국',note:'본사 기준 중국 / 비중국 › 단계 › 기업. 미국 IRA·FEOC 공급망 관점의 1차 구분입니다(지분 구조에 따른 판정은 별도 확인).'}
+];
+function axisGroups(ax, list){
+  if(ax==='country'){
+    const cnt={}; list.forEach(c=>cnt[c.c]=(cnt[c.c]||0)+1);
+    return Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a]||a.localeCompare(b,'ko')).map(k=>({k,label:k,test:c=>c.c===k}));
+  }
+  if(ax==='demand') return Object.keys(DEM).map(k=>({k,label:DEM[k],test:c=>c.d.includes(k)}));
+  if(ax==='chem') return Object.keys(CHEM).map(k=>({k,label:CHEM[k],test:c=>c.ch.includes(k)}));
+  if(ax==='form') return FORMS.map(k=>({k,label:k,test:c=>c.f.includes(k)}));
+  if(ax==='exg') return EXG_ORDER.map(k=>({k,label:k,test:c=>c.exg===k}));
+  if(ax==='block') return [{k:'cn',label:'중국 본사',test:c=>c.c==='중국'},{k:'non',label:'비중국 본사',test:c=>c.c!=='중국'}];
+  return [];
+}
+
+/* ───────── 상태 ───────── */
+const LS='bvc-map-v3';
+const state={axis:'stage',view:'flow',layout:'h',regions:new Set(),demands:new Set(),sel:null,lens:null};
+const DATA_ASOF='2026.10.15';
+try{const s=JSON.parse(localStorage.getItem(LS)||'{}'); if(AXES.some(a=>a.k===s.axis))state.axis=s.axis; if(['flow','map','table'].includes(s.view))state.view=s.view; if(s.layout==='r')state.layout='r';}catch(e){}
+function save(){try{localStorage.setItem(LS,JSON.stringify({axis:state.axis,view:state.view,layout:state.layout}));}catch(e){}}
+const collapsed={};
+const passes=c=>(!state.regions.size||state.regions.has(c.region))&&(!state.demands.size||c.d.some(d=>state.demands.has(d)));
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+const fmt1=n=>n.toLocaleString('ko-KR',{minimumFractionDigits:1,maximumFractionDigits:1});
+
+/* ───────── 트리 데이터 ───────── */
+function leaf(c,stage,path){return {name:c.ko,kind:'leaf',co:c,stage,key:path+'/'+c.id};}
+function buildData(){
+  const list=COS.filter(passes);
+  const root={name:'글로벌 2차전지 밸류체인',kind:'root',key:'@root',children:[]};
+  if(state.axis==='stage'){
+    STAGES.forEach(s=>{
+      const g1={name:s.name,kind:'g1',stage:s.k,key:s.k,mk:MARKET[s.k]||null,children:[]};
+      s.subs.forEach(sub=>{
+        const cs=list.filter(c=>c.st.some(e=>e[0]===s.k&&e[1]===sub)).sort((a,b)=>b.share-a.share);
+        if(cs.length) g1.children.push({name:sub,kind:'g2',stage:s.k,key:s.k+'/'+sub,children:cs.map(c=>leaf(c,s.k,s.k+'/'+sub))});
+      });
+      if(g1.children.length) root.children.push(g1);
+    });
+  }else{
+    axisGroups(state.axis,list).forEach(g=>{
+      const cs=list.filter(c=>g.test(c)&&!(state.axis==='chem'&&c.stage==='oem'));
+      if(!cs.length) return;
+      const g1={name:g.label,kind:'g1',key:g.k,children:[]};
+      STAGES.forEach(s=>{
+        const cs2=cs.filter(c=>c.stage===s.k).sort((a,b)=>b.share-a.share);
+        if(cs2.length) g1.children.push({name:s.name,kind:'g2',stage:s.k,key:g.k+'/'+s.k,children:cs2.map(c=>leaf(c,s.k,g.k+'/'+s.k))});
+      });
+      root.children.push(g1);
+    });
+  }
+  (function count(n){ if(n.kind==='leaf'){return new Set([n.co.id]);} const s=new Set(); (n.children||[]).forEach(ch=>count(ch).forEach(i=>s.add(i))); n.n=s.size; return s; })(root);
+  return root;
+}
+function defaultOpenKey(root){ if(state.axis==='stage') return 'cell'; return root.children[0]?root.children[0].key:''; }
+function isOpen(node,root){
+  if(node.kind==='leaf') return false;
+  const k=state.axis+'|'+node.key;
+  if(k in collapsed) return !collapsed[k];
+  if(node.kind==='root'||node.kind==='g1') return true;
+  return node.key.split('/')[0]===defaultOpenKey(root);
+}
+
+/* ───────── 화면 요소 ───────── */
+const $=id=>document.getElementById(id);
+const svgEl=$('map'), tip=$('tip'), emptyEl=$('empty');
+const reduceMQ=matchMedia('(prefers-reduced-motion: reduce)');
+const DUR=()=>reduceMQ.matches?0:620;
+let svg=null,gRoot=null,gLinks=null,gNodes=null,zoom=null,lastSig='',prevPos=new Map(),nodePos={},lastSel=null,lastExt=null;
+
+function renderStats(){
+  const countries=new Set(COS.map(c=>c.c)).size;
+  const listed=COS.filter(c=>c.tk.length||(c.parent&&c.parent.div)).length;
+  const rels=COS.reduce((s,c)=>s+c.cu.length,0);
+  const down=COS.filter(c=>c.stage==='cell').reduce((s,c)=>s+c.cu.filter(id=>BY[id].stage==='oem').length,0);
+  $('stats').innerHTML=`<span><b>${COS.length}</b>개 기업</span><span><b>${countries}</b>개국</span><span><b>${listed}</b>개 상장사</span><span><b>${rels}</b>개 공급 관계 (셀→수요처 <b>${down}</b>)</span><span>2025 전지 출하 <b>2,280.5</b>GWh</span>`;
+}
+function renderControls(){
+  $('axisSeg').innerHTML=AXES.map(a=>`<button type="button" data-a="${a.k}" aria-pressed="${state.axis===a.k}">${a.name}</button>`).join('');
+  document.querySelectorAll('#viewSeg button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===state.view)));
+  document.querySelectorAll('#layoutSeg button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.l===state.layout)));
+  const v=state.view, mapOnly=v==='map';
+  ['layoutSeg','expandAll','collapseAll','fitBtn'].forEach(id=>$(id).hidden=!mapOnly);
+  $('axisBar').hidden=!mapOnly;
+  $('axisNote').textContent=v==='flow'?FLOW_NOTE:v==='table'?'전체 기업을 표로 봅니다. 행을 누르면 오른쪽에 상세 정보가 열립니다.':AXES.find(a=>a.k===state.axis).note;
+  $('regionChips').innerHTML='<span class="lbl">지역</span>'+REGIONS.map(r=>`<button type="button" class="chip" data-r="${r}" aria-pressed="${state.regions.has(r)}">${r}</button>`).join('');
+  $('demandChips').innerHTML='<span class="lbl">전방 수요</span>'+Object.keys(DEM).map(k=>`<button type="button" class="chip" data-d="${k}" aria-pressed="${state.demands.has(k)}">${DEM[k]}</button>`).join('');
+  $('legend').innerHTML=STAGES.map(s=>`<span><i style="background:${SCOL(s.k)}"></i>${s.name}</span>`).join('');
+  $('flowView').hidden=v!=='flow'; $('mapView').hidden=!mapOnly; $('tableView').hidden=v!=='table';
+  $('dlPng').hidden=v!=='flow';
+  $('work').classList.toggle('flowmode',v==='flow');
+}
+function renderSources(){
+  const li=s=>`<li><a href="${s.u}" target="_blank" rel="noopener">${esc(s.t)}</a></li>`;
+  $('srcList').innerHTML=Object.values(SRC).map(li).join('');
+  $('relSrcList').innerHTML=REL_SRC.map(li).join('');
+  $('relSrcSum').textContent=`공급 관계 출처 ${REL_SRC.length}건 보기`;
+}
+
+/* ───────── 마인드맵: 좌표 · 경로 ───────── */
+const isH=()=>state.layout==='h';
+function P(x,y){ return isH()?[y,x]:[y*Math.cos(x-Math.PI/2), y*Math.sin(x-Math.PI/2)]; }
+function linkPath(s,t){
+  if(isH()){ const [sx,sy]=P(s.x,s.y),[tx,ty]=P(t.x,t.y), mx=(sx+tx)/2; return `M${sx},${sy}C${mx},${sy} ${mx},${ty} ${tx},${ty}`; }
+  const r=(s.y+t.y)/2, a=P(s.x,s.y), c1=P(s.x,r), c2=P(t.x,r), b=P(t.x,t.y);
+  return `M${a[0]},${a[1]}C${c1[0]},${c1[1]} ${c2[0]},${c2[1]} ${b[0]},${b[1]}`;
+}
+function nodeTf(p,depth){ const [px,py]=P(p.x,p.y); const deg=(isH()||depth===0)?0:(p.x*180/Math.PI-90); return `translate(${px},${py}) rotate(${deg})`; }
+const keyOf=d=>d.data.key;
+function textW(s){ let w=0; for(const ch of String(s)) w+=/[ㄱ-힣]/.test(ch)?12.5:7; return w; }
+
+function relatedSet(){ if(!state.sel) return null; const c=BY[state.sel]; return new Set([...(c.cu||[]),...(SUP[c.id]||[])]); }
+function leafR(c){ return c.share?4.6+Math.sqrt(c.share)*1.15:4.6; }
+
+function layout(data){
+  const root=d3.hierarchy(data,d=>isOpen(d,data)?d.children:null);
+  if(isH()){
+    d3.tree().nodeSize([24,1]).separation((a,b)=>{ let s=a.parent===b.parent?1:1.4; if(a.depth===1&&b.depth===1&&(a.data.mk||b.data.mk)) s=Math.max(s,1.9); return s; })(root);
+    const off=[0,230,470,710]; root.each(d=>{d.y=d.depth<off.length?off[d.depth]:d.depth*240;});
+  }else{
+    const leaves=root.leaves().length, R=Math.max(300,leaves*6);
+    d3.tree().size([2*Math.PI,R]).separation((a,b)=>(a.parent===b.parent?1:2)/Math.max(1,a.depth))(root);
+    const rr=[0,R*0.34,R*0.64,R]; root.each(d=>{d.y=d.depth<rr.length?rr[d.depth]:R;});
+  }
+  return root;
+}
+function labelSide(d){ // true = 오른쪽
+  if(isH()) return !(d.children||d.data.kind==='root');
+  return d.x<Math.PI;
+}
+function extents(root){
+  let x0=Infinity,x1=-Infinity,y0=Infinity,y1=-Infinity;
+  root.each(d=>{
+    const [px,py]=P(d.x,d.y), dt=d.data;
+    const w=textW(dt.name)+(dt.kind==='leaf'?textW(tickLabel(dt.co))*0.85+(dt.co.share?40:0):40)+16;
+    if(isH()){ const right=labelSide(d); x0=Math.min(x0,right?px-8:px-w); x1=Math.max(x1,right?px+w:px+8); y0=Math.min(y0,py-12); y1=Math.max(y1,py+(dt.mk?26:12)); }
+    else{ x0=Math.min(x0,px-w*Math.abs(Math.cos(d.x-Math.PI/2))-10); x1=Math.max(x1,px+w*Math.abs(Math.cos(d.x-Math.PI/2))+10); y0=Math.min(y0,py-w*Math.abs(Math.sin(d.x-Math.PI/2))-12); y1=Math.max(y1,py+w*Math.abs(Math.sin(d.x-Math.PI/2))+12); }
+  });
+  return {x:x0,y:y0,w:x1-x0,h:y1-y0};
+}
+
+/* ───────── 마인드맵: 렌더 (전환 애니메이션) ─────────
+   opts.src: 펼치기/접기를 누른 노드 — 화면에서 제자리에 고정
+   opts.bloom: 기준·배치·필터 변경 — 중심에서 퍼져 나오며 다시 그림 */
+function renderMap(opts){
+  opts=opts||{};
+  if(state.view!=='map') return;
+  if(typeof d3==='undefined'){emptyEl.hidden=false;emptyEl.textContent='지도 라이브러리를 불러오지 못했습니다. 「표」 보기로 전체 데이터를 확인할 수 있습니다.';return;}
+  const data=buildData();
+  if(!svg){
+    svg=d3.select(svgEl); gRoot=svg.append('g');
+    zoom=d3.zoom().scaleExtent([0.15,3]).on('zoom',e=>gRoot.attr('transform',e.transform));
+    svg.call(zoom).on('dblclick.zoom',null);
+    svg.on('click',e=>{ if(e.target===svgEl) select(null); });
+  }
+  if(!data.children.length){
+    emptyEl.hidden=false; emptyEl.textContent='선택한 필터에 해당하는 기업이 없습니다. 지역·수요 필터를 해제해 보세요.';
+    gRoot.selectAll('*').remove(); gLinks=gNodes=null; prevPos=new Map(); return;
+  }
+  emptyEl.hidden=true;
+  const sig=state.axis+'|'+state.layout+'|'+[...state.regions].join()+'|'+[...state.demands].join();
+  const bloom=opts.bloom||sig!==lastSig||!gNodes;
+  const dur=DUR(), ease=d3.easeCubicInOut;
+
+  if(bloom){
+    // 이전 그림은 흐려지며 사라지고, 새 그림은 중심(루트)에서 퍼져 나온다
+    gRoot.selectAll('g.layer').attr('class','old').style('pointer-events','none').transition().duration(dur*0.45).style('opacity',0).remove();
+    gLinks=gRoot.append('g').attr('class','layer'); gNodes=gRoot.append('g').attr('class','layer');
+    prevPos=new Map(); lastSig=sig;
+  }
+  const root=layout(data);
+  const newPos=new Map(); root.each(d=>newPos.set(keyOf(d),{x:d.x,y:d.y}));
+  const rel=relatedSet(), sel=state.sel, selChanged=sel!==lastSel; lastSel=sel;
+
+  const startOf=d=>{ // 나타날 때 출발점: 이전에 보이던 가장 가까운 조상 위치
+    for(let a=d.parent;a;a=a.parent){ const p=prevPos.get(keyOf(a)); if(p) return (!isH()&&p.y===0)?{x:d.x,y:0}:{x:p.x,y:p.y}; }
+    return isH()?{x:d.x*0.0,y:0}:{x:d.x,y:0};
+  };
+  const endOf=d=>{ // 사라질 때 도착점: 새 배치에 남아 있는 가장 가까운 조상 위치
+    for(let a=d.parent;a;a=a.parent){ const p=newPos.get(keyOf(a)); if(p) return (!isH()&&p.y===0)?{x:d.x,y:0}:p; }
+    return {x:0,y:0};
+  };
+
+  // 카메라: 누른 노드를 제자리에 두고, 펼친 가지가 화면 밖이면 부드럽게 끌어옴
+  let camT=null;
+  if(!bloom&&opts.src){
+    const t=d3.zoomTransform(svgEl), old=prevPos.get(opts.src), nw=newPos.get(opts.src);
+    if(old&&nw){
+      const b=P(old.x,old.y), a=P(nw.x,nw.y);
+      let tx=t.x+(b[0]-a[0])*t.k, ty=t.y+(b[1]-a[1])*t.k;
+      const node=root.descendants().find(d=>keyOf(d)===opts.src);
+      if(node&&node.children){
+        const W=svgEl.clientWidth,H=svgEl.clientHeight; let mnY=Infinity,mxY=-Infinity,mxX=-Infinity;
+        node.descendants().forEach(d=>{const p=P(d.x,d.y); const sx=p[0]*t.k+tx, sy=p[1]*t.k+ty; mnY=Math.min(mnY,sy); mxY=Math.max(mxY,sy); mxX=Math.max(mxX,sx+(d.children?0:(textW(d.data.name)+90)*t.k));});
+        const sp=P(nw.x,nw.y), srcY=sp[1]*t.k+ty, srcX=sp[0]*t.k+tx;
+        if(mxY>H-28){ let dy=-(mxY-(H-28)); if(mnY+dy<28) dy=28-mnY; dy=Math.max(dy,40-srcY); ty+=dy; }
+        else if(mnY<28){ let dy=28-mnY; dy=Math.min(dy,H-40-srcY); ty+=dy; }
+        if(mxX>W-16){ let dx=-(mxX-(W-16)); dx=Math.max(dx,30-srcX); tx+=dx; }
+      }
+      camT=d3.zoomIdentity.translate(tx,ty).scale(t.k);
+    }
+  }
+
+  /* 링크 */
+  const links=root.links();
+  const lk=gLinks.selectAll('path.lk').data(links,l=>keyOf(l.target));
+  lk.exit().each(function(l){ this.__to=endOf(l.target); })
+    .transition().duration(dur).ease(ease)
+    .attrTween('d',function(){ const from=this.__lp||{s:this.__to,t:this.__to}, to={s:this.__to,t:this.__to}; const i=d3.interpolate(from,to); return t=>linkPath(i(t).s,i(t).t); })
+    .style('opacity',0).remove();
+  const lkE=lk.enter().append('path').attr('class','lk').each(function(l){ const s=startOf(l.target); this.__lp={s,t:s}; }).attr('d',function(){return linkPath(this.__lp.s,this.__lp.t);});
+  lkE.merge(lk).attr('data-t',l=>keyOf(l.target))
+    .transition().duration(dur).ease(ease)
+    .attrTween('d',function(l){ const from=this.__lp, to={s:{x:l.source.x,y:l.source.y},t:{x:l.target.x,y:l.target.y}}; const i=d3.interpolate(from,to); this.__lp=to; return t=>{const v=i(t); return linkPath(v.s,v.t);}; });
+
+  /* 노드 */
+  const nd=gNodes.selectAll('g.node').data(root.descendants(),keyOf);
+  nd.exit().each(function(d){ this.__to=endOf(d); })
+    .transition().duration(dur).ease(ease)
+    .attrTween('transform',function(d){ const i=d3.interpolate(this.__p||this.__to,this.__to); return t=>nodeTf(i(t),d.depth); })
+    .style('opacity',0).remove();
+  const ndE=nd.enter().append('g').attr('class','node').style('opacity',0)
+    .each(function(d){ this.__p=startOf(d); }).attr('transform',function(d){return nodeTf(this.__p,d.depth);});
+  const all=ndE.merge(nd);
+  all.attr('class',d=>{ const dk=d.data.kind; let c='node '+(dk==='leaf'?'lf':'grp'); if(rel&&dk==='leaf'&&d.data.co.id!==sel&&!rel.has(d.data.co.id)) c+=' dim'; return c; });
+  all.each(function(d){ drawNode(d3.select(this),d,rel,sel,selChanged,dur); });
+  all.transition().duration(dur).ease(ease).style('opacity',null)
+    .attrTween('transform',function(d){ const to={x:d.x,y:d.y}, i=d3.interpolate(this.__p||to,to); this.__p=to; return t=>nodeTf(i(t),d.depth); });
+
+  // 상호작용
+  all.on('click',(e,d)=>{
+    e.stopPropagation();
+    if(d.data.kind==='leaf'){ select(d.data.co.id,false); return; }
+    if(d.data.kind==='root') return;
+    collapsed[state.axis+'|'+d.data.key]=!!d.children; renderMap({src:keyOf(d)});
+  });
+  all.on('mouseenter',(e,d)=>{ hot(d,true); if(d.data.kind==='leaf') showTip(e,d.data.co); })
+     .on('mousemove',(e,d)=>{ if(d.data.kind==='leaf') moveTip(e); })
+     .on('mouseleave',(e,d)=>{ hot(d,false); tip.hidden=true; });
+  all.filter(d=>d.data.kind!=='leaf'&&d.data.kind!=='root').attr('role','button').attr('tabindex',0)
+    .attr('aria-label',d=>`${d.data.name} ${d.data.n}개 기업, ${d.children?'접기':'펼치기'}`)
+    .on('keydown',(e,d)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); collapsed[state.axis+'|'+d.data.key]=!!d.children; renderMap({src:keyOf(d)}); } });
+
+  nodePos={}; root.leaves().forEach(d=>{ if(d.data.kind==='leaf') (nodePos[d.data.co.id]=nodePos[d.data.co.id]||[]).push(d); });
+  prevPos=newPos;
+  lastExt=extents(root);
+  if(bloom||opts.fit) fit(true);
+  else if(camT) svg.transition().duration(dur).ease(ease).call(zoom.transform,camT);
+}
+function hot(d,on){
+  // 루트까지의 경로를 강조
+  const keys=new Set(); for(let a=d;a&&a.parent;a=a.parent) keys.add(keyOf(a));
+  gLinks.selectAll('path.lk').classed('hot',function(l){ return on&&keys.has(keyOf(l.target)); });
+}
+function drawNode(g,d,rel,sel,selChanged,dur){
+  const dt=d.data, open=!!d.children;
+  g.selectAll('*').remove();
+  const r=dt.kind==='root'?7.5:dt.kind==='g1'?6.5:dt.kind==='g2'?5.5:leafR(dt.co);
+  let fill;
+  if(dt.kind==='leaf') fill=SCOL(dt.stage);
+  else if(dt.stage&&(state.axis==='stage'||dt.kind==='g2')) fill=open?'var(--surface)':SCOL(dt.stage);
+  else fill=open?'var(--surface)':'var(--ink)';
+  const stroke=dt.kind==='leaf'?'var(--surface)':(dt.stage?SCOL(dt.stage):'var(--ink)');
+  g.append('circle').attr('class','dot').attr('r',r).attr('fill',fill).attr('stroke',stroke).attr('stroke-width',2);
+  if(dt.kind==='leaf'){
+    const id=dt.co.id;
+    if(id===sel||(rel&&rel.has(id))){
+      const ring=g.append('circle').attr('class','ring'+(id===sel?'':' rel'));
+      if(selChanged&&dur) ring.attr('r',r+16).style('opacity',0).transition().duration(450).ease(d3.easeBackOut.overshoot(2)).attr('r',r+4).style('opacity',1);
+      else ring.attr('r',r+4);
+    }
+  }
+  const right=labelSide(d);
+  let anchor,x,flip=false;
+  const gap=(dt.kind==='leaf'&&(dt.co.id===sel||(rel&&rel.has(dt.co.id))))?10:6;
+  if(isH()){ anchor=right?'start':'end'; x=right?(r+gap):-(r+gap); }
+  else if(dt.kind==='root'){ anchor='middle'; x=0; }
+  else { anchor=right?'start':'end'; x=right?(r+gap-1):-(r+gap-1); flip=!right; }
+  const t=g.append('text').attr('class','lab').attr('dy','0.34em').attr('x',x).attr('text-anchor',anchor)
+    .attr('transform',flip?'rotate(180)':(!isH()&&dt.kind==='root'?'translate(0,20)':null))
+    .style('font-size',dt.kind==='root'?'14px':dt.kind==='g1'?'13px':'12px')
+    .style('font-weight',dt.kind==='leaf'&&dt.co.id===sel?'700':null);
+  const parts=[];
+  if(dt.kind==='leaf'&&rel&&rel.has(dt.co.id)){ const c=BY[sel]; parts.push(['tag',c.cu.includes(dt.co.id)?'고객':'공급']); }
+  parts.push(['',dt.name]);
+  if(dt.kind!=='leaf'&&dt.kind!=='root') parts.push(['cnt',String(dt.n)]);
+  if(dt.kind==='leaf'){ if(dt.co.share) parts.push(['shr',fmt1(dt.co.share)+'%']); parts.push(['sub',tickLabel(dt.co)]); }
+  if(anchor==='end') parts.reverse();
+  parts.forEach((p,i)=>{ const ts=t.append('tspan').text((i?' ':'')+p[1]); if(p[0]) ts.attr('class',p[0]); });
+  if(dt.mk&&isH()){
+    g.append('text').attr('class','mk').attr('x',x).attr('dy','1.75em').attr('text-anchor',anchor).text(`${dt.mk.v}`);
+  }
+}
+function fit(animated){
+  if(!gRoot||!lastExt) return;
+  const b=lastExt, W=svgEl.clientWidth, H=svgEl.clientHeight; if(!W||!b.w) return;
+  let k,tx,ty;
+  if(isH()&&W<700){ k=0.72; tx=16-b.x*k; ty=20-b.y*k; }
+  else if(isH()){
+    k=Math.min(1.05,(W-48)/b.w); k=Math.max(k,Math.min(1,(H-48)/b.h),0.45); k=Math.min(k,1.05);
+    tx=24-b.x*k+Math.max(0,(W-48-b.w*k)/2);
+    ty=b.h*k<H-48?(H-b.h*k)/2-b.y*k:24-b.y*k;
+  }else{
+    k=Math.min((W-40)/b.w,(H-40)/b.h,1.2); tx=(W-b.w*k)/2-b.x*k; ty=(H-b.h*k)/2-b.y*k;
+  }
+  const T=d3.zoomIdentity.translate(tx,ty).scale(k);
+  if(animated&&DUR()) svg.transition().duration(DUR()+150).ease(d3.easeCubicInOut).call(zoom.transform,T); else svg.call(zoom.transform,T);
+}
+function centerOn(id){
+  const arr=nodePos[id]; if(!arr||!arr.length||!svg) return;
+  const d=arr[0], t=d3.zoomTransform(svgEl), k=Math.max(t.k,0.85), p=P(d.x,d.y);
+  const W=svgEl.clientWidth,H=svgEl.clientHeight;
+  svg.transition().duration(DUR()+100).ease(d3.easeCubicInOut).call(zoom.transform,d3.zoomIdentity.translate(W*0.42-p[0]*k,H/2-p[1]*k).scale(k));
+}
+function revealPaths(id){
+  const data=buildData();
+  (function walk(n,anc){ if(n.kind==='leaf'){ if(n.co.id===id) anc.forEach(a=>{ if(a.kind!=='root') collapsed[state.axis+'|'+a.key]=false; }); return; } (n.children||[]).forEach(ch=>walk(ch,anc.concat(n))); })(data,[]);
+}
+
+/* ───────── 공급망 흐름도 ─────────
+   Layout: 열 4개(원료·광물 → 소재·부품 → 셀 → 수요처), 열 안은 그룹별로 쌓고 위쪽 정렬(셀 열만 수요처 열 높이 기준 가운데).
+   셀은 EV 점유율 순, 나머지 열은 연결된 상대의 평균 높이(바리센터)로 정렬해 선 교차를 줄임.
+   재활용은 2차 원료라 원료 열에, 공정 장비는 셀 제조사에 납품하므로 소재 열에 둠 */
+const FLOW_NOTE='원료·재활용 → 소재·장비 → 셀 → 수요처(완성차·ESS·IT)로 이어지는 공급 관계입니다. 기업에 마우스를 올리면 그 기업을 지나는 상·하류 경로가 흐르는 선으로 강조되고, 누르면 고정됩니다. 선 색은 수요 유형, 굵은 선은 합작·계열, 점선은 수주·공급 예정입니다.';
+const FCOL=[
+ {name:'원료·재활용',stages:['raw'],w:124},
+ {name:'소재·부품·장비',stages:['cath','anode','elsep','parts'],w:146},
+ {name:'셀',stages:['cell'],w:150},
+ {name:'수요처',stages:['oem'],w:158}
+];
+const FX=[0,256,544,836], FW=FX[3]+FCOL[3].w;
+const FGROUPS=[
+ ['리튬','니켈·코발트','흑연','리사이클링'],
+ ['전구체','양극재','음극재','전해액·첨가제','분리막','동박·알루미늄박','도전재·파우치 등','ESS 부품','공정 장비'],
+ ['중대형 셀(EV·ESS)','소형 셀(IT·공구)'],
+ ['완성차 · 중국','완성차 · 한국','완성차 · 일본','완성차 · 미국','완성차 · 유럽','ESS 통합·발주','IT 기기']
+];
+const ROW=21, BOXH=17, GHEAD=22, GGAP=10, FTOP=50;
+const SHORT={lges:'LG엔솔',sdi:'삼성SDI',skon:'SK온',panasonic:'파나소닉',calb:'CALB',gotion:'궈쉬안',eve:'EVE',svolt:'SVOLT',sunwoda:'신왕다',hithium:'하이티움',farasis:'Farasis',atl:'ATL',aesc:'AESC',acc:'ACC',powerco:'파워코',catl:'CATL',byd:'BYD',rept:'REPT',murata:'무라타',northvolt:'노스볼트'};
+const colOf=c=>c.stage==='eqr'?(c.st[0][1]==='리사이클링'?0:1):FCOL.findIndex(col=>col.stages.includes(c.stage));
+function flowGroup(c){
+  const k=c.stage, sub=c.st[0][1];
+  if(k==='raw'||k==='cell'||k==='eqr') return sub;
+  if(k==='cath') return sub==='전구체'?'전구체':'양극재';
+  if(k==='anode') return '음극재';
+  if(k==='elsep') return sub==='분리막'?'분리막':'전해액·첨가제';
+  if(k==='parts') return (sub==='동박'||sub==='알루미늄박')?'동박·알루미늄박':sub==='ESS 부품'?'ESS 부품':'도전재·파우치 등';
+  const t=demType(c); if(t!=='ev') return DEM_NAME[t]==='IT 기기'?'IT 기기':'ESS 통합·발주';
+  return '완성차 · '+({'미주':'미국','호주·기타':'유럽'}[c.region]||c.region);
+}
+const fpath=(M,l)=>{ const a=M.pos[l.s], b=M.pos[l.t]; const x1=FX[a.col]+FCOL[a.col].w, x2=FX[b.col], y1=FTOP+a.y, y2=FTOP+b.y, mx=(x1+x2)/2; return `M${x1},${y1}C${mx},${y1} ${mx},${y2} ${x2},${y2}`; };
+function flowModel(){
+  const nodes=COS.filter(c=>colOf(c)>=0&&passes(c)), vis=new Set(nodes.map(c=>c.id));
+  const links=[];
+  nodes.forEach(a=>a.cu.forEach(b=>{
+    if(!vis.has(b)) return; const cb=BY[b]; if(colOf(cb)<=colOf(a)) return;
+    const r=relOf(a.id,b); links.push({s:a.id,t:b,type:r.t,note:r.n,kind:colOf(cb)===3?demType(cb):'up'});
+  }));
+  links.sort((x,y)=>(x.kind==='up'?0:1)-(y.kind==='up'?0:1)); links.forEach((l,i)=>l.i=i);
+  const deg={}; links.forEach(l=>{deg[l.s]=(deg[l.s]||0)+1; deg[l.t]=(deg[l.t]||0)+1;});
+  const cols=FCOL.map(()=>[]); nodes.forEach(c=>cols[colOf(c)].push(c));
+  const colH=cols.map((cs,ci)=>{ let h=0; FGROUPS[ci].forEach(g=>{const n=cs.filter(c=>flowGroup(c)===g).length; if(n) h+=GHEAD+n*ROW+GGAP;}); return Math.max(0,h-GGAP); });
+  const H=Math.max(...colH,40), pos={}, heads=[];
+  const off=[0,0,Math.max(0,(colH[3]-colH[2])/2),0];
+  const place=(ci,sorter)=>{
+    let y=off[ci];
+    FGROUPS[ci].forEach(g=>{
+      const cs=cols[ci].filter(c=>flowGroup(c)===g); if(!cs.length) return;
+      cs.sort(sorter); heads.push({ci,g,y,n:cs.length}); y+=GHEAD;
+      cs.forEach(c=>{pos[c.id]={col:ci,y:y+ROW/2}; y+=ROW;}); y+=GGAP;
+    });
+  };
+  const byName=(a,b)=>a.ko.localeCompare(b.ko,'ko');
+  const bary=(c,down)=>{ const ys=links.filter(l=>down?l.s===c.id:l.t===c.id).map(l=>pos[down?l.t:l.s]).filter(Boolean).map(p=>p.y); return ys.length?ys.reduce((a,b)=>a+b,0)/ys.length:1e9; };
+  place(2,(a,b)=>b.share-a.share||(deg[b.id]||0)-(deg[a.id]||0)||byName(a,b));
+  place(3,(a,b)=>bary(a,false)-bary(b,false)||byName(a,b));
+  place(1,(a,b)=>bary(a,true)-bary(b,true)||byName(a,b));
+  place(0,(a,b)=>bary(a,true)-bary(b,true)||byName(a,b));
+  const out={}, inn={}; links.forEach(l=>{(out[l.s]=out[l.s]||[]).push(l); (inn[l.t]=inn[l.t]||[]).push(l);});
+  return {nodes,vis,links,deg,pos,heads,H,out,inn,cols};
+}
+let flowM=null;
+const LENSES=[
+ {k:'k3',name:'K-배터리 3사',ids:()=>['lges','sdi','skon']},
+ {k:'cn',name:'중국 셀 제조사',ids:()=>COS.filter(c=>c.stage==='cell'&&c.c==='중국').map(c=>c.id)},
+ {k:'jp',name:'일본 셀 제조사',ids:()=>COS.filter(c=>c.stage==='cell'&&c.c==='일본').map(c=>c.id)},
+ {k:'kmat',name:'한국 소재·장비사',ids:()=>COS.filter(c=>c.stage!=='cell'&&c.stage!=='oem'&&c.c==='한국').map(c=>c.id)},
+ {k:'usoem',name:'미국 완성차',ids:()=>COS.filter(c=>c.stage==='oem'&&demType(c)==='ev'&&c.c==='미국').map(c=>c.id)},
+ {k:'ess',name:'ESS 고객',ids:()=>COS.filter(c=>c.stage==='oem'&&demType(c)==='ess').map(c=>c.id)},
+ {k:'it',name:'IT 기기',ids:()=>COS.filter(c=>c.stage==='oem'&&demType(c)==='it').map(c=>c.id)}
+];
+const focusIds=()=>state.sel?[state.sel]:(state.lens?LENSES.find(l=>l.k===state.lens).ids():[]);
+function renderLens(){
+  $('lensBar').innerHTML='<span class="lbl">빠른 보기</span>'+LENSES.map(l=>`<button type="button" class="chip" data-lens="${l.k}" aria-pressed="${state.lens===l.k}">${l.name}</button>`).join('');
+}
+const ftip=$('ftip'), flowEl=$('flow');
+function nameFit(s,w){ let acc=0,out=''; for(const ch of s){ const cw=/[ㄱ-힣]/.test(ch)?11.4:6.6; if(acc+cw>w){ return out.replace(/\s+$/,'')+'…'; } acc+=cw; out+=ch; } return out; }
+function flowVal(c,M){
+  if(c.stage==='cell') return c.share?fmt1(c.share)+'%':'';
+  if(c.stage==='oem'){ const n=(M.inn[c.id]||[]).filter(l=>BY[l.s].stage==='cell').length; return n?n+'사':''; }
+  return '';
+}
+function renderFlow(opts){
+  opts=opts||{};
+  if(state.view!=='flow') return;
+  if(typeof d3==='undefined'){ flowEl.outerHTML='<p class="none" style="padding:24px">흐름도 라이브러리를 불러오지 못했습니다. 아래 매트릭스와 「표」 보기로 확인할 수 있습니다.</p>'; return; }
+  const M=flowModel(); flowM=M;
+  const W=FW+24, H=FTOP+M.H+16, dur=opts.anim?DUR():0;
+  const sv=d3.select(flowEl).attr('viewBox',`-12 0 ${W} ${H}`); sv.selectAll('*').remove();
+  if(!M.nodes.length){ sv.attr('viewBox','0 0 600 80').append('text').attr('x',20).attr('y',44).attr('class','gh').text('선택한 필터에 해당하는 기업이 없습니다.'); renderMatrix(); return; }
+  sv.append('defs').append('clipPath').attr('id','flowClip').append('rect').attr('x',-12).attr('y',0).attr('height',H).attr('width',dur?0:W);
+  // 열 제목
+  const hd=sv.append('g');
+  FCOL.forEach((col,i)=>{
+    const t=hd.append('text').attr('class','ch').attr('x',FX[i]).attr('y',20);
+    t.append('tspan').text(col.name); t.append('tspan').attr('class','chn').attr('dx',6).text(M.cols[i].length);
+    if(i<3) hd.append('text').attr('class','arrow').attr('x',(FX[i]+col.w+FX[i+1])/2).attr('y',20).attr('text-anchor','middle').text('→');
+  });
+  hd.append('line').attr('x1',-12).attr('x2',W-12).attr('y1',32).attr('y2',32).attr('stroke','var(--line)');
+  // 그룹 제목
+  sv.append('g').selectAll('text').data(M.heads).join('text').attr('class','gh')
+    .attr('x',h=>FX[h.ci]+2).attr('y',h=>FTOP+h.y+14).text(h=>`${h.g} · ${h.n}`);
+  // 선
+  const gl=sv.append('g').attr('clip-path','url(#flowClip)');
+  gl.selectAll('path').data(M.links).join('path').attr('class',l=>`fl ${l.kind} t-${l.type}`).attr('d',l=>fpath(M,l));
+  sv.append('g').attr('class','pulses');
+  sv.append('g').selectAll('path').data(M.links).join('path').attr('class','hit').attr('d',l=>fpath(M,l))
+    .on('mouseenter',(e,l)=>{ showFTip(e,linkTipHTML(l)); }).on('mousemove',e=>moveFTip(e)).on('mouseleave',()=>{ftip.hidden=true;});
+  // 기업 상자
+  const ng=sv.append('g').selectAll('g.fn').data(M.nodes,c=>c.id).join('g')
+    .attr('class',c=>'fn'+((M.deg[c.id]||0)?'':' iso'))
+    .attr('transform',c=>{const p=M.pos[c.id]; return `translate(${FX[p.col]},${FTOP+p.y-BOXH/2})`;})
+    .attr('tabindex',0).attr('role','button').attr('aria-label',c=>`${c.ko} — 상세 보기`);
+  ng.append('rect').attr('class','box').attr('width',c=>FCOL[colOf(c)].w).attr('height',BOXH).attr('rx',4);
+  ng.append('rect').attr('width',4).attr('height',BOXH).attr('rx',2).attr('fill',dotColor);
+  ng.append('text').attr('class','nm').attr('x',10).attr('y',BOXH/2).attr('dy','.36em').text(c=>{const v=flowVal(c,M); return nameFit(c.ko,FCOL[colOf(c)].w-16-(v?v.length*6.4+4:0));});
+  ng.append('text').attr('class','v').attr('x',c=>FCOL[colOf(c)].w-6).attr('y',BOXH/2).attr('dy','.36em').attr('text-anchor','end').text(c=>flowVal(c,M));
+  ng.on('mouseenter',(e,c)=>{ flowFocus([c.id]); showFTip(e,nodeTipHTML(c,M)); }).on('mousemove',e=>moveFTip(e))
+    .on('mouseleave',()=>{ ftip.hidden=true; flowFocus(focusIds()); })
+    .on('click',(e,c)=>{ e.stopPropagation(); select(c.id,false); })
+    .on('keydown',(e,c)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); select(c.id,false); } });
+  sv.on('click',e=>{ if(e.target===flowEl) select(null); });
+  // 등장 애니메이션: 상자는 열 순서대로, 선은 왼쪽에서 오른쪽으로 쓸어 나감
+  if(dur){
+    ng.style('opacity',0).attr('transform',c=>{const p=M.pos[c.id]; return `translate(${FX[p.col]-14},${FTOP+p.y-BOXH/2})`;})
+      .transition().delay(c=>M.pos[c.id].col*150+Math.min(220,M.pos[c.id].y*0.15)).duration(420).ease(d3.easeCubicOut)
+      .style('opacity',1).attr('transform',c=>{const p=M.pos[c.id]; return `translate(${FX[p.col]},${FTOP+p.y-BOXH/2})`;})
+      .on('end',function(){ d3.select(this).style('opacity',null); });
+    sv.select('#flowClip rect').transition().delay(120).duration(1200).ease(d3.easeCubicInOut).attr('width',W);
+  }
+  flowFocus(focusIds());
+  renderMatrix();
+}
+/* ids: 강조할 기업들. 각 기업에서 고객 쪽(하류)과 공급사 쪽(상류)으로 끝까지 따라감 */
+function flowFocus(ids){
+  if(!flowM||state.view!=='flow') return;
+  const M=flowM, on=new Set(), onL=new Set(), seeds=new Set((ids||[]).filter(id=>M.vis.has(id)));
+  const walk=(start,dir)=>{ const seen=new Set([start]), q=[start];
+    while(q.length){ const x=q.shift(); ((dir>0?M.out:M.inn)[x]||[]).forEach(l=>{ onL.add(l.i); const y=dir>0?l.t:l.s; on.add(y); if(!seen.has(y)){seen.add(y); q.push(y);} }); } };
+  seeds.forEach(id=>{ on.add(id); walk(id,1); walk(id,-1); });
+  const sv=d3.select(flowEl), active=on.size>0;
+  sv.classed('focus',active);
+  sv.selectAll('g.fn').classed('on',c=>on.has(c.id)).classed('sel',c=>seeds.has(c.id));
+  sv.selectAll('path.fl').classed('on',l=>onL.has(l.i));
+  const pl=active&&!reduceMQ.matches?M.links.filter(l=>onL.has(l.i)):[];
+  sv.select('g.pulses').selectAll('path').data(pl,l=>l.i).join('path').attr('class','pulse')
+    .attr('d',l=>fpath(M,l)).attr('stroke',l=>l.kind==='up'?'var(--ink-2)':`var(--${l.kind})`);
+}
+function nodeTipHTML(c,M){
+  const nOut=(M.out[c.id]||[]).length, nIn=(M.inn[c.id]||[]).length;
+  const sh=shareText(c);
+  return `<b>${esc(c.ko)}</b> <span class="m">${esc(c.en)}</span><br>${esc(c.c)} · <span class="m">${esc(tickLabel(c))}</span><br>${esc(c.p)}${sh.length?'<br>'+sh.map(esc).join('<br>'):''}<br><span class="m">고객 ${nOut} · 공급사 ${nIn} (화면 기준)</span>`;
+}
+function linkTipHTML(l){
+  const a=BY[l.s], b=BY[l.t];
+  return `<b>${esc(a.ko)} → ${esc(b.ko)}</b><br>${REL_TYPE[l.type]}${l.note?' · '+esc(l.note):''}`;
+}
+function showFTip(e,html){ ftip.innerHTML=html; ftip.hidden=false; moveFTip(e); }
+function moveFTip(e){
+  const fb=$('flowbox'), box=fb.getBoundingClientRect();
+  let x=e.clientX-box.left+fb.scrollLeft+14, y=e.clientY-box.top+14;
+  const w=ftip.offsetWidth, h=ftip.offsetHeight;
+  if(e.clientX-box.left+14+w>box.width-8) x-=w+28;
+  if(y+h>box.height-8) y-=h+28;
+  ftip.style.left=Math.max(8,x)+'px'; ftip.style.top=Math.max(8,y)+'px';
+}
+
+/* ───────── 셀 × 수요처 매트릭스 ───────── */
+function renderMatrix(){
+  const M=flowM, tb=$('mx'); if(!M){ tb.innerHTML=''; return; }
+  const cellsCols=M.cols[2].filter(c=>(M.out[c.id]||[]).some(l=>l.kind!=='up')).sort((a,b)=>M.pos[a.id].y-M.pos[b.id].y);
+  const dems=M.cols[3].filter(c=>(M.inn[c.id]||[]).some(l=>BY[l.s].stage==='cell'));
+  if(!cellsCols.length||!dems.length){ tb.innerHTML='<tbody><tr><td style="padding:12px 16px;color:var(--muted)">선택한 필터에서는 셀 → 수요처 관계가 없습니다.</td></tr></tbody>'; return; }
+  const L={}; M.links.forEach(l=>{L[l.s+'>'+l.t]=l;});
+  const SYM={jv:'◆',s:'●',c:'○'}, sel=state.sel;
+  const head=`<thead><tr><th class="rh">수요처 \\ 셀 제조사</th>${cellsCols.map(c=>`<th class="${c.id===sel?'on':''}"><button type="button" data-pick="${c.id}" title="${esc(c.ko)}">${esc(SHORT[c.id]||c.ko)}</button></th>`).join('')}<th class="cnt">셀 공급사</th></tr></thead>`;
+  const body=FGROUPS[3].map(g=>{
+    const rows=dems.filter(c=>flowGroup(c)===g).sort((a,b)=>M.pos[a.id].y-M.pos[b.id].y); if(!rows.length) return '';
+    return `<tr class="g"><td colspan="${cellsCols.length+2}">${esc(g)} · ${rows.length}</td></tr>`+rows.map(d=>{
+      const k=demType(d); let n=0;
+      const tds=cellsCols.map(c=>{ const l=L[c.id+'>'+d.id], on=c.id===sel?' on':''; if(!l) return `<td class="x${on}"></td>`; n++;
+        return `<td class="x ${k}${on}"><span class="${l.type}" title="${esc(c.ko+' → '+d.ko+' · '+REL_TYPE[l.type]+(l.note?' · '+l.note:''))}">${SYM[l.type]}</span></td>`; }).join('');
+      return `<tr class="${d.id===sel?'on':''}"><th class="rh"><button type="button" data-pick="${d.id}">${esc(d.ko)}</button><small>${esc(d.c)}</small></th>${tds}<td class="cnt">${n}</td></tr>`;
+    }).join('');
+  }).join('');
+  tb.innerHTML=head+'<tbody>'+body+'</tbody>';
+}
+function renderFlowLegend(){
+  const ln=(stroke,w,dash)=>`<svg width="28" height="10" aria-hidden="true"><line x1="1" y1="5" x2="27" y2="5" stroke="${stroke}" stroke-width="${w}"${dash?' stroke-dasharray="4 3"':''}/></svg>`;
+  $('flowLegend').innerHTML=[
+    `<span>${ln('var(--ev)',2)}셀 → 완성차</span>`,`<span>${ln('var(--ess)',2)}셀 → ESS</span>`,`<span>${ln('var(--it)',2)}셀 → IT 기기</span>`,
+    `<span>${ln('var(--muted)',1.6)}원료·소재 공급</span>`,`<span>${ln('var(--ink-2)',3)}합작·계열</span>`,`<span>${ln('var(--ink-2)',1.6,true)}수주·공급 예정</span>`,
+    `<span style="color:var(--muted);white-space:normal">셀 옆 % = EV 배터리 점유율(2026.1~8) · 수요처 옆 숫자 = 셀 공급사 수</span>`
+  ].join('');
+}
+
+/* ───────── 툴팁 ───────── */
+function shareText(c){
+  const out=[];
+  if(c.shareEV) out.push(`EV 배터리 ${fmt1(c.shareEV.p)}% · ${c.shareEV.rk}위 (2026.1~8)`);
+  if(c.shareESS) out.push(`ESS 배터리 ${fmt1(c.shareESS.p)}% · ${c.shareESS.rk}위 (2026 상반기)`);
+  return out;
+}
+function showTip(e,c){
+  const sh=shareText(c);
+  tip.innerHTML=`<b>${esc(c.ko)}</b> <span class="m">${esc(c.en)}</span><br>${esc(c.c)} · <span class="m">${esc(c.tk.length?c.tk.join(' / '):(c.parent?(c.parent.div?c.parent.ko+' 사업 부문 · '+c.parent.tk[0]:'비상장 (모회사 '+c.parent.tk[0]+')'):'비상장'))}</span><br>${esc(c.p)}${sh.length?'<br>'+sh.map(esc).join('<br>'):''}`;
+  tip.hidden=false; moveTip(e);
+}
+function moveTip(e){
+  const box=$('mapbox').getBoundingClientRect();
+  let x=e.clientX-box.left+14, y=e.clientY-box.top+14;
+  const w=tip.offsetWidth,h=tip.offsetHeight;
+  if(x+w>box.width-8) x=e.clientX-box.left-w-14;
+  if(y+h>box.height-8) y=e.clientY-box.top-h-14;
+  tip.style.left=Math.max(8,x)+'px'; tip.style.top=Math.max(8,y)+'px';
+}
+
+/* ───────── 패널 ───────── */
+function stageLine(c){return c.st.map(e=>`<span class="badge"><i style="background:${SCOL(e[0])}"></i>${esc(STAGES[STAGE_IDX[e[0]]].name)} › ${esc(e[1])}</span>`).join(' ');}
+function relKind(o){ if(o.stage==='oem') return DEM_NAME[demType(o)]; return {raw:'원료·광물',cath:'소재·부품',anode:'소재·부품',elsep:'소재·부품',parts:'소재·부품',cell:'셀',eqr:'장비·재활용'}[o.stage]; }
+function relList(c,ids,out){
+  if(!ids.length) return '<span class="none">등록된 관계 없음</span>';
+  const order=['셀','완성차','ESS 통합·발주','IT 기기','소재·부품','원료·광물','장비·재활용'], g={};
+  ids.forEach(id=>{ const k=relKind(BY[id]); (g[k]=g[k]||[]).push(id); });
+  const keys=order.filter(k=>g[k]);
+  return keys.map(k=>`${keys.length>1?`<h4>${k} ${g[k].length}</h4>`:''}<ul class="rl">${g[k].map(id=>{
+    const o=BY[id], r=RELMAP[out?c.id+'>'+id:id+'>'+c.id];
+    return `<li><button type="button" data-go="${id}"><i style="background:${dotColor(o)}"></i>${esc(o.ko)}</button>${r?`<span class="rt ${r.t}">${REL_TYPE[r.t]}</span>`:''}${r&&r.n?`<span class="rn">${esc(r.n)}</span>`:''}</li>`;
+  }).join('')}</ul>`).join('');
+}
+function relSummaryHTML(){
+  const list=COS.filter(passes), vis=new Set(list.map(c=>c.id));
+  const cnt={ev:0,ess:0,it:0,up:0}, t={jv:0,s:0,c:0};
+  list.forEach(a=>a.cu.forEach(b=>{ if(!vis.has(b)) return; const o=BY[b];
+    if(a.stage==='cell'&&o.stage==='oem'){ cnt[demType(o)]++; t[relOf(a.id,b).t]++; } else cnt.up++; }));
+  const dem=list.filter(c=>c.stage==='oem').map(c=>({c,n:(SUP[c.id]||[]).filter(id=>vis.has(id)&&BY[id].stage==='cell').length})).filter(x=>x.n).sort((a,b)=>b.n-a.n||a.c.ko.localeCompare(b.c.ko,'ko')).slice(0,8);
+  const cel=list.filter(c=>c.stage==='cell').map(c=>({c,n:c.cu.filter(id=>vis.has(id)&&BY[id].stage==='oem').length})).filter(x=>x.n).sort((a,b)=>b.n-a.n||a.c.ko.localeCompare(b.c.ko,'ko')).slice(0,8);
+  const top=a=>`<div class="toplist">${a.map(x=>`<button type="button" data-go="${x.c.id}"><span>${esc(x.c.ko)}</span><b>${x.n}</b></button>`).join('')}</div>`;
+  return `<h3 class="sec" style="margin-top:4px">셀 → 수요처 관계 (현재 필터)</h3>
+  <div class="sumrow"><span><i style="display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;background:var(--ev)"></i>완성차</span><b>${cnt.ev}</b></div>
+  <div class="sumrow"><span><i style="display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;background:var(--ess)"></i>ESS 통합·발주</span><b>${cnt.ess}</b></div>
+  <div class="sumrow"><span><i style="display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;background:var(--it)"></i>IT 기기</span><b>${cnt.it}</b></div>
+  <div class="srcline">합작·계열 ${t.jv} · 공급 ${t.s} · 수주·공급 예정 ${t.c} — 원료·소재 쪽 관계 ${cnt.up}건 별도</div>
+  <h3 class="sec">셀 공급사가 많은 수요처</h3>${top(dem)}
+  <h3 class="sec">수요처가 많은 셀 제조사</h3>${top(cel)}`;
+}
+function tickerHTML(c){
+  if(c.tk.length) return c.tk.map(t=>`<span class="mono">${esc(t)}</span> <span style="color:var(--muted);font-size:11.5px">${esc(exOf(t))}</span>`).join('<br>');
+  if(c.parent) return `${c.parent.div?esc(c.parent.ko)+' 사업 부문':'비상장 · 모회사 '+esc(c.parent.ko)}<br>${c.parent.tk.map(t=>`<span class="mono">${esc(t)}</span>`).join(' · ')}`;
+  return '비상장';
+}
+function marketHTML(){
+  const rows=STAGES.filter(s=>MARKET[s.k]).map(s=>{const m=MARKET[s.k];return `<div class="row"><i style="background:${SCOL(s.k)}"></i><span class="k">${s.name}</span><span class="v">${esc(m.v)}</span><span class="s">${esc(m.d)}</span></div>`;}).join('');
+  const evRows=Object.entries(SHARE_EV).sort((a,b)=>a[1].rk-b[1].rk).map(([id,s])=>`<button type="button" data-go="${id}" title="${esc(BY[id].ko)} 선택"><span>${s.rk}. ${esc(BY[id].ko)}</span><span class="track"><span class="fill" style="display:block;width:${(s.p/40*100).toFixed(1)}%"></span></span><span class="val">${fmt1(s.p)}% · ${fmt1(s.g)}</span></button>`).join('');
+  const essRows=Object.entries(SHARE_ESS).sort((a,b)=>a[1].rk-b[1].rk).map(([id,s])=>`<button type="button" data-go="${id}" title="${esc(BY[id].ko)} 선택"><span>${s.rk}. ${esc(BY[id].ko)}</span><span class="track"><span class="fill" style="display:block;width:${(s.p/40*100).toFixed(1)}%"></span></span><span class="val">${fmt1(s.p)}% · ${fmt1(s.g)}</span></button>`).join('');
+  const dem=DEMAND_MKT.map(m=>`<div class="row"><i style="background:var(--ev)"></i><span class="k">${esc(m.k)}</span><span class="v">${esc(m.v)}</span><span class="s">${esc(m.d)}</span></div>`).join('');
+  return `<h3 class="sec">최종 수요 — EV 판매·ESS 설치</h3><div class="mkt">${dem}</div>
+  <h3 class="sec">밸류체인 시장 규모 (2025)</h3><div class="mkt">${rows}</div>
+  <div class="srcline">양극·음극·전해액·분리막은 중국 출하 기준(EVTank)이며, 중국이 글로벌 출하의 대부분을 차지합니다. 재활용은 중국 폐동력전지 한정입니다.</div>
+  <div class="srcline">리튬이온전지 수요 기준으로는 1.59TWh (Benchmark). 집계 기준이 달라 출하량과 직접 비교하지 않습니다.</div>
+  <h3 class="sec">EV 배터리 점유율 · 2026.1~8 <span style="font-weight:400">(전체 ${fmt1(EV_TOTAL)}GWh, +19.7%)</span></h3><div class="bars">${evRows}</div>
+  <div class="srcline">SNE리서치 장착 사용량 기준. 삼성SDI는 전체 순위 미공개, 비중국 시장 13.6GWh. 일부 점유율은 GWh÷전체로 환산.</div>
+  <h3 class="sec">ESS 배터리 점유율 · 2026 상반기 <span style="font-weight:400">(전체 461.3GWh, +71%)</span></h3><div class="bars">${essRows}</div>
+  <div class="srcline">2025년 연간 ESS 셀 출하 612GWh (InfoLink), 리튬이온 ESS 전지 출하 651.5GWh (EVTank).</div>`;
+}
+function renderPanel(){
+  const p=$('panel');
+  if(!state.sel){
+    const list=COS.filter(passes);
+    const rows=STAGES.map(s=>{const n=list.filter(c=>c.st.some(e=>e[0]===s.k)).length; return `<div class="sumrow"><span><i style="display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;background:${SCOL(s.k)}"></i>${s.name}</span><b>${n}</b></div>`;}).join('');
+    p.innerHTML=`<h2>공급망 요약 · 시장 규모</h2><p class="hint">기업을 누르면 티커와 함께 고객사·공급사가 계약 내용과 같이 여기에 나옵니다. 흐름도에서는 그 기업을 지나는 경로 전체가 강조됩니다.</p>${relSummaryHTML()}${marketHTML()}<h3 class="sec">현재 필터 기준 단계별 기업 수</h3>${rows}`;
+    return;
+  }
+  const c=BY[state.sel], sup=SUP[c.id]||[], sh=shareText(c);
+  const extra=[];
+  if(EV25[c.id]) extra.push(`2025년 EV 배터리 사용량 ${fmt1(EV25[c.id])}GWh (점유율 ${fmt1(EV25[c.id]/1187*100)}%)`);
+  if(NONCN[c.id]) extra.push(`비중국 시장 2026.1~8 ${fmt1(NONCN[c.id])}GWh`);
+  if(c.id==='catl') extra.push('2025년 ESS 출하 121GWh (회사 연간보고서)');
+  p.innerHTML=`<div class="eyebrow">${esc(STAGES[STAGE_IDX[c.stage]].name)}${c.stage==='oem'?' · '+esc(DEM_NAME[demType(c)]):''}</div><h2>${esc(c.ko)}</h2><div class="en">${esc(c.en)}</div>
+  <div class="badges"><span class="badge">${esc(c.c)}</span><span class="badge">${c.c==='중국'?'중국 본사':'비중국 본사'}</span><span class="badge">${esc(c.exg)}</span></div>
+  <dl>
+    <dt>티커</dt><dd>${tickerHTML(c)}</dd>
+    ${c.dg.length?`<dt>DataGuide</dt><dd class="mono">${c.dg.map(esc).join(' · ')}</dd>`:''}
+    <dt>밸류체인</dt><dd style="display:flex;flex-wrap:wrap;gap:4px">${stageLine(c)}</dd>
+    <dt>주요 제품</dt><dd>${esc(c.p)}</dd>
+    ${sh.length||extra.length?`<dt>점유율</dt><dd>${sh.concat(extra).map(esc).join('<br>')}</dd>`:''}
+    <dt>배터리 화학</dt><dd>${c.ch.length?c.ch.map(k=>esc(CHEM[k])).join(', '):'—'}</dd>
+    <dt>폼팩터</dt><dd>${c.f.length?esc(c.f.join(', ')):'—'}</dd>
+    <dt>전방 수요</dt><dd>${c.d.map(k=>esc(DEM[k])).join(', ')}</dd>
+  </dl>
+  ${c.n?`<div class="note">${esc(c.n)}</div>`:''}
+  <div class="rel"><h3>${c.stage==='cell'?'고객사 (완성차·ESS·IT)':'주요 고객사'} ${c.cu.length}</h3>${relList(c,c.cu,true)}</div>
+  <div class="rel"><h3>${c.stage==='oem'?'배터리·소재 공급사':'주요 공급사'} ${sup.length}</h3>${relList(c,sup,false)}</div>
+  <div class="rel"><button type="button" data-clear="1">선택 해제 · 시장 규모 보기</button></div>`;
+}
+
+/* ───────── 표 ───────── */
+function renderTable(){
+  if(state.view!=='table') return;
+  const q=$('q').value.trim().toLowerCase();
+  const rows=COS.filter(passes).filter(c=>!q||matchQ(c,q))
+    .sort((a,b)=>STAGE_IDX[a.stage]-STAGE_IDX[b.stage]||b.share-a.share||a.c.localeCompare(b.c,'ko')||a.ko.localeCompare(b.ko,'ko'));
+  $('tbl').querySelector('tbody').innerHTML=rows.map(c=>`<tr data-id="${c.id}" class="${c.id===state.sel?'on':''}">
+    <td><span class="dot" style="background:${SCOL(c.stage)}"></span><b>${esc(c.ko)}</b><br><span style="color:var(--muted)">${esc(c.en)}</span></td>
+    <td>${esc(c.c)}</td><td class="mono">${c.tk.length?c.tk.map(esc).join('<br>'):(c.parent?(c.parent.div?esc(c.parent.tk[0])+'<br><span style="color:var(--muted)">'+esc(c.parent.ko)+' 부문</span>':'비상장<br><span style="color:var(--muted)">모 '+esc(c.parent.tk[0])+'</span>'):'비상장')}</td>
+    <td>${c.st.map(e=>esc(STAGES[STAGE_IDX[e[0]]].name+' › '+e[1])).join('<br>')}</td>
+    <td>${esc(c.p)}</td><td class="mono">${shareText(c).map(esc).join('<br>')||'—'}</td><td>${c.ch.map(k=>esc(CHEM[k])).join('<br>')||'—'}</td><td>${esc(c.f.join(', '))||'—'}</td>
+    <td>${c.d.map(k=>esc(DEM[k])).join('<br>')}</td><td>${c.cu.map(id=>esc(BY[id].ko)).join(', ')||'—'}</td><td>${(SUP[c.id]||[]).map(id=>esc(BY[id].ko)).join(', ')||'—'}</td></tr>`).join('')
+    || `<tr><td colspan="11" style="color:var(--muted);padding:18px">조건에 맞는 기업이 없습니다.</td></tr>`;
+}
+
+/* ───────── 검색 ───────── */
+function matchQ(c,q){return c.ko.toLowerCase().includes(q)||c.en.toLowerCase().includes(q)||c.p.toLowerCase().includes(q)||c.tk.some(t=>t.toLowerCase().includes(q))||c.dg.some(t=>t.toLowerCase().includes(q))||(c.parent&&c.parent.tk.some(t=>t.toLowerCase().includes(q)));}
+let hitIdx=0;
+function renderHits(){
+  const q=$('q').value.trim().toLowerCase(), ul=$('hits');
+  if(!q){ul.hidden=true;return;}
+  const rank=c=>{ const keys=[c.ko,c.en,...c.tk,...c.dg].map(x=>x.toLowerCase()), bare=c.tk.map(t=>t.split('.')[0].toLowerCase());
+    if(keys.includes(q)||bare.includes(q)) return 0; if(keys.some(k=>k.startsWith(q))) return 1; if(keys.some(k=>k.includes(q))) return 2; return 3; };
+  const hits=COS.filter(c=>matchQ(c,q)).map(c=>({c,r:rank(c)})).sort((a,b)=>a.r-b.r).map(x=>x.c).slice(0,10); hitIdx=0;
+  if(!hits.length){ul.innerHTML='<li><span class="none" style="display:block;padding:7px 9px">일치하는 기업이 없습니다</span></li>';ul.hidden=false;return;}
+  ul.innerHTML=hits.map((c,i)=>`<li><button type="button" data-hit="${c.id}" class="${i===0?'on':''}"><span>${esc(c.ko)}</span><small>${esc(c.en)} · ${esc(c.c)} · ${esc(c.tk[0]||'비상장')}</small></button></li>`).join('');
+  ul.hidden=false;
+}
+
+/* ───────── 선택 ───────── */
+function select(id,reveal){
+  state.sel=id;
+  if(id&&reveal&&state.view==='map') revealPaths(id);
+  renderPanel(); renderMap(); renderTable();
+  if(id&&reveal&&state.view==='map') setTimeout(()=>centerOn(id),DUR()?DUR()*0.6:0);
+  if(id&&state.lens){ state.lens=null; renderLens(); }
+  if(state.view==='flow'){
+    flowFocus(focusIds()); renderMatrix();
+    if(id&&reveal){ const el=[...flowEl.querySelectorAll('g.fn')].find(g=>g.__data__&&g.__data__.id===id); if(el) el.scrollIntoView({block:'center',inline:'center',behavior:reduceMQ.matches?'auto':'smooth'}); }
+  }
+}
+function refreshAll(){ renderControls(); renderFlow({anim:true}); renderMap({bloom:true}); renderTable(); renderPanel(); }
+
+/* ───────── 내려받기 (downloads 기능이 있을 때만 버튼 표시) ───────── */
+let dl=null;
+function toast(msg){ const t=document.createElement('div'); t.className='toast'; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),2600); }
+const csvCell=v=>{ const x=String(v==null?'':v); return /[",\r\n]/.test(x)?'"'+x.replace(/"/g,'""')+'"':x; };
+const toCSV=rows=>'﻿'+rows.map(r=>r.map(csvCell).join(',')).join('\r\n');
+const stageName=c=>STAGES[STAGE_IDX[c.stage]].name;
+function companiesCSV(){
+  const head=['ID','기업명','영문명','국가','지역','밸류체인','세부','티커','DataGuide','상장 시장','주요 제품','배터리 화학','폼팩터','전방 수요','EV 점유율 2026.1~8(%)','ESS 점유율 2026H1(%)','고객사','공급사','비고'];
+  const rows=COS.map(c=>[c.id,c.ko,c.en,c.c,c.region,stageName(c),c.st.map(e=>e[1]).join(' / '),
+    c.tk.length?c.tk.join(' / '):(c.parent?(c.parent.div?c.parent.tk.join(' / ')+' ('+c.parent.ko+' 부문)':'비상장 (모회사 '+c.parent.ko+' '+c.parent.tk.join(' / ')+')'):'비상장'),
+    c.dg.join(' / '),c.ex,c.p,c.ch.map(k=>CHEM[k]).join(' / '),c.f.join(' / '),c.d.map(k=>DEM[k]).join(' / '),
+    c.shareEV?c.shareEV.p:'',c.shareESS?c.shareESS.p:'',c.cu.map(id=>BY[id].ko).join(' / '),(SUP[c.id]||[]).map(id=>BY[id].ko).join(' / '),c.n||'']);
+  return toCSV([head,...rows]);
+}
+function relationsCSV(){
+  const head=['공급사','공급사 단계','공급사 국가','고객사','고객사 구분','고객사 국가','관계 유형','내용'];
+  const rows=[];
+  COS.forEach(a=>a.cu.forEach(b=>{ const o=BY[b], r=relOf(a.id,b);
+    rows.push([a.ko,stageName(a),a.c,o.ko,o.stage==='oem'?DEM_NAME[demType(o)]:stageName(o),o.c,REL_TYPE[r.t],r.n]); }));
+  return toCSV([head,...rows]);
+}
+async function flowPNG(){
+  if(!flowM) throw new Error('흐름도가 아직 그려지지 않았습니다');
+  const vb=flowEl.viewBox.baseVal, scale=2, clone=flowEl.cloneNode(true);
+  const src=[...flowEl.querySelectorAll('*')], dst=[...clone.querySelectorAll('*')];
+  const props=['fill','stroke','stroke-width','stroke-dasharray','opacity','font-size','font-family','font-weight'];
+  src.forEach((el,i)=>{ const t=dst[i];
+    if(el.matches('.hit,.pulses,.pulses *')){ t.setAttribute('data-drop','1'); return; }
+    const cs=getComputedStyle(el); props.forEach(pn=>{ const v=cs.getPropertyValue(pn); if(v) t.setAttribute(pn,v); }); t.removeAttribute('class'); t.removeAttribute('style'); });
+  clone.querySelectorAll('[data-drop]').forEach(n=>n.remove());
+  const cr=clone.querySelector('#flowClip rect'); if(cr) cr.setAttribute('width',vb.width+40);
+  const bg=document.createElementNS('http://www.w3.org/2000/svg','rect');
+  bg.setAttribute('x',vb.x); bg.setAttribute('y',vb.y); bg.setAttribute('width',vb.width); bg.setAttribute('height',vb.height); bg.setAttribute('fill',getComputedStyle($('flowbox')).backgroundColor);
+  clone.insertBefore(bg,clone.firstChild);
+  const cap=document.createElementNS('http://www.w3.org/2000/svg','text');
+  cap.setAttribute('x',vb.x+vb.width-8); cap.setAttribute('y',vb.y+vb.height-4); cap.setAttribute('text-anchor','end'); cap.setAttribute('font-size','10'); cap.setAttribute('fill',getComputedStyle(document.body).color); cap.setAttribute('opacity','.6');
+  cap.textContent='2차전지 공급망 흐름도 · 공시·보도 기준 · '+DATA_ASOF; clone.appendChild(cap);
+  clone.setAttribute('xmlns','http://www.w3.org/2000/svg'); clone.setAttribute('width',vb.width*scale); clone.setAttribute('height',vb.height*scale); clone.removeAttribute('class'); clone.removeAttribute('style');
+  const img=new Image(); img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(new XMLSerializer().serializeToString(clone));
+  await img.decode();
+  const cv=document.createElement('canvas'); cv.width=vb.width*scale; cv.height=vb.height*scale;
+  cv.getContext('2d').drawImage(img,0,0,cv.width,cv.height);
+  return await new Promise((res,rej)=>cv.toBlob(b=>b?res(b):rej(new Error('PNG 변환 실패')),'image/png'));
+}
+async function offer(filename,make){
+  if(!dl) return;
+  try{ const data=await make(); await dl.save({filename,data}); }
+  catch(e){ const code=e&&e.code; if(code==='declined') return; if(code==='rate_limited'){ toast('다른 저장 창이 열려 있습니다. 잠시 후 다시 눌러 주세요.'); return; }
+    if(['unavailable','not_granted','capability_disabled','capability_removed'].includes(code)){ dl=null; $('dlGroup').hidden=true; return; }
+    toast('파일을 만들지 못했습니다: '+((e&&e.message)||'알 수 없는 오류')); }
+}
+$('dlCos').addEventListener('click',()=>offer(`2차전지_밸류체인_기업목록_${DATA_ASOF.replace(/\./g,'')}.csv`,()=>companiesCSV()));
+$('dlRel').addEventListener('click',()=>offer(`2차전지_공급관계_${DATA_ASOF.replace(/\./g,'')}.csv`,()=>relationsCSV()));
+$('dlPng').addEventListener('click',()=>{ toast('흐름도 이미지를 만드는 중입니다…'); offer(`2차전지_공급망_흐름도_${DATA_ASOF.replace(/\./g,'')}.png`,flowPNG); });
+(async()=>{ try{ if(window.claude&&typeof window.claude.use==='function') dl=await window.claude.use('downloads'); }catch(e){ dl=null; }
+  $('dlGroup').hidden=!dl; })();
+
+/* ───────── 이벤트 ───────── */
+document.addEventListener('click',e=>{
+  const t=e.target.closest('button'); if(!t){ if(!e.target.closest('.search')) $('hits').hidden=true; return; }
+  if(t.dataset.a){ state.axis=t.dataset.a; save(); renderControls(); renderMap({bloom:true}); renderPanel(); renderTable(); return; }
+  if(t.dataset.v){ state.view=t.dataset.v; save(); renderControls(); renderTable(); renderFlow({anim:true}); requestAnimationFrame(()=>renderMap({bloom:true})); return; }
+  if(t.dataset.l){ state.layout=t.dataset.l; save(); renderControls(); renderMap({bloom:true}); return; }
+  if(t.dataset.r){ state.regions.has(t.dataset.r)?state.regions.delete(t.dataset.r):state.regions.add(t.dataset.r); refreshAll(); return; }
+  if(t.dataset.d){ state.demands.has(t.dataset.d)?state.demands.delete(t.dataset.d):state.demands.add(t.dataset.d); refreshAll(); return; }
+  if(t.dataset.go){ select(t.dataset.go,true); return; }
+  if(t.dataset.pick){ select(state.sel===t.dataset.pick?null:t.dataset.pick,false); return; }
+  if(t.dataset.lens){ state.lens=state.lens===t.dataset.lens?null:t.dataset.lens; state.sel=null; renderLens(); renderPanel(); renderTable(); flowFocus(focusIds()); renderMatrix(); return; }
+  if(t.dataset.clear){ select(null); return; }
+  if(t.dataset.hit){ $('hits').hidden=true; select(t.dataset.hit,true); return; }
+  if(t.id==='expandAll'){ const data=buildData(); (function w(n){ if(n.kind!=='leaf'){ if(n.kind!=='root') collapsed[state.axis+'|'+n.key]=false; (n.children||[]).forEach(w);} })(data); renderMap({fit:true}); return; }
+  if(t.id==='collapseAll'){ const data=buildData(); (function w(n){ if(n.kind!=='leaf'){ if(n.kind==='g2') collapsed[state.axis+'|'+n.key]=true; (n.children||[]).forEach(w);} })(data); renderMap({fit:true}); return; }
+  if(t.id==='fitBtn'){ fit(true); return; }
+  if(t.closest('#dlGroup')) return;
+});
+$('tbl').addEventListener('click',e=>{ const tr=e.target.closest('tr[data-id]'); if(tr) select(tr.dataset.id,false); });
+$('q').addEventListener('input',()=>{ renderHits(); renderTable(); });
+$('q').addEventListener('keydown',e=>{
+  const btns=[...$('hits').querySelectorAll('button[data-hit]')]; if(!btns.length) return;
+  if(e.key==='ArrowDown'||e.key==='ArrowUp'){ e.preventDefault(); hitIdx=(hitIdx+(e.key==='ArrowDown'?1:-1)+btns.length)%btns.length; btns.forEach((b,i)=>b.classList.toggle('on',i===hitIdx)); }
+  if(e.key==='Enter'){ e.preventDefault(); $('hits').hidden=true; select(btns[hitIdx].dataset.hit,true); }
+  if(e.key==='Escape'){ $('hits').hidden=true; }
+});
+let rt; window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>fit(false),200);});
+
+renderStats(); renderSources(); renderFlowLegend(); renderLens(); renderControls(); renderPanel(); renderTable();
+renderFlow({anim:true});
+requestAnimationFrame(()=>renderMap({bloom:true}));
+})();
+</script>
