@@ -324,7 +324,7 @@ footer summary{cursor:pointer;color:var(--accent);margin-top:4px}
         <li>2026.10 — 최초 공개 (115개 기업, 7개 분류 기준 마인드맵·표)</li>
       </ul>
     </div>
-    <div><b>공급 관계 출처</b> — 공시·보도자료·언론 보도 기준의 대표 거래이며 전체 거래처가 아닙니다. 관계 유형은 기준일 기준으로 나눴습니다: <b>합작·계열</b>(지분·계열 관계) / <b>공급</b>(공급 진행 확인) / <b>수주·공급 예정</b>(계약 체결, 공급 개시 미확인) / <b>MOU·협력</b>(비구속 협약·공동개발). 상대방 비공개 계약과 종료된 계약은 관계선 없이 기업 비고에 적었고, 「과거 기준, 현행 미확인」은 2021~2023년 자료에 근거한 관계입니다. 금액·물량은 보도치가 섞여 있습니다.
+    <div><b>공급 관계 출처</b> — 공시·보도자료·언론 보도 기준의 대표 거래이며 전체 거래처가 아닙니다. 관계 유형은 기준일 기준으로 나눴습니다: <b>합작·계열</b>(합작법인·모자회사·최대주주 관계, 단순 지분 투자는 제외) / <b>공급</b>(공급 진행 확인) / <b>수주·공급 예정</b>(계약 체결, 공급 개시 미확인) / <b>MOU·협력</b>(비구속 협약·프레임워크·공동개발). 상대방 비공개 계약과 종료된 계약은 관계선 없이 기업 비고에 적었고, 「과거 기준, 현행 미확인」은 2021~2023년 자료에 근거한 관계입니다. 금액·물량은 보도치가 섞여 있습니다.
       <details><summary id="relSrcSum">공급 관계 출처 보기</summary><ul id="relSrcList"></ul></details>
     </div>
   </footer>
@@ -636,7 +636,7 @@ const SHARE_ESS={catl:{g:125,p:27.1,rk:1},eve:{g:48,p:10.4,rk:2},hithium:{g:46.2
 const NONCN={sdi:13.6,lges:58.1,skon:24.8};
 
 /* ───────── 공급 관계 (공시·보도자료·언론 보도 기준, 대표 거래만) ─────────
-   [공급사, 고객사, 유형, 내용] · 유형은 기준일(2026.10.15) 기준: jv 합작·계열 / s 공급(공급 진행 확인) / c 수주·공급 예정(계약 체결, 개시 미확인) / m MOU·협력(비구속) */
+   [공급사, 고객사, 유형, 내용] · 유형은 기준일(2026.10.15) 기준: jv 합작·계열(합작법인·모자회사·최대주주, 단순 지분 투자 제외) / s 공급(공급 진행 확인) / c 수주·공급 예정(계약 체결, 개시 미확인) / m MOU·협력(비구속·프레임워크) */
 const REL=[
  // 셀 → 완성차·ESS·IT
  ['catl','tesla','s','중국·독일 공장용 LFP 등'],
@@ -650,7 +650,7 @@ const REL=[
  ['catl','hyundai','s','레이 EV 등 LFP'],
  ['catl','li','s','주력 공급사'],
  ['catl','nio','s','주력 공급사'],
- ['catl','xpeng','s',''],
+ ['catl','xpeng','s','주요 공급사 (보도)'],
  ['catl','geely','s','지커 등'],
  ['catl','saic','jv','상하이차와 셀 합작'],
  ['catl','xiaomi','s','SU7 등'],
@@ -682,7 +682,6 @@ const REL=[
  ['sdi','gm','jv','미국 인디애나 합작 공장 (건설)'],
  ['sdi','hyundai','c','유럽향 P6 각형, 2026~2032 (2023.10) — 공급 개시 미확인'],
  ['sdi','rivian','s','R1 시리즈 셀 (2021 발표)'],
- ['sdi','tesla_e','c','ESS 배터리 공급 계약 (2026.1 공시, 상대방 비공개 — 테슬라·약 3조원 보도)'],
  ['sdi','nextera','c','ESS(SBB) 4,374억원 (2025.3 공시) — 공급 개시 미확인'],
  ['sdi','samsung_elec','s','스마트폰 등 소형 전지'],
  ['skon','hyundai','jv','미국 조지아 합작, 아이오닉 등'],
@@ -699,12 +698,12 @@ const REL=[
  ['calb','gac','s','최대 고객 (아이온)'],
  ['calb','xpeng','s','800V 고속충전 셀'],
  ['calb','leap','s','립모터와 공장 공동 건설'],
- ['calb','changan','s',''],
+ ['calb','changan','s','고객사 (2025 반기 실적 자료)'],
  ['gotion','vw','jv','폭스바겐그룹이 최대주주, 중국 공급'],
  ['eve','bmw','c','노이어 클라세 46시리즈 원통형 (헝가리 공장)'],
  ['eve','hyperstrong','c','ESS 셀 50GWh (2025) — 공급 개시 미확인'],
  ['svolt','gwm','jv','창청자동차와 같은 그룹'],
- ['hithium','crrc','c','ESS 120GWh, 5년 협력 (2025.12) — 공급 개시 미확인'],
+ ['hithium','crrc','m','ESS 120GWh, 5년 협력 협약 (2025.12)'],
  ['farasis','mbz','s','다임러(현 벤츠) 지분 투자·공급 계약 (2020)'],
  ['farasis','geely','jv','지리와 배터리 합작 (보도)'],
  ['atl','apple','s','아이폰 주력 셀 공급사'],
@@ -720,10 +719,10 @@ const REL=[
  // 원료·소재 → 셀 (대표 거래)
  ['sqm','lges','s','탄산·수산화리튬 10만t 이상, 2023~2029 (2023.7 계약)'],
  ['sqm','ford','c','리튬 공급 계약 (2023) — 공급 개시 미확인'],
- ['alb','ford','s','수산화리튬 10만t 이상, 2026~2030 (2023) — 공급 개시 구간'],
+ ['alb','ford','c','수산화리튬 10만t 이상, 2026~2030 (2023) — 공급 개시 미확인'],
  ['ganfeng','hyundai','s','수산화리튬, 2024.1~2027.12'],
  ['pls','ganfeng','s','스포듀민 오프테이크 ~2026, 2024년 31만t (2024 개정)'],
- ['gem','ecopro_bm','jv','니켈·전구체 협력 (인도네시아·새만금)'],
+ ['gem','ecopro_bm','jv','니켈·전구체 합작 (인도네시아, 새만금 지이엠코리아)'],
  ['huayou','lgchem','jv','LFP 양극재 합작 등 (보도)'],
  ['huayou','posco_fm','jv','전구체·양극재 합작 (보도)'],
  ['posco_fm','gm','jv','얼티엄캠 (캐나다 양극재 합작)'],
@@ -731,16 +730,16 @@ const REL=[
  ['ronbay','skon','m','삼원계·LFP 양극재 MOU (2024)'],
  ['umicore','powerco','jv','IONWAY 양극재 합작'],
  ['daejoo','lges','s','실리콘 음극재 장기 거래 (포르쉐 타이칸 배터리 등)'],
- ['tinci','byd','s',''],
- ['tinci','lges','s',''],
+ ['tinci','byd','s','전해액 주요 고객 (보도)'],
+ ['tinci','lges','s','전해액 주요 고객 (보도)'],
  ['enchem','lges','s','얼티엄셀즈 오하이오 등'],
  ['enchem','tesla','s','북미 신규 고객 (2024)'],
  ['enchem','panasonic','s','북미 신규 고객 (2024)'],
- ['semcorp','lges','s',''],
- ['semcorp','panasonic','s',''],
- ['semcorp','byd','s',''],
+ ['semcorp','lges','s','분리막 고객 (보도)'],
+ ['semcorp','panasonic','s','분리막 고객 (보도)'],
+ ['semcorp','byd','s','분리막 고객 (보도)'],
  ['semcorp','sdi','s','중국 내 공급 (보도)'],
- ['semcorp','acc','s',''],
+ ['semcorp','acc','s','분리막 고객 (보도)'],
  ['skc','skon','s','SK넥실리스 — SK온 매출 비중 35.5% (2023)'],
  ['solus','lges','s','헝가리 공장 전지박'],
  ['solus','acc','c','5년간 최대 8,000억원 (2023 계약, 보도) — 공급 개시 미확인'],
@@ -749,7 +748,7 @@ const REL=[
  ['ecopro','ecopro_bm','jv','지주사 — 에코프로비엠 최대주주'],
  ['ecopro','ecopro_mat','jv','지주사 — 에코프로머티리얼즈 최대주주'],
  ['cosmochem','cosmo','jv','코스모신소재 모회사'],
- ['cosmochem','cngr','s','재활용 메탈 판매 협업 (2024.7, 보도)'],
+ ['cosmochem','cngr','m','재활용 메탈 판매 협업 (2024.7, 보도)'],
  ['jeio','catl','s','TWCNT 도전재 정기 공급 확대 (2026.3, 보도·2차 출처)'],
  ['jeio','skon','s','CNT 도전재 (보도)'],
  ['ecoanddream','umicore','c','하이니켈 NCM 전구체 162억원 (2025.10 공시) — 공급 개시 미확인'],
@@ -759,7 +758,7 @@ const REL=[
  ['yoonsung','skon','s','메인 믹서 주력 고객 (2022 리포트) — 과거 기준, 현행 미확인'],
  ['yoonsung','lges','s','믹싱 시스템 (2022 리포트) — 과거 기준, 현행 미확인'],
  ['philenergy','sdi','s','스태킹 장비 주력 고객'],
- ['dent','lges','s','레이저 노칭 — 얼티엄셀즈 등 (2023 IR) — 과거 기준, 현행 미확인'],
+ ['dent','lges','s','레이저 노칭, 얼티엄셀즈 등 (2023 IR) — 과거 기준, 현행 미확인'],
  ['onejoon','posco_fm','s','양극재 소성로 RHK (2023 리포트) — 과거 기준, 현행 미확인'],
  ['onejoon','ecopro_bm','s','소성로 (2023 리포트) — 과거 기준, 현행 미확인'],
  ['onejoon','daejoo','s','음극재 소성로 (2023 리포트) — 과거 기준, 현행 미확인'],
@@ -776,24 +775,24 @@ const REL=[
  ['lgchem','lges','jv','LG에너지솔루션의 모회사 — 양극재 공급'],
  ['brunp','catl','jv','CATL 자회사 — 재생 소재 공급'],
  ['skiet','skon','jv','SK이노베이션 계열 — 최대 고객'],
- ['lnf','lges','s','하이니켈 양극재 (보도, 개별 출처 미확보)'],
- ['lgchem','toyota','s','북미 양극재 공급 계약 (보도, 개별 출처 미확보)'],
- ['yuneng','catl','s','LFP 양극재 — CATL·BYD가 매출의 80% 이상 (2022 — 과거 기준, 현행 미확인)'],
- ['dynanonic','catl','s','LFP 양극재 주요 고객 (보도, 개별 출처 미확보)'],
+ ['lnf','lges','s','하이니켈 양극재 (보도) [출처 미확인]'],
+ ['lgchem','toyota','s','북미 양극재 공급 계약 (보도) [출처 미확인]'],
+ ['yuneng','catl','s','LFP 양극재, CATL·BYD가 매출의 80% 이상 (2022) — 과거 기준, 현행 미확인'],
+ ['dynanonic','catl','s','LFP 양극재 주요 고객 (보도) [출처 미확인]'],
  ['tinci','catl','s','전해액 주요 고객 (보도)'],
  ['semcorp','catl','s','습식 분리막 주요 고객 (보도)'],
  ['enchem','skon','s','국내 최대 고객 (보도)'],
- ['soulbrain','sdi','s','전해액 주요 고객 (보도, 개별 출처 미확보)'],
- ['sangsin','sdi','s','원통형·각형 캔 (보도, 개별 출처 미확보)'],
- ['shinheung','sdi','s','캡 어셈블리 (보도, 개별 출처 미확보)'],
+ ['soulbrain','sdi','s','전해액 주요 고객 (보도) [출처 미확인]'],
+ ['sangsin','sdi','s','원통형·각형 캔 (보도) [출처 미확인]'],
+ ['shinheung','sdi','s','캡 어셈블리 (보도) [출처 미확인]'],
  // 국내 소재사 관계 보강·정정 (2026.10.15)
  ['korea_zinc','lgchem','jv','한국전구체(KPC, 켐코 51 : LG화학 49) 2025.1 양산'],
  ['posco_h','posco_fm','jv','그룹 내 리튬 조달'],
  ['posco_fm','sdi','s','NCA 양극재 공급 + LFP 약 6조원 본계약 (2026.10.6)'],
  ['posco_fm','skon','s','음극재 공급 중 + LFP 양극재 약 1.1조원, 2027~2029 (2026.9.22)'],
- ['posco_fm','lges','s','인조흑연 음극재 9,393억원 2023~2028 (얼티엄셀즈향, 2022.12 계약) + 양극재 공급 (2025.7 NCMA 전구체 초도 출하)'],
+ ['posco_fm','lges','s','인조흑연 음극재 9,393억원 2023~2028 (얼티엄셀즈향, 2022.12 계약) + NCMA 전구체 초도 출하 (2025.7, 보도) — 얼티엄 물량 감소 전망'],
  ['ecopro_bm','sdi','s','43.87조원, 2024~2028 — 헝가리 공장 2026.6 첫 출하'],
- ['ecopro_bm','skon','s','장기 공급 계약 (계약 당사자 SK이노베이션, 2026년 말 만료 예정 — 금액 출처 미확인) + 새만금 전구체 합작(지이엠코리아)'],
+ ['ecopro_bm','skon','s','장기 공급 계약 (계약 당사자 SK이노베이션, 2026년 말 만료 예정) + 새만금 전구체 합작(지이엠코리아) [출처 미확인]'],
  ['lnf','sdi','c','LFP 1조6,067억원, ~2029.12 북미향 (2026.3 공시) — 공급 개시 미확인'],
  ['lnf','skon','s','하이니켈 공급 + ESS용 LFP 약 1,600억원 2026.9~2028.12'],
  ['lgchem','gm','s','양극재 24.75조원, 2026~2035 (2024.2) — 얼티엄 물량 감소 영향'],
@@ -803,16 +802,16 @@ const REL=[
  ['daejoo','panasonic','s','실리콘 음극재 → 테슬라 모델Y용 2170 (2025.6 보도)'],
  ['daejoo','skon','s','실리콘 음극재 (2025.6 보도)'],
  ['enchem','catl','c','전해액 5년 35만t·약 1.5조원, 2026~2030 (2025.12 보도) — 공급 개시 미확인'],
- ['chunbo','sdi','s','LiPO2F2 첨가제 (2021 IR 기준 — 과거 기준, 현행 미확인)'],
- ['chunbo','skon','s','LiPO2F2 첨가제 (2021 IR 기준 — 과거 기준, 현행 미확인)'],
- ['chunbo','catl','s','LiPO2F2 첨가제 (2021 IR 기준 — 과거 기준, 현행 미확인)'],
- ['chunbo','lges','s','LiPO2F2 첨가제 (2021 IR 기준 — 과거 기준, 현행 미확인)'],
- ['dongwha','lges','s','국내 3사 주요 고객 (2023년경 보도 — 과거 기준, 현행 미확인)'],
- ['dongwha','sdi','s','국내 3사 주요 고객 (2023년경 보도 — 과거 기준, 현행 미확인)'],
- ['dongwha','skon','s','국내 3사 주요 고객 (2023년경 보도 — 과거 기준, 현행 미확인)'],
+ ['chunbo','sdi','s','LiPO2F2 첨가제 (2021 IR) — 과거 기준, 현행 미확인'],
+ ['chunbo','skon','s','LiPO2F2 첨가제 (2021 IR) — 과거 기준, 현행 미확인'],
+ ['chunbo','catl','s','LiPO2F2 첨가제 (2021 IR) — 과거 기준, 현행 미확인'],
+ ['chunbo','lges','s','LiPO2F2 첨가제 (2021 IR) — 과거 기준, 현행 미확인'],
+ ['dongwha','lges','s','국내 3사 주요 고객 (2023년경 보도) — 과거 기준, 현행 미확인'],
+ ['dongwha','sdi','s','국내 3사 주요 고객 (2023년경 보도) — 과거 기준, 현행 미확인'],
+ ['dongwha','skon','s','국내 3사 주요 고객 (2023년경 보도) — 과거 기준, 현행 미확인'],
  ['skiet','gotion','m','북미·유럽 분리막 공급 협력 MOU (2025.2)'],
  ['wcp','sdi','s','주요 고객, 스타플러스 ESS 라인 단독 공급 (보도) — 스텔란티스 합작 철수 검토 보도(2026.2)'],
- ['wcp','skon','c','조지아 LFP ESS 분리막 단독 공급, 2026.10 양산 (보도)'],
+ ['wcp','skon','c','조지아 LFP ESS 분리막 단독 공급, 2026.10 양산 (보도) — 공급 개시 미확인'],
  ['skc','lges','m','동박 5~10만t·1~3조원 합의 보도, 구매 의무 없음 (2025.7)'],
  ['skc','aesc','s','동박 약 2조원, 2025년부터 10년 (2023 계약, 보도)'],
  ['lotteemat','sdi','s','최대 고객 — 삼성SDI·LG엔솔 합산 약 80% (2025 초 보도)'],
@@ -828,7 +827,7 @@ const REL=[
  ['syrah','tesla','c','미국 비달리아 천연흑연 음극재 — 2025.7 디폴트 통지 후 2026.6 해지 철회, 최종 품질인증 전'],
  ['syrah','posco_fm','s','발라마 흑연 6년 (2024.3)'],
  ['syrah','lges','m','비달리아 음극재 연 0.2만t MOU, 비구속 (2022)'],
- ['novonix','panasonic','c','합성흑연 1만t 2025~2028 — 첫 납품 2026년 초 계획, 장비 지연으로 개시 미확인'],
+ ['novonix','panasonic','c','합성흑연 1만t 2025~2028 — 첫 납품 2026년 초 계획, 장비 지연, 공급 개시 미확인'],
  ['novonix','powerco','c','합성흑연 3.2만t 이상, 2027년부터 5년 (2024.11)'],
  ['smm','panasonic','s','파나소닉의 테슬라향 NCA 양극재'],
  ['smm','toyota','m','전고체용 양극재 양산 협력, 2028 목표 (2025.10)'],
@@ -850,7 +849,7 @@ const REL=[
  ['glencore','tesla','s','코발트 연 최대 0.6만t (2020.6, 보도)'],
  ['glencore','umicore','s','장기 코발트 수산화물 (2019.5)'],
  ['glencore','catl','s','코발트 2만t (보도, 기간 미확인)'],
- ['vale','gm','c','황산니켈 연 2.5만t, 2026 하반기 개시 예정 (2022.11)'],
+ ['vale','gm','c','황산니켈 연 2.5만t, 2026 하반기 개시 예정 (2022.11) — 공급 개시 미확인'],
  ['vale','tesla','s','니켈 공급 계약 (로이터)'],
  ['vale','ford','s','니켈 공급 계약 (로이터)'],
  ['nornickel','basf','s','핀란드 하르야발타 Ni·Co 원료 장기 공급 (2018.10)'],
@@ -861,23 +860,23 @@ const REL=[
  ['gem','xtc','m','2026~2028 연 15만t 원료·전구체, 비구속 프레임워크 (2025.10)'],
  ['gem','skon','jv','한국 전구체 합작 (지이엠코리아)'],
  ['umicore','acc','s','폴란드 니사 하이니켈 양극재 (2022.4)'],
- ['umicore','aesc','c','북미향 양극재 10년 2026~2035 — 천안 공장에서 공급, 개시 미확인'],
- ['basf','catl','s','양극재 글로벌 프레임워크 (2025.7)'],
+ ['umicore','aesc','c','북미향 양극재 10년 2026~2035 — 천안 공장에서 공급, 공급 개시 미확인'],
+ ['basf','catl','m','양극재 글로벌 프레임워크 협약, 주요 공급사 선정 (2025.7)'],
  ['basf','skon','m','양극재 공동생산 검토 협력 (2023.11)'],
- ['basf','svolt','s','양극재 공급·재활용 협력'],
+ ['basf','svolt','s','양극재 공급 (재활용 분야 협력 병행)'],
  ['basf','shanshan','jv','BASF 샨샨 51:49 양극재 합작 (2021)'],
  ['ronbay','catl','s','LFP·삼원계 6년 305만t 이상 (2026.1) + 나트륨이온 양극재 주공급사 (2025.11)'],
  ['easpring','skon','s','하이·중니켈 약 1.7만t, 2025~2027 (2025.2)'],
  ['easpring','lges','s','약 11만t, 2025~2027, 약 140억위안 (2025.3)'],
- ['yuneng','byd','s','CATL·BYD가 매출의 80% 이상 (2022 — 과거 기준, 현행 미확인)'],
+ ['yuneng','byd','s','CATL·BYD가 매출의 80% 이상 (2022) — 과거 기준, 현행 미확인'],
  ['xtc','byd','s','고객사 (보도)'],
  ['xtc','catl','s','고객사 (보도)'],
  ['xtc','panasonic','s','고객사 (보도)'],
  ['btr','ford','c','모로코 음극재 공장, 선급금 1.2억달러 예정 (2024.8, 보도)'],
  ['btr','panasonic','s','고객 목록 (보도)'],
  ['btr','sdi','s','고객 목록 (보도)'],
- ['shanshan','catl','jv','CATL 계열 투자(2022), 주요 고객'],
- ['shanshan','byd','jv','BYD 투자(2022), 주요 고객'],
+ ['shanshan','catl','s','주요 고객 (CATL 계열이 자회사 지분 투자, 2022)'],
+ ['shanshan','byd','s','주요 고객 (BYD가 자회사 지분 투자, 2022)'],
  ['shangtai','catl','s','2022 상장 시점 공급망 진입 (보도)'],
  ['shangtai','atl','s','고객사 (보도)'],
  ['shangtai','gotion','s','고객사 (보도)'],
@@ -898,10 +897,10 @@ const REL=[
  ['nuode','catl','s','주요 고객 (보도)'],
  ['nuode','byd','s','주요 고객 (보도)'],
  ['nuode','lges','s','주요 고객 (보도)'],
- ['jiayuan','catl','s','동박 62.6만t 이상 2026~2028 우선 공급사 (2025.11), 10만t 합작 (2021)'],
+ ['jiayuan','catl','jv','동박 10만t 합작 (2021) 이후 우선 공급사 + 2026~2028 62.6만t 이상 계약 (2025.11)'],
  ['cabot','powerco','s','도전재 다년 공급 (2026.1)'],
  ['brunp','mbz','m','중국 폐배터리 폐쇄루프 협력 MOU (2023.2)'],
- ['brunp','bmw','s','장기 재활용 협력사 (보도)'],
+ ['brunp','bmw','s','장기 재활용 파트너 (보도)'],
  ['redwood','toyota','c','양극재·동박 장기 공급 (보도)'],
  ['redwood','panasonic','s','배터리 재활용 (2021)'],
  ['redwood','gm','s','얼티엄셀즈 공정 스크랩 재활용']
@@ -1049,7 +1048,7 @@ const REL_SRC=[
  {t:'상타이 상장·고객 (EqualOcean)',u:'https://equalocean.com/news/2022122919330-shangtai-listed-shenzhen-stock-exchange-entered-catls-supply-chain'},
  {t:'노보닉스 20-F (SEC, 파나소닉·파워코)',u:'https://www.sec.gov/Archives/edgar/data/1859795/000095017025029488/nvx-20241231.htm'},
  {t:'노보닉스–스텔란티스 계약 해지 (SEC)',u:'https://www.sec.gov/Archives/edgar/data/1859795/000119312525262911/nvx-ex99_1.htm'},
- {t:'그룹14 시리즈D·SK 합작 인수 (TechCrunch 2025.8)',u:'https://techcrunch.com/2025/08/20/group14-lands-463m-from-sk-porsche-and-others-to-make-silicon-anodes-for-evs'},
+ {t:'그룹14 2025.8 투자 라운드·SK 합작 인수 (TechCrunch)',u:'https://techcrunch.com/2025/08/20/group14-lands-463m-from-sk-porsche-and-others-to-make-silicon-anodes-for-evs'},
  {t:'실라–파나소닉 (electrive)',u:'https://www.electrive.com/2023/12/12/panasonic-orders-anode-material-from-sila-nanotechnologies'},
  {t:'실라–메르세데스 G-클래스 (TechCrunch)',u:'https://techcrunch.com/2023/12/11/sila-panasonic-deal/amp'},
  {t:'신주방(Capchem)–CATL 전해액 30만t (2026.6)',u:'https://filingreader.com/news-wire/shenzhen/2026-06-07/capchem-secures-major-three-year-electrolyte-supply-deal-with-catl'},
@@ -1078,7 +1077,9 @@ const REL_SRC=[
  {t:'둬푸둬–BYD LiPF6 계약 (Asian Metal)',u:'https://www.asianmetal.com/news/1740220/DFD-secures-no-less-than-56,050t-LiPF6-purchase-order-from-BYD'},
  {t:'둬푸둬–엔켐 LiPF6 계약 (Yicai)',u:'https://yicaiglobal.com/news/china-do-fluoride-gains-on-usd156-mln-purchase-order-from-south-korean-ev-battery-maker-enchem'},
  {t:'포르쉐의 BASF 독점 양극재 선정 (Kallanish)',u:'https://kallanish.com/en/news/power-materials/market-reports/article-details/cathode-porsche-picks-basf-as-its-exclusive-cathode-materials-supplier-0721'},
- {t:'솔루스첨단소재–ACC 전지박 (더코모디티스뉴스, 5년 최대 8,000억원)',u:'https://thecommoditiesnews.com/news/articleView.html?idxno=9835'}
+ {t:'솔루스첨단소재–ACC 전지박 (더코모디티스뉴스, 5년 최대 8,000억원)',u:'https://thecommoditiesnews.com/news/articleView.html?idxno=9835'},
+ {t:'포스코퓨처엠 광양 NCMA 전구체 얼티엄셀즈 초도 출하 (시대일보 2025.10)',u:'https://www.sidae.com/article/2025102415373977262'},
+ {t:'얼티엄셀즈 GM향 출하 감소 전망 (아시아경제 2026.1)',u:'https://core.asiae.co.kr/article/2026010508091986124'}
 ];
 
 /* 정규화 */
@@ -1096,7 +1097,7 @@ COS.forEach(c=>{BY[c.id]=c; c.cu=(c.cu||[]); c.f=c.f||[]; c.d=c.d||[];
 /* 상대방 비공개 계약 — 관계선 대신 기업 비고에 표시 */
 const NOTE_EXTRA={
  posco_fm:'음극재: 비공개 글로벌 완성차향 천연흑연 6,710억원 2027.10~2031.9 (2025.10 공시), 인조흑연 1조149억원 2027~2032 베트남 공장 (2026.3)',
- lgchem:'비공개 미국 고객 EV 양극재 3조7,620억원, ~2029.7 (2025.11 공시) [출처 링크 미확정] · 2170 원통형 양극재 2026년 3분기 공급 개시 — 고객 비공개, 업계는 파나소닉 추정 (보도)',
+ lgchem:'비공개 미국 고객 EV 양극재 3조7,620억원, ~2029.7 (2025.11 공시) [출처 미확인] · 2170 원통형 양극재 2026년 3분기 공급 개시 — 고객 비공개, 업계는 파나소닉 추정 (보도)',
  dongwha:'테네시 공장 전해액 — 비공개 미국 배터리사·완성차 2곳, 2026~2028 합산 약 3,500억원 (2025.4)',
  foosung:'LiPF6 — 비공개 미국 글로벌 업체향, 국내 캐파의 20~30% (2025.10 증권사, ESS향 추정)',
  skiet:'비공개 북미 고객 분리막 원단 2025.4~, 2026년까지 EV 최대 30만대분',
@@ -1120,7 +1121,9 @@ const NOTE_EXTRA={
  ganfeng:'LG화학 리튬 계약(2019~2025, 누적 9.26만t) — 갱신 미확인',
  innometry:'노스볼트(2023 IR 기준 고객)는 파산으로 사실상 종료',
  chunbo:'동화기업과 북미 공급망 협력 협약 (2026.2, 공급계약 아님)',
- umicore:'LG화학(현 LG에너지솔루션 사업)과 NMC 12.5만t 다년 공급 계약 (2020~, 현황 미확인)'
+ umicore:'LG화학(현 LG에너지솔루션 사업)과 NMC 12.5만t 다년 공급 계약 (2020~, 현황 미확인)',
+ sdi:'ESS 배터리 공급 계약 (2026.1 공시, 상대방 비공개 — 업계는 테슬라 ESS·약 3조원으로 보도)',
+ tesla_e:'삼성SDI의 2026.1 ESS 공급 계약 상대방으로 보도됨(공시상 비공개)'
 };
 COS.forEach(c=>{ if(NOTE_EXTRA[c.id]) c.n=c.n?c.n+' · '+NOTE_EXTRA[c.id]:NOTE_EXTRA[c.id]; });
 const RELMAP={};
@@ -1809,11 +1812,13 @@ const csvCell=v=>{ const x=String(v==null?'':v); return /[",\r\n]/.test(x)?'"'+x
 const toCSV=rows=>'﻿'+rows.map(r=>r.map(csvCell).join(',')).join('\r\n');
 const stageName=c=>STAGES[STAGE_IDX[c.stage]].name;
 function companiesCSV(){
-  const head=['ID','기업명','영문명','국가','지역','밸류체인','세부','티커','DataGuide','상장 시장','주요 제품','배터리 화학','폼팩터','전방 수요','EV 점유율 2026.1~8(%)','ESS 점유율 2026H1(%)','고객사','공급사','비고'];
+  const head=['ID','기업명','영문명','국가','지역','밸류체인','세부','티커','DataGuide','상장 시장','주요 제품','배터리 화학','폼팩터','전방 수요','EV 점유율 2026.1~8(%)','ESS 점유율 2026H1(%)','고객사','공급사','MOU·협력 상대','비고'];
+  const isM=(a,b)=>relOf(a,b).t==='m';
   const rows=COS.map(c=>[c.id,c.ko,c.en,c.c,c.region,[...new Set(c.st.map(e=>STAGES[STAGE_IDX[e[0]]].name))].join(' / '),c.st.map(e=>e[1]).join(' / '),
     c.tk.length?c.tk.join(' / '):(c.parent?(c.parent.div?c.parent.tk.join(' / ')+' ('+c.parent.ko+' 부문)':'비상장 (모회사 '+c.parent.ko+' '+c.parent.tk.join(' / ')+')'):'비상장'),
     c.dg.join(' / '),c.ex,c.p,c.ch.map(k=>CHEM[k]).join(' / '),c.f.join(' / '),c.d.map(k=>DEM[k]).join(' / '),
-    c.shareEV?c.shareEV.p.toFixed(1):'',c.shareESS?c.shareESS.p.toFixed(1):'',c.cu.map(id=>BY[id].ko).join(' / '),(SUP[c.id]||[]).map(id=>BY[id].ko).join(' / '),c.n||'']);
+    c.shareEV?c.shareEV.p.toFixed(1):'',c.shareESS?c.shareESS.p.toFixed(1):'',c.cu.filter(id=>!isM(c.id,id)).map(id=>BY[id].ko).join(' / '),(SUP[c.id]||[]).filter(id=>!isM(id,c.id)).map(id=>BY[id].ko).join(' / '),
+    [...c.cu.filter(id=>isM(c.id,id)),...(SUP[c.id]||[]).filter(id=>isM(id,c.id))].map(id=>BY[id].ko).join(' / '),c.n||'']);
   return toCSV([head,...rows]);
 }
 function relationsCSV(){
