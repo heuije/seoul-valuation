@@ -4,6 +4,7 @@
 
 ## 1. 표 구조
 - 같은 값이 세로로 이어지는 분류 열(예: Stream·사업·제품)은 **셀 병합**한다. 병합 셀은 가운데 정렬.
+- 기업 표에 점유율 행을 붙일 때는 품목·근거 셀을 기업 행과 점유율 행에 걸쳐 병합한다.
 - Stream 구분 행(예: `Upstream — 소재·칩·부품 (광모듈 向 소재)`)은 연한 청록 띠로 표 전체 폭에 둔다.
 - 머리글 행: 진한 청록(006C64) 바탕·흰색 굵은 글씨·가운데 정렬.
 - 기준 양식: `deliverables/2026-11-24_광모듈_밸류체인/` 의 대표이사 수정 구조표(B2 제목, 3행 머리글 `Stream | 사업 | 제품 | 품목 | 품목 설명 | 적용 애플리케이션 | 비고`).
@@ -13,13 +14,14 @@
 - 틀고정 추가 금지(원본에 없으면).
 
 ## 3. 제목·소제목
-- B2 제목은 짧은 명사구로만 쓴다(예: `통신용 광모듈 밸류체인 구조`). 설명 문장, 기준일, 용어 풀이를 제목 줄에 붙이지 않는다.
+- B2 제목은 짧은 명사구로만 쓴다(예: `통신용 광모듈 밸류체인 구조`). 12pt 굵게. 설명 문장, 기준일, 용어 풀이를 제목 줄이나 제목 아래 줄에 붙이지 않는다. 머리글은 3행부터.
 - 소제목·구분 행도 같은 방식으로 간략히 쓴다. 필요한 설명은 비고 열이나 별도 주석 탭으로 보낸다.
 
 ## 4. 값 표기
 - 원문·입력 숫자 = 파란 글씨, 탭 내 계산 = 검은 글씨. 이 색 구분이 곧 값의 출처 표시이므로 "값 처리" 같은 별도 설명 열을 만들지 않는다.
 
 ## 5. 출처
-- 출처 목록은 본문 표 아래에 두지 않고 **별도 탭(출처)** 으로 관리한다. 본문에는 출처 코드(S1, S2 …)만 남긴다.
+- 출처 목록은 본문 표 아래에 두지 않고 **별도 탭(출처)** 으로 관리한다. 본문에는 출처 코드(S1, S2 …)와 해당 행의 원문 링크만 남긴다.
+- 출처는 가능한 한 원문(PDF·보도자료)을 직접 열어 확인하고, 확인 방법(원문 확인 / 검색 요약만 확인)을 출처 탭에 적는다.
 - 우선 사용: Yole Group, Omdia, LightCounting, Dell'Oro, Cignal AI, 증권사·컨설팅사 리포트(PDF), 기업 IR 자료.
-- **사용 금지(현재·향후 모두)**: Research and Markets 및 같은 성격의 범용 시장조사 재판매 보고서(GII, MarketsandMarkets, Mordor Intelligence, DataIntelo, QYResearch, LP Information, DiReports, PS Market Research, Industry Research, Fortune Business Insights, Global Market Insights 등). 증권사 PDF가 이들을 인용한 수치도 쓰지 않는다.
+- **사용 금지(현재·향후 모두)**: Research and Markets 및 같은 성격의 범용 시장조사 재판매 보고서(GII, MarketsandMarkets, Mordor Intelligence, DataIntelo, QYResearch, LP Information, DiReports, PS Market Research, Industry Research, Fortune Business Insights, Global Market Insights 등). 증권사 PDF가 이들을 인용한 수치도 쓰지 않는다. 같은 성격의 중국·국내 리포트 판매 사이트(观研天下·智研咨询 등)도 포함.
