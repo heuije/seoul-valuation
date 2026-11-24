@@ -32,6 +32,7 @@
 - 진행 중: `deliverables/YYYY-MM-DD_<주제>/` 아래에 작업
 - QC 통과·발행 후: 지식관리팀이 `archive/`로 이동, `archive/INDEX.md` 갱신
 - 산출물 양식은 `templates/`의 표준 양식을 사용한다.
+- 엑셀 산출물은 `templates/excel-style.md`(셀 병합·눈금선 숨김·간략 제목·출처 별도 탭·범용 시장조사 재판매 보고서 사용 금지)를 반드시 따른다.
 
 ## 컴플라이언스 (최우선)
 
