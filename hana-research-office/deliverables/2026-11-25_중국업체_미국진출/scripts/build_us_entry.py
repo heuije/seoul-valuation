@@ -18,7 +18,7 @@ HAN = re.compile(r"[ᄀ-ᇿ㄰-㆏가-힣]")
 LAT = re.compile(r"[A-Za-z0-9]")
 HDR_FILL = PatternFill("solid", fgColor="006C64")
 BAND_FILL = PatternFill("solid", fgColor="D9EDED")
-THIN = Side(style="thin", color="000000")
+THIN = Side(style="thin", color="808080")
 BORDER = Border(left=THIN, right=THIN, top=THIN, bottom=THIN)
 LINK_COLOR = "FF0000FF"
 
