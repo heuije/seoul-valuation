@@ -65,6 +65,9 @@ for k, f in fx.URL_FIX.items():
 for k, dt in fx.DATE_FIX.items():
     src_all[k]["date"] = dt
 src_all.update(fx.NEW_SRC)
+# ---- 2026-11-25 외부 교차검증(FIE·실효적 통제·MACR) 반영
+fx2 = load("data_us_fix2")
+src_all.update(fx2.NEW_SRC2)
 
 def _swap(codes, key=None):
     out = []
@@ -77,20 +80,34 @@ def _swap(codes, key=None):
             out.append(n)
     return out
 
-_hits = {o: 0 for o, _ in fx.TEXT_FIX}
+_hits = {o: 0 for o, _ in fx.TEXT_FIX + fx2.TEXT_FIX2 + fx2.EXACT_FIX2}
 def _tx(t):
     if not isinstance(t, str):
         return t
-    for o, n in fx.TEXT_FIX:
+    for o, n in fx.TEXT_FIX + fx2.TEXT_FIX2:
         if o in t:
             _hits[o] += 1
             t = t.replace(o, n)
+    for o, n in fx2.EXACT_FIX2:
+        if t == o:
+            _hits[o] += 1
+            t = n
     return t
 
+def _add(codes, extra):
+    out = list(codes)
+    for n in extra:
+        if n not in out:
+            out.append(n)
+    return out
+
 main = [dict(r, src=_swap(r["src"], (r["company"], r["year"])), content=_tx(r["content"]), status=_tx(r["status"]), note=_tx(r.get("note", ""))) for r in main]
-FORD_CMP = {"cols": cell.FORD_CMP["cols"], "rows": [[a, _tx(b), _tx(c), _swap(d)] for a, b, c, d in cell.FORD_CMP["rows"]]}
-FORD_TL = [[a, b, _tx(c), _swap(d)] for a, b, c, d in cell.FORD_TL]
-policy = [[a, _tx(b), _swap(c)] for a, b, c in policy]
+FORD_CMP = {"cols": cell.FORD_CMP["cols"], "rows": [[a, _tx(b), _tx(c), _add(_swap(d), fx2.ADD_FCMP.get(a, []))] for a, b, c, d in cell.FORD_CMP["rows"]]}
+FORD_TL = [[a, b, _tx(c), _add(_swap(d), fx2.ADD_TL.get(a, []))] for a, b, c, d in cell.FORD_TL]
+policy = [[a, _tx(b), _add(_swap(c), fx2.ADD_POLICY.get(a, []))] for a, b, c in policy]
+assert all(k in [r[0] for r in policy] for k in fx2.ADD_POLICY)
+assert all(k in [r[0] for r in FORD_CMP["rows"]] for k in fx2.ADD_FCMP)
+assert all(k in [r[0] for r in FORD_TL] for k in fx2.ADD_TL)
 _miss = [o[:40] for o, h in _hits.items() if h == 0]
 assert not _miss, _miss
 _left = sorted({c for r in main for c in r["src"]} | {c for r in FORD_CMP["rows"] for c in r[3]} | {c for r in FORD_TL for c in r[3]} | {c for r in policy for c in r[2]})
@@ -114,6 +131,11 @@ for row in FORD_TL:
 for row in policy:
     see(row[2])
 
+# 기존 S번호 유지: 직전 배포본 순서(prev_order.json) 우선, 신규 출처는 뒤에 첫 등장 순으로 추가
+_prev = _json.load(open(os.path.join(_base, "prev_order.json")))
+_dropped = [k for k in _prev if k not in order]
+assert not _dropped, ("기존 출처 누락", _dropped)
+order = _prev + [k for k in order if k not in _prev]
 remap = {old: f"S{i+1}" for i, old in enumerate(order)}
 def rm(codes):
     return [remap[c] for c in codes]
@@ -124,6 +146,7 @@ data = {
     "ford_tl": [[a, b, c, rm(d)] for a, b, c, d in FORD_TL],
     "policy": [[a, b, rm(c)] for a, b, c in policy],
     "sources": {remap[k]: src_all[k] for k in order},
+    "keymap": remap,
 }
 json.dump(data, open(sys.argv[1], "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 print("rows", len(data["main"]), "sources", len(data["sources"]), "unused", sorted(set(src_all) - set(order)))
