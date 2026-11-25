@@ -107,56 +107,93 @@ def src_label(codes, S):
     return "\n".join(lines)
 
 
+def block(ws, r, cells, src_col, codes, S, src_w, hmerge=None):
+    """한 행(사업)을 출처 개수만큼 세로 하위행으로 나눠 기록.
+    cells: [(col, value, kwargs, width)] 세로 병합 대상. hmerge: (c0, c1) 가로+세로 병합.
+    출처는 하위행마다 한 건씩, 각자 링크."""
+    k = max(1, len(codes))
+    for col, val, kw, _w in cells:
+        put(ws, r, col, val, **kw)
+        for rr in range(r + 1, r + k):
+            put(ws, rr, col, None, **kw)
+    if hmerge:
+        for rr in range(r, r + k):
+            for col in range(hmerge[0] + 1, hmerge[1] + 1):
+                put(ws, rr, col, None)
+        ws.merge_cells(start_row=r, start_column=hmerge[0], end_row=r + k - 1, end_column=hmerge[1])
+    elif k > 1:
+        for col, _v, _kw, _w in cells:
+            ws.merge_cells(start_row=r, start_column=col, end_row=r + k - 1, end_column=col)
+    sub_min = 0
+    for i in range(k):
+        if codes:
+            c = codes[i]
+            lab = f"{c} {S[c]['pub']} {S[c]['date']}"
+            put(ws, r + i, src_col, lab, color=LINK_COLOR, underline="single", link=S[c]["url"])
+            sub_min = max(sub_min, 14 * est_lines(lab, src_w) + 4)
+        else:
+            put(ws, r + i, src_col, None)
+    need = 14 * max(est_lines(v, w) for _c, v, _kw, w in cells if v is not None) + 4
+    per = max(18, sub_min, math.ceil(need / k))
+    for rr in range(r, r + k):
+        ws.row_dimensions[rr].height = per
+    return r + k
+
+
 def build(data, out):
     S = data["sources"]
     wb = Workbook()
 
-    # ---- 1. 메인 표
+    # ---- 1. 메인 표 (사용자 수정본 열 구성: 운영 상태 열 추가)
     ws = wb.active
     ws.title = "미국 진출 현황"
     ws.sheet_view.showGridLines = False
-    widths = {"A": 2, "B": 14, "C": 10, "D": 9, "E": 52, "F": 52, "G": 40, "H": 24}
+    widths = {"A": 2, "B": 14, "C": 10, "D": 9, "E": 52, "F": 8.6, "G": 52, "H": 40, "I": 50.9}
     for k, w in widths.items():
         ws.column_dimensions[k].width = w
     t = ws.cell(2, 2, "중국 EV·셀메이커 미국 진출 현황")
-    t.font = Font(name=KR, size=12, bold=True)
-    header(ws, 3, ["기업명", "구분", "연도", "진출 내용", "진행 현황", "비고", "출처"])
+    t.font = Font(name=KR, size=11, bold=True)
+    header(ws, 3, ["기업명", "구분", "연도", "진출 내용", "운영 상태", "진행 현황 상세", "비고", "출처"])
     r = 4
     cur_band = None
-    groups = []  # (company, start, end)
+    groups = []
     for row in data["main"]:
         if row["band"] != cur_band:
-            band(ws, r, row["band"], 2, 8)
+            band(ws, r, row["band"], 2, 9)
             ws.row_dimensions[r].height = 18
             cur_band = row["band"]
             r += 1
-        put(ws, r, 2, row["company"], bold=True, h="center")
-        put(ws, r, 3, row["type"], h="center")
-        put(ws, r, 4, row["year"], h="center")
-        put(ws, r, 5, row["content"])
-        put(ws, r, 6, row["status"])
-        put(ws, r, 7, row.get("note", ""))
-        codes = row["src"]
-        put(ws, r, 8, src_label(codes, S), color=LINK_COLOR, underline="single", link=S[codes[0]]["url"] if codes else None)
-        lines = max(est_lines(row["content"], widths["E"]), est_lines(row["status"], widths["F"]),
-                    est_lines(row.get("note", ""), widths["G"]), est_lines(src_label(codes, S), widths["H"]))
-        ws.row_dimensions[r].height = max(18, 14 * lines + 4)
-        if groups and groups[-1][0] == (row["band"], row["company"]) and groups[-1][2] == r - 1:
-            groups[-1][2] = r
+        start = r
+        cells = [(2, row["company"], dict(bold=True, h="center"), widths["B"]),
+                 (3, row["type"], dict(h="center"), widths["C"]),
+                 (4, row["year"], dict(h="center"), widths["D"]),
+                 (5, row["content"], {}, widths["E"]),
+                 (6, row.get("op", ""), dict(h="center"), widths["F"]),
+                 (7, row["status"], {}, widths["G"]),
+                 (8, row.get("note", ""), {}, widths["H"])]
+        r = block(ws, r, cells, 9, row["src"], S, widths["I"])
+        key = (row["band"], row["company"])
+        if groups and groups[-1][0] == key and groups[-1][2] == start - 1:
+            groups[-1][2] = r - 1
         else:
-            groups.append([(row["band"], row["company"]), r, r])
-        r += 1
-    for (bd, comp), a, b in groups:
-        if b > a:
+            groups.append([key, start, r - 1, [start]])
+            continue
+        groups[-1][3].append(start)
+    for key, a, b, starts in groups:
+        if len(starts) > 1:
+            # 같은 기업 여러 사업: 하위행 병합을 풀고 기업명·구분을 전체 범위로 병합
+            for col in (2, 3):
+                for rng in list(ws.merged_cells.ranges):
+                    if rng.min_col == col and rng.max_col == col and a <= rng.min_row <= b:
+                        ws.unmerge_cells(str(rng))
             ws.merge_cells(start_row=a, start_column=2, end_row=b, end_column=2)
-            # 구분도 같은 값이면 병합
-            if len({ws.cell(x, 3).value for x in range(a, b + 1)}) == 1:
+            if len({ws.cell(x, 3).value for x in starts}) == 1:
                 ws.merge_cells(start_row=a, start_column=3, end_row=b, end_column=3)
 
     # ---- 2. Ford-CATL
     fc = wb.create_sheet("Ford-CATL")
     fc.sheet_view.showGridLines = False
-    w2 = {"A": 2, "B": 16, "C": 50, "D": 50, "E": 24}
+    w2 = {"A": 2, "B": 16, "C": 50, "D": 50, "E": 40}
     for k, w in w2.items():
         fc.column_dimensions[k].width = w
     t = fc.cell(2, 2, "Ford-CATL 협력 현황")
@@ -165,13 +202,7 @@ def build(data, out):
     header(fc, 3, ["항목"] + cmp_["cols"] + ["출처"])
     r = 4
     for item, a, b, codes in cmp_["rows"]:
-        put(fc, r, 2, item, bold=True, h="center")
-        put(fc, r, 3, a)
-        put(fc, r, 4, b)
-        put(fc, r, 5, src_label(codes, S), color=LINK_COLOR, underline="single", link=S[codes[0]]["url"] if codes else None)
-        lines = max(est_lines(a, w2["C"]), est_lines(b, w2["D"]), est_lines(src_label(codes, S), w2["E"]))
-        fc.row_dimensions[r].height = max(18, 14 * lines + 4)
-        r += 1
+        r = block(fc, r, [(2, item, dict(bold=True, h="center"), w2["B"]), (3, a, {}, w2["C"]), (4, b, {}, w2["D"])], 5, codes, S, w2["E"])
     r += 1
     band(fc, r, "주요 일지", 2, 5)
     fc.row_dimensions[r].height = 18
@@ -181,19 +212,16 @@ def build(data, out):
     r += 1
     for date, plant, text, codes in data["ford_tl"]:
         body = f"[{plant}] {text}" if plant else text
-        put(fc, r, 2, date, h="center")
-        put(fc, r, 3, body)
-        put(fc, r, 4, None)
-        fc.merge_cells(start_row=r, start_column=3, end_row=r, end_column=4)
-        put(fc, r, 5, src_label(codes, S), color=LINK_COLOR, underline="single", link=S[codes[0]]["url"] if codes else None)
-        lines = max(est_lines(body, w2["C"] + w2["D"]), est_lines(src_label(codes, S), w2["E"]))
-        fc.row_dimensions[r].height = max(18, 14 * lines + 4)
-        r += 1
+        k = max(1, len(codes))
+        r0 = r
+        r = block(fc, r, [(2, date, dict(h="center"), w2["B"]), (3, body, {}, w2["C"] + w2["D"])], 5, codes, S, w2["E"], hmerge=(3, 4))
+        if k > 1:
+            fc.merge_cells(start_row=r0, start_column=2, end_row=r - 1, end_column=2)
 
     # ---- 3. 주요 규제
     pl = wb.create_sheet("주요 규제")
     pl.sheet_view.showGridLines = False
-    w4 = {"A": 2, "B": 24, "C": 90, "D": 26}
+    w4 = {"A": 2, "B": 24, "C": 90, "D": 40}
     for k, w in w4.items():
         pl.column_dimensions[k].width = w
     t = pl.cell(2, 2, "중국계 기업 관련 미국 주요 규제")
@@ -201,11 +229,7 @@ def build(data, out):
     header(pl, 3, ["항목", "내용", "출처"])
     r = 4
     for item, text, codes in data.get("policy", []):
-        put(pl, r, 2, item, bold=True, h="center")
-        put(pl, r, 3, text)
-        put(pl, r, 4, src_label(codes, S), color=LINK_COLOR, underline="single", link=S[codes[0]]["url"] if codes else None)
-        pl.row_dimensions[r].height = max(18, 14 * max(est_lines(text, w4["C"]), est_lines(item, w4["B"]), est_lines(src_label(codes, S), w4["D"])) + 4)
-        r += 1
+        r = block(pl, r, [(2, item, dict(bold=True, h="center"), w4["B"]), (3, text, {}, w4["C"])], 4, codes, S, w4["D"])
 
     # ---- 4. 출처
     sh = wb.create_sheet("출처")
